@@ -1,1 +1,3 @@
 rootProject.name = 'sei-core'
+include 'core-entity'
+
