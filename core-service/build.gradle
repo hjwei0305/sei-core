@@ -9,6 +9,7 @@ dependencies {
     // 第三方的依赖
     compile(
             "org.springframework.boot:spring-boot-starter-data-jpa",
+            "org.springframework.boot:spring-boot-starter-data-redis",
             "joda-time:joda-time:$jodaTimeVersion"
     )
 }

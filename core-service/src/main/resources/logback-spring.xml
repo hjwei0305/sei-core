@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <!--
+        日志初始化在ApplicationContext创建之前，所以@PropertySources加载的配置是读取不到的，
+        系统环境变量、Spring Environment及application,bootstrap配置文件中的信息可以读取到
+     -->
+
+    <!-- 读取当前应用Environment中的属性 -->
+    <!--<springProperty scope="context" name="APP_NAME" source="spring.application.name"/>-->
+    <!--<springProperty scope="context" name="APP_PORT" source="server.port"/>-->
+    <!--<springProperty scope="context" name="DEFAULT_APP_PORT" source="spring.application.port"/>-->
+    <!--<springProperty scope="context" name="fluentHost" source="myapp.fluentd.host" defaultValue="localhost"/>-->
+
+    <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
+    <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/>
+    <!--<property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n %clr(traceId:%X{traceId} userId:%X{userId} account:%X{account} userName:%X{userName} tenantCode:%X{tenantCode}) %n accessToken:%X{accessToken}%n %clr(args:%X{args}) %n"/>-->
+    <!-- 读取系统环境属性 -->
+    <!--<property name="OS_NAME" value="${os.name}"/>-->
+    <!--<if condition='property("OS_NAME").contains("Windows")'>-->
+        <!--<then>-->
+            <!--<property name="LOG_PATH" value="${LOG_PATH:-E:/logs}"/>-->
+        <!--</then>-->
+        <!--<else>-->
+            <!--<property name="LOG_PATH" value="${LOG_PATH:-/log}"/>-->
+        <!--</else>-->
+    <!--</if>-->
+    <!--<property name="LOG_DIR" value="${APP_NAME:-system}"/>-->
+    <!--<property name="APP_PORT" value="${APP_PORT:-${DEFAULT_APP_PORT:-0}}"/>-->
+    <!--<if condition='!property("APP_PORT").equals("0")'>-->
+        <!--<then>-->
+            <!--<property name="LOG_DIR" value="${LOG_DIR}-${APP_PORT}"/>-->
+        <!--</then>-->
+    <!--</if>-->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <!--<charset>utf8</charset>-->
+        </encoder>
+    </appender>
+
+    <!--&lt;!&ndash; 按照每天生成日志文件 &ndash;&gt;-->
+    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>INFO</level>-->
+        <!--</filter>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash;日志文件输出的文件名 &ndash;&gt;-->
+            <!--<FileNamePattern>${LOG_PATH}/${LOG_DIR}/info.log.%d{yyyy-MM-dd}.log</FileNamePattern>-->
+            <!--&lt;!&ndash;日志文件保留天数 &ndash;&gt;-->
+            <!--<MaxHistory>30</MaxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--&lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 &ndash;&gt;-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
+        <!--</encoder>-->
+        <!--&lt;!&ndash;日志文件最大的大小 &ndash;&gt;-->
+        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<MaxFileSize>10MB</MaxFileSize>-->
+        <!--</triggeringPolicy>-->
+    <!--</appender>-->
+    <!--&lt;!&ndash; 按照每天生成日志文件 error级别 &ndash;&gt;-->
+    <!--<appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>ERROR</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--&lt;!&ndash;日志文件输出的文件名 &ndash;&gt;-->
+            <!--<FileNamePattern>${LOG_PATH}/${LOG_DIR}/error.log.%d{yyyy-MM-dd}.log</FileNamePattern>-->
+            <!--&lt;!&ndash;日志文件保留天数 &ndash;&gt;-->
+            <!--<MaxHistory>30</MaxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--&lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 &ndash;&gt;-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
+        <!--</encoder>-->
+        <!--&lt;!&ndash;日志文件最大的大小 &ndash;&gt;-->
+        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+            <!--<MaxFileSize>10MB</MaxFileSize>-->
+        <!--</triggeringPolicy>-->
+    <!--</appender>-->
+
+    <!-- additivity="true" 是否重复记录 -->
+    <!-- 3rd party Loggers -->
+    <!-- spring -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.jboss.logging" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.elasticsearch" level="WARN"/>
+    <logger name="org.mongodb" level="WARN"/>
+    <logger name="io.lettuce" level="WARN"/>
+    <!-- swagger log configure -->
+    <logger name="io.swagger" level="WARN"/>
+    <!-- kafka log configure -->
+    <logger name="org.apache.kafka" level="WARN"/>
+    <!-- cxf log configure -->
+    <logger name="org.apache.cxf" level="ERROR"/>
+    <!-- thymeleaf log configure -->
+    <logger name="org.thymeleaf" level="WARN"/>
+    <!-- redisson log configure -->
+    <logger name="org.redisson" level="WARN"/>
+    <!--<logger name="io.netty.util.internal" level="WARN"/>-->
+    <logger name="io.netty" level="WARN"/>
+    <logger name="druid" level="WARN"/>
+    <logger name="com.alibaba" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="org.apache.curator.framework" level="ERROR"/>
+
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+    <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

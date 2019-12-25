@@ -4,7 +4,6 @@ import com.changhong.sei.core.dao.BaseTreeDao;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.IFrozen;
-import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.entity.TreeEntity;
 import com.changhong.sei.core.entity.search.Search;
 import com.changhong.sei.core.entity.search.SearchFilter;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +41,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回树根节点集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getAllRootNode() {
         Search search = new Search();
         search.addFilter(new SearchFilter(TreeEntity.PARENT_ID, SearchFilter.EMPTY_VALUE, SearchFilter.Operator.BK));
@@ -59,7 +56,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点下的所有子节点(包含自己)
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodes(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
@@ -79,7 +75,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点下的所有子节点(不包含自己)
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodesNoneOwn(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
@@ -99,7 +94,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点名称的所有节点
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodesByName(String nodeName) {
         Assert.notNull(nodeName, "nodeName不能为空");
 
@@ -117,7 +111,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点树形对象
      */
     @Override
-    @Transactional(readOnly = true)
     public T getTree(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
@@ -250,7 +243,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
     public T findOne4Unfrozen(String id) {
         Assert.notNull(id, "主键不能为空");
         if (IFrozen.class.isAssignableFrom(domainClass)) {
@@ -267,7 +259,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回树根节点集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getAllRootNode4Unfrozen() {
         List<T> list;
         if (IFrozen.class.isAssignableFrom(domainClass)) {
@@ -289,7 +280,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点下的所有子节点(包含自己)
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodes4Unfrozen(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
@@ -309,7 +299,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点下的所有子节点(不包含自己)
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodesNoneOwn4Unfrozen(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
@@ -329,7 +318,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点名称的所有节点
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> getChildrenNodesByName4Unfrozen(String nodeName) {
         Assert.notNull(nodeName, "nodeName不能为空");
 
@@ -347,7 +335,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
      * @return 返回指定节点树形对象
      */
     @Override
-    @Transactional(readOnly = true)
     public T getTree4Unfrozen(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 

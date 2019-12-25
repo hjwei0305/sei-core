@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
  */
 //@Repository
 @SuppressWarnings("unchecked")
-@Transactional(readOnly = true)
 public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseDao<T, ID> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseDaoImpl.class);
 
@@ -77,7 +76,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return
      */
     @Override
-    @Transactional
     public <S extends T> S save(S entity) {
         boolean isNew = preSave(entity);
         if (isNew) {
@@ -89,7 +87,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
     }
 
     @Override
-    @Transactional
     public void save(Collection<T> entities) {
         if (entities != null && entities.size() > 0) {
             int i = 0;
@@ -164,7 +161,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于主键集合查询集合数据对象
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findAll() {
         Sort sort = Sort.unsorted();
         if (IRank.class.isAssignableFrom(domainClass)) {
@@ -194,7 +190,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于主键查询单一数据对象
      */
     @Override
-    @Transactional(readOnly = true)
     public T findOne(ID id) {
         return findById(id).orElse(null);
     }
@@ -207,7 +202,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @throws IllegalArgumentException if {@code id} is {@literal null}.
      */
     @Override
-    @Transactional(readOnly = true)
     public Optional<T> findById(ID id) {
         T entity = null;
         if (Objects.nonNull(id)) {
@@ -266,7 +260,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @param id 业务实体id清单
      */
     @Override
-    @Transactional
     public void delete(ID id) {
         //软删除
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
@@ -289,7 +282,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @param ids 业务实体id清单
      */
     @Override
-    @Transactional
     public void delete(Collection<ID> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return;
@@ -316,7 +308,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 返回所有包含标记删除的业务实体集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findAllWithDelete() {
         Sort sort = Sort.unsorted();
         if (IRank.class.isAssignableFrom(domainClass)) {
@@ -340,7 +331,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 返回未冻结的数据集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findAllUnfrozen() {
         Sort sort = Sort.unsorted();
         if (IRank.class.isAssignableFrom(domainClass)) {
@@ -381,7 +371,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @param value    参数值
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findListByProperty(final String property, final Object value) {
         Specification<T> spec = (root, query, builder) -> {
             SearchFilter searchFilter = new SearchFilter(property, value, SearchFilter.Operator.EQ, null);
@@ -413,7 +402,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 未查询到返回null，如果查询到多条数据则抛出异常
      */
     @Override
-    @Transactional(readOnly = true)
     @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     public T findByProperty(final String property, final Object value) {
         List<T> entities = findListByProperty(property, value);
@@ -433,7 +421,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 未查询到返回null，如果查询到多条数据则返回第一条
      */
     @Override
-    @Transactional(readOnly = true)
     public T findFirstByProperty(final String property, final Object value) {
         Sort sort = Sort.unsorted();
         if (IRank.class.isAssignableFrom(domainClass)) {
@@ -471,7 +458,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 未查询到返回false，如果查询到一条或多条数据则返回true
      */
     @Override
-    @Transactional(readOnly = true)
     public boolean isExistsByProperty(String property, Object value) {
         return Objects.nonNull(findFirstByProperty(property, value));
     }
@@ -480,7 +466,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 单一条件对象查询数据集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findByFilter(SearchFilter searchFilter) {
         List<SearchFilter> searchFilters = new ArrayList<SearchFilter>();
         searchFilters.add(searchFilter);
@@ -502,7 +487,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于查询条件count记录数据
      */
     @Override
-    @Transactional(readOnly = true)
     public long count(Search searchConfig) {
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
             searchConfig.addFilter(new SearchFilter(ISoftDelete.DELETED, 0));
@@ -515,7 +499,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于动态组合条件对象查询数据
      */
     @Override
-    @Transactional(readOnly = true)
     public T findOneByFilters(Search searchConfig) {
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
             searchConfig.addFilter(new SearchFilter(ISoftDelete.DELETED, 0));
@@ -529,7 +512,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于动态组合条件对象和排序定义查询数据集合
      */
     @Override
-    @Transactional(readOnly = true)
     public List<T> findByFilters(Search searchConfig) {
         Sort sort = buildSort(searchConfig);
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
@@ -543,7 +525,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * 基于动态组合条件对象和分页(含排序)对象查询数据集合
      */
     @Override
-    @Transactional(readOnly = true)
     public PageResult<T> findByPage(Search searchConfig) {
         PageInfo pageInfo = searchConfig.getPageInfo();
         //Assert.isTrue(pageInfo != null, "无分页参数。");
@@ -576,7 +557,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 是否已经存在
      */
     @Override
-    @Transactional(readOnly = true)
     public boolean isCodeExists(String code, String id) {
         if (ICodeUnique.class.isAssignableFrom(domainClass)) {
             String queryStr;
@@ -604,7 +584,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 是否已经存在
      */
     @Override
-    @Transactional(readOnly = true)
     public boolean isCodeExists(String tenantCode, String code, String id) {
         if (ICodeUnique.class.isAssignableFrom(domainClass) && ITenant.class.isAssignableFrom(domainClass)) {
             String queryStr;
