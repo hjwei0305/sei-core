@@ -6,7 +6,9 @@ dependencies {
     compile(
             "com.changhong.sei:sei-util:$util_version"
     )
+    // 第三方的依赖
     compile(
-            "org.springframework.boot:spring-boot-starter-data-jpa"
+            "org.springframework.boot:spring-boot-starter-data-jpa",
+            "joda-time:joda-time:$jodaTimeVersion"
     )
 }
