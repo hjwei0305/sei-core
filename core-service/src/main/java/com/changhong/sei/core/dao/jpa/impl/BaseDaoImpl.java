@@ -1,10 +1,9 @@
 package com.changhong.sei.core.dao.jpa.impl;
 
-import ch.qos.logback.core.util.ContextUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
 import com.changhong.sei.core.entity.*;
 import com.changhong.sei.core.entity.search.*;
-import com.changhong.sei.core.utils.ContextTokenUtil;
+import com.changhong.sei.core.utils.ContextUtil;
 import com.chonghong.sei.exception.DataOperationDeniedException;
 import com.chonghong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
@@ -136,9 +135,9 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         //是否含有业务审计属性实体
         if (entity instanceof IAuditable) {
             Date now = new Date();
-            String userId = ContextTokenUtil.getUserId();
-            String userAccount = ContextTokenUtil.getUserAccount();
-            String userName = ContextTokenUtil.getUserName();
+            String userId = ContextUtil.getUserId();
+            String userAccount = ContextUtil.getUserAccount();
+            String userName = ContextUtil.getUserName();
             IAuditable auditableEntity = (IAuditable) entity;
             if (isNew) {
                 //创建
@@ -156,7 +155,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         if (entity instanceof ITenant && StringUtils.isBlank(((ITenant) entity).getTenantCode())) {
             //从上下文中获取租户代码
             ITenant tenant = (ITenant) entity;
-            tenant.setTenantCode(ContextTokenUtil.getTenantCode());
+            tenant.setTenantCode(ContextUtil.getTenantCode());
         }
         return isNew;
     }
@@ -181,9 +180,9 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             //租户
             if (ITenant.class.isAssignableFrom(domainClass)) {
                 if (Objects.isNull(predicate)) {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()));
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()));
                 } else {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()), predicate);
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()), predicate);
                 }
             }
             return predicate;
@@ -215,7 +214,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             entity = super.findById(id).orElse(null);
             if (Objects.nonNull(entity) && ITenant.class.isAssignableFrom(domainClass)) {
                 ITenant tenantEntity = (ITenant) entity;
-                if (!StringUtils.equals(ContextTokenUtil.getTenantCode(), tenantEntity.getTenantCode())) {
+                if (!StringUtils.equals(ContextUtil.getTenantCode(), tenantEntity.getTenantCode())) {
                     return Optional.empty();
                 }
             }
@@ -328,7 +327,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             Predicate predicate = null;
             //租户
             if (ITenant.class.isAssignableFrom(domainClass)) {
-                predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()));
+                predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()));
             }
             return predicate;
         };
@@ -365,9 +364,9 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             //租户
             if (ITenant.class.isAssignableFrom(domainClass)) {
                 if (Objects.isNull(predicate)) {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()));
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()));
                 } else {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()), predicate);
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()), predicate);
                 }
             }
             return predicate;
@@ -393,7 +392,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             }
             //  租户隔离
             if (ITenant.class.isAssignableFrom(domainClass)) {
-                return builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode()), predicate);
+                return builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()), predicate);
             }
             return predicate;
         };
@@ -447,7 +446,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         Specification<T> spec = (root, query, builder) -> {
             Predicate predicate = buildPredicate(property, searchFilter, root, query, builder, false);
             if (ITenant.class.isAssignableFrom(domainClass)) {
-                Predicate tenantCodePredicate = builder.equal(root.get(ITenant.TENANT_CODE), ContextTokenUtil.getTenantCode());
+                Predicate tenantCodePredicate = builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode());
                 predicate = builder.and(predicate, tenantCodePredicate);
             }
             if (ISoftDelete.class.isAssignableFrom(domainClass)) {
@@ -872,7 +871,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     protected Predicate buildPredicatesFromFilters(Search searchConfig, Root root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         if (ITenant.class.isAssignableFrom(domainClass)) {
-            SearchFilter filter = new SearchFilter(ITenant.TENANT_CODE, ContextTokenUtil.getTenantCode(), SearchFilter.Operator.EQ);
+            SearchFilter filter = new SearchFilter(ITenant.TENANT_CODE, ContextUtil.getTenantCode(), SearchFilter.Operator.EQ);
             List<SearchFilter> filters = searchConfig.getFilters();
             if (filters == null || filters.size() == 0 || filters.stream().noneMatch(filter::equals)) {
                 //追加租户代码
