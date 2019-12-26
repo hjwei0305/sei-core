@@ -1,6 +1,5 @@
-package com.changhong.sei.core.utils;
+package com.changhong.sei.core.context;
 
-import com.changhong.sei.core.context.SessionUser;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;

@@ -8,7 +8,7 @@ import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.dto.auth.AuthEntityData;
 import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
-import com.changhong.sei.core.utils.ContextUtil;
+import com.changhong.sei.core.context.ContextUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.util.IdGenerator;
 

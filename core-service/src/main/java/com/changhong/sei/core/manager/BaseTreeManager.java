@@ -8,7 +8,7 @@ import com.changhong.sei.core.dto.auth.AuthTreeEntityData;
 import com.changhong.sei.core.dto.auth.IDataAuthTreeEntity;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
-import com.changhong.sei.core.utils.ContextUtil;
+import com.changhong.sei.core.context.ContextUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;

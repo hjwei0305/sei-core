@@ -13,7 +13,7 @@ import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import com.changhong.sei.core.manager.bo.ResponseData;
 import com.changhong.sei.core.manager.proxy.DataDictProxy;
 import com.changhong.sei.core.manager.proxy.UserProxy;
-import com.changhong.sei.core.utils.ContextUtil;
+import com.changhong.sei.core.context.ContextUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

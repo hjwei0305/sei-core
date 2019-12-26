@@ -4,7 +4,7 @@ import com.changhong.sei.core.dao.jpa.BaseDao;
 import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;
-import com.changhong.sei.core.utils.ContextUtil;
+import com.changhong.sei.core.context.ContextUtil;
 import com.chonghong.sei.exception.DataOperationDeniedException;
 import com.chonghong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
