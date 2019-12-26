@@ -5,13 +5,12 @@ import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
-import com.changhong.sei.core.entity.auth.AuthEntityData;
-import com.changhong.sei.core.entity.auth.IDataAuthEntity;
+import com.changhong.sei.core.dto.auth.AuthEntityData;
+import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ContextUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.util.IdGenerator;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;

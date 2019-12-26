@@ -2,6 +2,8 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 dependencies {
+    // 内部模块依赖
+    compile project(':core-api')
     // SEI平台依赖
     compile(
             "com.changhong.sei:sei-util:$util_version"

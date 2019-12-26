@@ -6,7 +6,7 @@ import com.changhong.sei.core.dao.impl.BaseTreeDaoImpl;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.RelationEntity;
-import com.changhong.sei.core.entity.TreeEntity;
+import com.changhong.sei.core.dto.TreeEntity;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import javax.persistence.EntityManager;

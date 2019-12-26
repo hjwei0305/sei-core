@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity;
+package com.changhong.sei.core.dto;
 
 /**
  * 实现功能：排序属性特征接口

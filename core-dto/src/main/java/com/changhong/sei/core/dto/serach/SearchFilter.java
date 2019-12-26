@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity.search;
+package com.changhong.sei.core.dto.serach;
 
 import com.chonghong.sei.annotation.Remark;
 import com.chonghong.sei.util.ConverterUtils;

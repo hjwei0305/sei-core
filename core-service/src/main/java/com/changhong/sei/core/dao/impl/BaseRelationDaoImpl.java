@@ -3,9 +3,9 @@ package com.changhong.sei.core.dao.impl;
 import com.changhong.sei.core.dao.BaseRelationDao;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
 import com.changhong.sei.core.entity.AbstractEntity;
-import com.changhong.sei.core.entity.IRank;
+import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.entity.RelationEntity;
-import com.changhong.sei.core.entity.search.SearchFilter;
+import com.changhong.sei.core.dto.serach.SearchFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

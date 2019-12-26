@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity;
+package com.changhong.sei.core.dto;
 
 import java.io.Serializable;
 import java.util.List;

@@ -4,13 +4,12 @@ import com.changhong.sei.core.dao.BaseTreeDao;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.IFrozen;
-import com.changhong.sei.core.entity.TreeEntity;
-import com.changhong.sei.core.entity.search.Search;
-import com.changhong.sei.core.entity.search.SearchFilter;
-import com.changhong.sei.core.entity.search.SearchOrder;
+import com.changhong.sei.core.dto.TreeEntity;
+import com.changhong.sei.core.dto.serach.Search;
+import com.changhong.sei.core.dto.serach.SearchFilter;
+import com.changhong.sei.core.dto.serach.SearchOrder;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;

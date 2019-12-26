@@ -3,7 +3,7 @@ package com.changhong.sei.core.manager;
 import com.changhong.sei.core.dao.BaseRelationDao;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.RelationEntity;
-import com.changhong.sei.core.entity.RelationParam;
+import com.changhong.sei.core.dto.RelationParam;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

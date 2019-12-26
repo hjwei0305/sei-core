@@ -1,5 +1,9 @@
 package com.changhong.sei.core.dao.impl;
 
+import com.changhong.sei.core.dto.serach.PageInfo;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.QueryParam;
+import com.changhong.sei.core.dto.serach.SearchOrder;
 import com.changhong.sei.core.entity.search.*;
 import org.apache.commons.lang3.StringUtils;
 

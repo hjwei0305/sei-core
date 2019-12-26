@@ -1,6 +1,6 @@
-package com.changhong.sei.core.entity.auth;
+package com.changhong.sei.core.dto.auth;
 
-import com.changhong.sei.core.entity.TreeEntity;
+import com.changhong.sei.core.dto.TreeEntity;
 
 import java.util.List;
 

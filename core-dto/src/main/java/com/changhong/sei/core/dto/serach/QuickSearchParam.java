@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity.search;
+package com.changhong.sei.core.dto.serach;
 
 import java.io.Serializable;
 import java.util.Collection;

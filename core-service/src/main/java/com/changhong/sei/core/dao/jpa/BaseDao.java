@@ -1,8 +1,8 @@
 package com.changhong.sei.core.dao.jpa;
 
-import com.changhong.sei.core.entity.search.PageResult;
-import com.changhong.sei.core.entity.search.Search;
-import com.changhong.sei.core.entity.search.SearchFilter;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.Search;
+import com.changhong.sei.core.dto.serach.SearchFilter;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

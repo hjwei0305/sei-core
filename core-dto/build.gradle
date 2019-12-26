@@ -1,1 +1,6 @@
-
+dependencies {
+    // SEI平台依赖
+    compile(
+            "com.changhong.sei:sei-util:$util_version"
+    )
+}

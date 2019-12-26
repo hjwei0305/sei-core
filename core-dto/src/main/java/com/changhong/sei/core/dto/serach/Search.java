@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity.search;
+package com.changhong.sei.core.dto.serach;
 
 import org.apache.commons.lang3.StringUtils;
 

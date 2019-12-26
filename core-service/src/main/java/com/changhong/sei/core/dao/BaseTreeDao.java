@@ -2,7 +2,7 @@ package com.changhong.sei.core.dao;
 
 import com.changhong.sei.core.dao.jpa.BaseDao;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.entity.TreeEntity;
+import com.changhong.sei.core.dto.TreeEntity;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;

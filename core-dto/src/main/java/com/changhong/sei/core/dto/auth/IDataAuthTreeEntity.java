@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity.auth;
+package com.changhong.sei.core.dto.auth;
 
 /**
  * *************************************************************************************************
