@@ -12,6 +12,7 @@ dependencies {
     compile(
             "org.springframework.boot:spring-boot-starter-data-jpa",
             "org.springframework.boot:spring-boot-starter-data-redis",
+            "org.modelmapper:modelmapper:$modelmapperVersion",
             "joda-time:joda-time:$jodaTimeVersion"
     )
 }

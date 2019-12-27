@@ -1,6 +1,7 @@
 package com.changhong.sei.core.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * <strong>实现功能:</strong>
@@ -52,6 +53,28 @@ public class ResultData<T> implements Serializable {
 
     public T getData() {
         return data;
+    }
+
+    /**
+     * 处理结果是成功的
+     * @return 成功
+     */
+    public boolean isSuccessful(){
+        if (Objects.isNull(successful)){
+            return false;
+        }
+        return successful;
+    }
+
+    /**
+     * 处理结果是失败的
+     * @return 成功
+     */
+    public boolean isFailed(){
+        if (Objects.isNull(successful)){
+            return true;
+        }
+        return !successful;
     }
 
     /**
