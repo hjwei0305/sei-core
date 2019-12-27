@@ -103,58 +103,52 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
     void delete(Collection<ID> ids);
 
     /**
-     * 获取所有业务实体清单(可以使用二级缓存)
+     * 获取所有业务实体清单
      *
      * @return 返回所有业务实体集合
      */
     @Override
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findAll();
 
     /**
-     * 获取所有包含标记删除的业务实体清单(可以使用二级缓存)
+     * 获取所有包含标记删除的业务实体清单
      *
      * @return 返回所有包含标记删除的业务实体集合
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findAllWithDelete();
 
     /**
-     * 获取所有未冻结的(可以使用二级缓存)
+     * 获取所有未冻结的
      *
      * @return 返回未冻结的数据集合
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findAllUnfrozen();
 
     /**
-     * 根据泛型对象属性和值查询集合对象(可以使用二级缓存)
+     * 根据泛型对象属性和值查询集合对象
      *
      * @param property 属性名，即对象中数量变量名称
      * @param value    参数值
      * @return 返回符合条件的业务实体集合
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findListByProperty(String property, Object value);
 
     /**
-     * 根据泛型对象属性和值查询唯一对象(可以使用二级缓存)
+     * 根据泛型对象属性和值查询唯一对象
      *
      * @param property 属性名，即对象中数量变量名称
      * @param value    参数值
      * @return 未查询到返回null，如果查询到多条数据则抛出异常
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     T findByProperty(String property, Object value);
 
     /**
-     * 根据泛型对象属性和值查询唯一对象(可以使用二级缓存)
+     * 根据泛型对象属性和值查询唯一对象
      *
      * @param property 属性名，即对象中数量变量名称
      * @param value    参数值
      * @return 未查询到返回null，如果查询到多条数据则返回第一条
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     T findFirstByProperty(String property, Object value);
 
     /**
@@ -173,7 +167,6 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
      * @return 返回符合条件的对象集合
      * @see SearchFilter
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findByFilter(SearchFilter searchFilter);
 
     /**
@@ -188,7 +181,6 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
     /**
      * 基于动态组合条件对象查询数据
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     T findOneByFilters(Search searchConfig);
 
     /**
@@ -198,7 +190,6 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
      * @return 返回符合条件的对象集合
      * @see Search
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     List<T> findByFilters(Search searchConfig);
 
     /**
@@ -209,7 +200,6 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
      * @see Search
      * @see PageResult
      */
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     PageResult<T> findByPage(Search searchConfig);
 
     /**

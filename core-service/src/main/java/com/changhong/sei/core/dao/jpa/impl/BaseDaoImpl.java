@@ -402,7 +402,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return 未查询到返回null，如果查询到多条数据则抛出异常
      */
     @Override
-    @QueryHints(@QueryHint(name = "org.hibernate.cacheable", value = "true"))
     public T findByProperty(final String property, final Object value) {
         List<T> entities = findListByProperty(property, value);
         if (CollectionUtils.isEmpty(entities)) {

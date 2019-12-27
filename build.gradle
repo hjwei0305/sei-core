@@ -3,6 +3,7 @@ allprojects {
     group GROUP
     version VERSION
     apply plugin: 'idea'
+    apply plugin: 'maven'
 }
 
 // 子模块的统一配置
