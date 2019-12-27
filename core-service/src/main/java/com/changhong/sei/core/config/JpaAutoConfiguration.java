@@ -23,5 +23,5 @@ import javax.sql.DataSource;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @EnableJpaRepositories(basePackages = {"com.changhong.sei.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EnableTransactionManagement
-public class JpaConfiguration {
+public class JpaAutoConfiguration {
 }

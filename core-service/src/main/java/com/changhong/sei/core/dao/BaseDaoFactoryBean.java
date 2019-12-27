@@ -3,10 +3,7 @@ package com.changhong.sei.core.dao;
 import com.changhong.sei.core.dao.jpa.impl.DaoImplMapper;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
-import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
-import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.data.jpa.repository.support.*;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -52,7 +49,7 @@ public class BaseDaoFactoryBean<R extends JpaRepository<T, Serializable>, T exte
             @Override
             protected Class<?> getRepositoryBaseClass(RepositoryMetadata metadata) {
                 if (isQueryDslExecutor(metadata.getRepositoryInterface())) {
-                    return QuerydslJpaRepository.class;
+                    return QuerydslJpaPredicateExecutor.class;
                 } else {
                     Class clazz = metadata.getDomainType();
                     return new DaoImplMapper<T>().getRepositoryBaseClass(clazz);
