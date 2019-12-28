@@ -11,7 +11,7 @@ import java.util.Locale;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-25 14:39
  */
-public class ContextUtil {
+public class ContextUtil extends BaseContextSupport {
     private static ThreadLocal<SessionUser> userTokenHold = new InheritableThreadLocal<>();
     /**
      * 获取当前用户的Id
