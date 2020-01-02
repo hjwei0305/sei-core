@@ -6,6 +6,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.*;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ import java.util.Locale;
  * @version 1.0.1 2017/3/30 17:07
  * @see ApplicationContextAware
  */
+@Component
 public class BaseApplicationContext implements ApplicationContextAware, EnvironmentAware {
 
     /**

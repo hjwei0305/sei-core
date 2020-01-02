@@ -48,10 +48,10 @@ public abstract class BaseEntityServiceImpl <T extends BaseEntity, D extends Bas
     protected ResultData checkDto(D dto){
         if (Objects.isNull(dto)){
             // 输入的数据传输对象为空！
-            return ResultData.fail(ContextUtil.getMessage("sei_service_00002"));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00002"));
         }
         // 检查通过！
-        return ResultData.success(ContextUtil.getMessage("sei_service_00001"));
+        return ResultData.success(ContextUtil.getMessage("core_service_00001"));
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class BaseEntityServiceImpl <T extends BaseEntity, D extends Bas
             // 捕获异常，并返回
             LogUtil.error("保存业务实体异常！", e);
             // 保存业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("sei_service_00003", e.getMessage()));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00003", e.getMessage()));
         }
         if (result.notSuccessful()){
             return ResultData.fail(result.getMessage());
@@ -97,7 +97,7 @@ public abstract class BaseEntityServiceImpl <T extends BaseEntity, D extends Bas
             e.printStackTrace();
             LogUtil.error("删除业务实体异常！", e);
             // 删除业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("sei_service_00004", e.getMessage()));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00004", e.getMessage()));
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class BaseEntityServiceImpl <T extends BaseEntity, D extends Bas
             e.printStackTrace();
             LogUtil.error("获取业务实体异常！", e);
             // 获取业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("sei_service_00005"));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00005"));
         }
         // 转换数据 to DTO
         D dto = convertToDto(entity);

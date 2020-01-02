@@ -80,7 +80,7 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
                     str.setLength(0);
                 } else {
                     // error
-                    return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00005");
+                    return OperateResultWithData.operationFailureWithData(entity, "core_manager_00005");
                 }
             }
 
@@ -91,11 +91,11 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
                 if (Objects.nonNull(origin)) {
                     //验证当前parentId是否与原parentId相同,用以控制不允许修改父节点操作
                     if (!StringUtils.equalsAny(origin.getParentId(), parentId, null, "")) {
-                        return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00006");
+                        return OperateResultWithData.operationFailureWithData(entity, "core_manager_00006");
                     }
                 } else {
                     //未找到原始数据
-                    return OperateResultWithData.operationFailureWithData(entity, "ecmp_service_00004");
+                    return OperateResultWithData.operationFailureWithData(entity, "core_manager_00004");
                 }
 
                 //检查是否修改代码和名称，以便同步更新子节点的路径
@@ -120,9 +120,9 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
             }
 
             if (isNew) {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00001");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "core_manager_00001");
             } else {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "ecmp_service_00002");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(entity, "core_manager_00002");
             }
         }
         return operateResultWithData;
@@ -161,12 +161,12 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
                 List<T> childrenList = getChildrenNodesNoneOwn(id);
                 if (CollectionUtils.isEmpty(childrenList)) {
                     getDao().delete(entity);
-                    return OperateResult.operationSuccess("ecmp_service_00003");
+                    return OperateResult.operationSuccess("core_manager_00003");
                 } else {
-                    return OperateResult.operationFailure("ecmp_service_00007");
+                    return OperateResult.operationFailure("core_manager_00007");
                 }
             } else {
-                return OperateResult.operationWarning("ecmp_service_00004");
+                return OperateResult.operationWarning("core_manager_00004");
             }
         } else {
             return operateResult;
@@ -202,16 +202,16 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
     @Transactional
     public OperateResult move(String nodeId, String targetParentId) {
         if (StringUtils.isBlank(nodeId)) {
-            return OperateResult.operationFailure("ecmp_service_00008", "当前节点ID");
+            return OperateResult.operationFailure("core_manager_00008", "当前节点ID");
         }
         if (StringUtils.isBlank(targetParentId)) {
-            return OperateResult.operationFailure("ecmp_service_00008", "目标父节点ID");
+            return OperateResult.operationFailure("core_manager_00008", "目标父节点ID");
         }
 
         //获取当前节点
         T entity = findOne(nodeId);
         if (Objects.isNull(entity)) {
-            return OperateResult.operationWarning("ecmp_service_00004");
+            return OperateResult.operationWarning("core_manager_00004");
         }
         OperateResult operateResult;
         //当前节点的父节点
@@ -243,9 +243,9 @@ public abstract class BaseTreeManager<T extends BaseEntity & TreeEntity<T>> exte
                     }
                 }
             }
-            operateResult = OperateResult.operationSuccess("ecmp_service_00009");
+            operateResult = OperateResult.operationSuccess("core_manager_00009");
         } else {
-            operateResult = OperateResult.operationWarning("ecmp_service_00004");
+            operateResult = OperateResult.operationWarning("core_manager_00004");
         }
         return operateResult;
     }
