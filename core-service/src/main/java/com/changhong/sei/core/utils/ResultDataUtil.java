@@ -8,5 +8,4 @@ package com.changhong.sei.core.utils;
  * @version 1.0.1 2019-12-27 11:19
  */
 public class ResultDataUtil {
-
 }

@@ -2,4 +2,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.changhong.sei.core.config.JpaAutoConfiguration,\
 com.changhong.sei.core.config.RedisAutoConfiguration,\
-com.changhong.sei.core.config.SeiAutoConfiguration
+com.changhong.sei.core.config.SeiAutoConfiguration,\
+com.changhong.sei.core.config.SwaggerFeaturesConfig,\
+com.changhong.sei.core.config.ProvidersConfig
