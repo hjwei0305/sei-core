@@ -3,8 +3,8 @@ package com.changhong.sei.core.api;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.ApiOperation;
-
-import javax.ws.rs.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <strong>实现功能:</strong>
@@ -21,10 +21,9 @@ public interface BaseEntityService<T extends BaseEntityDto> {
      * @param entity 业务实体
      * @return 操作结果
      */
-    @POST
-    @Path("save")
+    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
-    ResultData<T> save(T entity);
+    ResultData<T> save(@RequestBody T entity);
 
     /**
      * 删除业务实体
@@ -32,10 +31,9 @@ public interface BaseEntityService<T extends BaseEntityDto> {
      * @param id 业务实体Id
      * @return 操作结果
      */
-    @DELETE
-    @Path("delete")
+    @DeleteMapping(path = "delete")
     @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
-    ResultData delete(String id);
+    ResultData delete(@RequestParam("id") String id);
 
     /**
      * 通过Id获取一个业务实体
@@ -43,8 +41,7 @@ public interface BaseEntityService<T extends BaseEntityDto> {
      * @param id 业务实体Id
      * @return 业务实体
      */
-    @GET
-    @Path("findOne")
+    @GetMapping(path = "findOne")
     @ApiOperation(value = "获取一个业务实体", notes = "通过Id获取一个业务实体")
-    ResultData<T> findOne(@QueryParam("id") String id);
+    ResultData<T> findOne(@RequestParam("id") String id);
 }

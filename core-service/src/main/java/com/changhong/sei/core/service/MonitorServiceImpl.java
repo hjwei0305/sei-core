@@ -3,6 +3,7 @@ package com.changhong.sei.core.service;
 import com.changhong.sei.core.api.MonitorService;
 import com.changhong.sei.core.dto.ResultData;
 import com.chonghong.sei.util.DateUtils;
+import io.swagger.annotations.Api;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.Date;
  * @version 1.0.1 2019-12-26 14:10
  */
 @Service
+@Api(value = "监控服务接口")
 public class MonitorServiceImpl implements MonitorService {
     /**
      * 监控业务健康

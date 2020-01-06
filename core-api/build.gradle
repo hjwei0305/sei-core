@@ -4,9 +4,9 @@ apply plugin: 'io.spring.dependency-management'
 dependencies {
     compile project(':core-dto')
     compile(
-            "org.apache.cxf:cxf-spring-boot-starter-jaxrs:$cxfSpringBootVersion",
-            "org.apache.cxf:cxf-rt-rs-service-description-swagger:$cxfSpringBootVersion",
-            "org.webjars:swagger-ui:$swaggerUiVersion",
+            "org.springframework.boot:spring-boot-starter-web",
+            "io.springfox:springfox-swagger2:$foxSwaggerVersion",
+            "io.springfox:springfox-swagger-ui:$foxSwaggerVersion",
             "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion"
     )
 }

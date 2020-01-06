@@ -1,14 +1,11 @@
 package com.changhong.sei.core.api;
 
 import com.changhong.sei.core.dto.ResultData;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * usage:监控服务
@@ -16,16 +13,14 @@ import javax.ws.rs.core.MediaType;
  * </p>
  * User:liusonglin; Date:2018/6/13;ProjectName:ecmp-core;
  */
-@Api(value = "监控服务接口")
-@Path("monitor")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+@RestController
+@RequestMapping(value = "monitor",
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface MonitorService {
     /**
      * 监控业务健康
      */
-    @GET
-    @Path("health")
+    @GetMapping(path = "health")
     @ApiOperation(value = "监控服务是否健康", notes = "监控服务是否健康")
     ResultData health();
 }

@@ -30,10 +30,7 @@ import java.util.stream.Collectors;
  * @version 1.0.1 2019-12-27 9:31
  */
 public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends BaseEntityDto>
-        implements BaseEntityService<D>,
-        FindAllService<D>,
-        FindByPageService<D>,
-        DataAuthEntityService<D> {
+        implements BaseEntityService<D>{
     // 注入业务逻辑实现
     protected abstract BaseEntityManager<T> getManager();
 
@@ -174,7 +171,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      *
      * @return 业务实体清单
      */
-    @Override
     public ResultData<List<D>> findAll() {
         List<D> data;
         try {
@@ -194,7 +190,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      *
      * @return 业务实体清单
      */
-    @Override
     public ResultData<List<D>> findAllUnfrozen() {
         List<D> data;
         try {
@@ -215,7 +210,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      * @param search 查询参数
      * @return 分页查询结果
      */
-    @Override
     public ResultData<PageResult<D>> findByPage(Search search) {
         PageResult<T> result;
         try {
@@ -239,7 +233,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      * @param ids 业务实体Id清单
      * @return 数据权限实体清单
      */
-    @Override
     public ResultData<List<AuthEntityData>> getAuthEntityDataByIds(List<String> ids) {
         List<AuthEntityData> authEntityDatas;
         try {
@@ -258,7 +251,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      *
      * @return 数据权限实体清单
      */
-    @Override
     public ResultData<List<AuthEntityData>> findAllAuthEntityData() {
         List<AuthEntityData> authEntityDatas;
         try {
@@ -278,7 +270,6 @@ public abstract class BaseEntityServiceImpl<T extends BaseEntity, D extends Base
      * @param featureCode 功能项代码
      * @return 有权限的业务实体清单
      */
-    @Override
     public ResultData<List<D>> getUserAuthorizedEntities(String featureCode) {
         List<T> authEntities;
         try {

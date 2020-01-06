@@ -3,11 +3,10 @@ package com.changhong.sei.core.api;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -26,18 +25,16 @@ public interface BaseTreeService<T extends BaseEntityDto> extends BaseEntityServ
      * @param targetParentId 目标父节点Id
      * @return 操作状态
      */
-    @POST
-    @Path("move")
+    @PostMapping(path = "move")
     @ApiOperation(value = "移动节点", notes = "移动一个节点")
-    ResultData move(@QueryParam("nodeId") String nodeId, @QueryParam("targetParentId") String targetParentId);
+    ResultData move(@RequestParam("nodeId") String nodeId, @RequestParam("targetParentId") String targetParentId);
 
     /**
      * 获取所有根节点
      *
      * @return 根节点清单
      */
-    @GET
-    @Path("getAllRootNode")
+    @GetMapping(path = "getAllRootNode")
     @ApiOperation(value = "获取所有根节点", notes = "获取所有根节点")
     ResultData<List<T>> getAllRootNode();
 
@@ -47,10 +44,9 @@ public interface BaseTreeService<T extends BaseEntityDto> extends BaseEntityServ
      * @param nodeId 节点Id
      * @return 节点树
      */
-    @GET
-    @Path("getTree")
+    @GetMapping(path = "getTree")
     @ApiOperation(value = "获取一个节点的树", notes = "获取一个节点的树")
-    ResultData<T> getTree(@QueryParam("nodeId") String nodeId);
+    ResultData<T> getTree(@RequestParam("nodeId") String nodeId);
 
     /**
      * 获取一个节点的所有子节点
@@ -59,10 +55,9 @@ public interface BaseTreeService<T extends BaseEntityDto> extends BaseEntityServ
      * @param includeSelf 是否包含本节点
      * @return 子节点清单
      */
-    @GET
-    @Path("getChildrenNodes")
+    @GetMapping(path = "getChildrenNodes")
     @ApiOperation(value = "获取一个节点的所有子节点", notes = "获取一个节点的所有子节点,可以包含本节点")
-    ResultData<List<T>> getChildrenNodes(@QueryParam("nodeId") String nodeId, @QueryParam("includeSelf") boolean includeSelf);
+    ResultData<List<T>> getChildrenNodes(@RequestParam("nodeId") String nodeId, @RequestParam("includeSelf") boolean includeSelf);
 
     /**
      * 获取一个节点的所有父节点
@@ -71,8 +66,7 @@ public interface BaseTreeService<T extends BaseEntityDto> extends BaseEntityServ
      * @param includeSelf 是否包含本节点
      * @return 父节点清单
      */
-    @GET
-    @Path("getParentNodes")
+    @GetMapping(path = "getParentNodes")
     @ApiOperation(value = "获取一个节点的所有父节点", notes = "获取一个节点的所有父节点,可以包含本节点")
-    ResultData<List<T>> getParentNodes(@QueryParam("nodeId") String nodeId, @QueryParam("includeSelf") boolean includeSelf);
+    ResultData<List<T>> getParentNodes(@RequestParam("nodeId") String nodeId, @RequestParam("includeSelf") boolean includeSelf);
 }

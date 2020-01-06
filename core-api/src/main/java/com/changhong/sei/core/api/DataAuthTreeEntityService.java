@@ -5,11 +5,12 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.auth.AuthTreeEntityData;
 import com.changhong.sei.core.dto.auth.IDataAuthTreeEntity;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -27,18 +28,16 @@ public interface DataAuthTreeEntityService<T extends BaseEntityDto & IDataAuthTr
      * @param ids 业务实体Id清单
      * @return 数据权限树形实体清单
      */
-    @POST
-    @Path("getAuthTreeEntityDataByIds")
+    @PostMapping(path = "getAuthTreeEntityDataByIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取数据权限树形实体清单", notes = "通过业务实体Id清单获取数据权限树形实体清单")
-    ResultData<List<AuthTreeEntityData>> getAuthTreeEntityDataByIds(List<String> ids);
+    ResultData<List<AuthTreeEntityData>> getAuthTreeEntityDataByIds(@RequestBody List<String> ids);
 
     /**
      * 获取所有数据权限树形实体清单
      *
      * @return 数据权限树形实体清单
      */
-    @GET
-    @Path("findAllAuthTreeEntityData")
+    @GetMapping(path = "findAllAuthTreeEntityData")
     @ApiOperation(value = "获取所有数据权限树形实体清单", notes = "获取当前租户所有数据权限树形实体清单")
     ResultData<List<AuthTreeEntityData>> findAllAuthTreeEntityData();
 
@@ -48,8 +47,7 @@ public interface DataAuthTreeEntityService<T extends BaseEntityDto & IDataAuthTr
      * @param featureCode 功能项代码
      * @return 有权限的树形业务实体清单
      */
-    @GET
-    @Path("getUserAuthorizedTreeEntities")
+    @GetMapping(path = "getUserAuthorizedTreeEntities")
     @ApiOperation(value = "获取当前用户有权限的树形业务实体清单", notes = "获取当前用户有权限的树形业务实体清单")
-    ResultData<List<T>> getUserAuthorizedTreeEntities(@QueryParam("featureCode") String featureCode);
+    ResultData<List<T>> getUserAuthorizedTreeEntities(@RequestParam("featureCode") String featureCode);
 }

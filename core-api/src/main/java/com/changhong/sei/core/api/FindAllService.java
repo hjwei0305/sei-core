@@ -3,9 +3,8 @@ package com.changhong.sei.core.api;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import java.util.List;
 
 /**
@@ -22,8 +21,7 @@ public interface FindAllService<T extends BaseEntityDto> {
      *
      * @return 业务实体清单
      */
-    @GET
-    @Path("findAll")
+    @GetMapping(path = "findAll")
     @ApiOperation(value = "获取所有业务实体", notes = "获取所有业务实体")
     ResultData<List<T>> findAll();
 
@@ -32,8 +30,7 @@ public interface FindAllService<T extends BaseEntityDto> {
      *
      * @return 业务实体清单
      */
-    @GET
-    @Path("findAllUnfrozen")
+    @GetMapping(path = "findAllUnfrozen")
     @ApiOperation(value = "获取所有未冻结业务实体", notes = "获取所有未冻结业务实体(适用与实现了冻结接口的业务实体)")
     ResultData<List<T>> findAllUnfrozen();
 }

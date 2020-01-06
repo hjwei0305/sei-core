@@ -5,8 +5,8 @@ import com.changhong.sei.core.dto.RelationEntityDto;
 import com.changhong.sei.core.dto.RelationParam;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
 import java.util.List;
 
 /**
@@ -27,10 +27,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param parentId 父实体Id
      * @return 子实体清单
      */
-    @GET
-    @Path("getChildrenFromParentId")
+    @GetMapping(path = "getChildrenFromParentId")
     @ApiOperation(value = "通过角色获取功能项清单", notes = "通过角色Id获取已分配的功能项清单")
-    ResultData<List<C>> getChildrenFromParentId(@QueryParam("parentId") String parentId);
+    ResultData<List<C>> getChildrenFromParentId(@RequestParam("parentId") String parentId);
 
     /**
      * 创建分配关系
@@ -39,10 +38,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param childIds 子实体Id清单
      * @return 操作结果
      */
-    @POST
-    @Path("insertRelations")
+    @PostMapping(path = "insertRelations")
     @ApiOperation(value = "创建分配关系", notes = "通过父实体Id和子实体Id清单创建分配关系")
-    ResultData insertRelations(@QueryParam("parentId") String parentId, @QueryParam("childIds") List<String> childIds);
+    ResultData insertRelations(@RequestParam("parentId") String parentId, @RequestParam("childIds") List<String> childIds);
 
     /**
      * 创建分配关系
@@ -50,10 +48,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param relationParam 分配关系参数
      * @return 操作结果
      */
-    @POST
-    @Path("insertRelationsByParam")
+    @PostMapping(path = "insertRelationsByParam")
     @ApiOperation(value = "创建分配关系", notes = "通过分配关系参数创建分配关系")
-    ResultData insertRelationsByParam(RelationParam relationParam);
+    ResultData insertRelationsByParam(@RequestBody RelationParam relationParam);
 
     /**
      * 移除分配关系
@@ -62,10 +59,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param childIds 子实体Id清单
      * @return 操作结果
      */
-    @DELETE
-    @Path("removeRelations")
+    @DeleteMapping(path = "removeRelations")
     @ApiOperation(value = "移除分配关系", notes = "通过父实体Id和子实体Id清单移除分配关系")
-    ResultData removeRelations(@QueryParam("parentId") String parentId, @QueryParam("childIds") List<String> childIds);
+    ResultData removeRelations(@RequestParam("parentId") String parentId, @RequestParam("childIds") List<String> childIds);
 
     /**
      * 移除分配关系
@@ -73,10 +69,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param relationParam 分配关系参数
      * @return 操作结果
      */
-    @DELETE
-    @Path("removeRelationsByParam")
+    @DeleteMapping(path = "removeRelationsByParam")
     @ApiOperation(value = "移除分配关系", notes = "通过分配关系参数移除分配关系")
-    ResultData removeRelationsByParam(RelationParam relationParam);
+    ResultData removeRelationsByParam(@RequestBody RelationParam relationParam);
 
     /**
      * 获取未分配的子实体清单
@@ -84,10 +79,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param parentId 父实体Id
      * @return 子实体清单
      */
-    @GET
-    @Path("getUnassigned")
+    @GetMapping(path = "getUnassigned")
     @ApiOperation(value = "获取未分配的功能项", notes = "获取用户有权限且未分配的功能项清单")
-    ResultData<List<C>> getUnassignedChildren(@QueryParam("parentId") String parentId);
+    ResultData<List<C>> getUnassignedChildren(@RequestParam("parentId") String parentId);
 
     /**
      * 通过子实体Id获取父实体清单
@@ -95,10 +89,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param childId 子实体Id
      * @return 父实体清单
      */
-    @GET
-    @Path("getParentsFromChildId")
+    @GetMapping(path = "getParentsFromChildId")
     @ApiOperation(value = "通过子实体Id获取父实体清单", notes = "通过子实体Id获取父实体清单")
-    ResultData<List<P>> getParentsFromChildId(@QueryParam("childId") String childId);
+    ResultData<List<P>> getParentsFromChildId(@RequestParam("childId") String childId);
 
     /**
      * 通过父实体清单创建分配关系
@@ -107,10 +100,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param parentIds 父实体Id清单
      * @return 操作结果
      */
-    @POST
-    @Path("insertRelationsByParents")
+    @PostMapping(path = "insertRelationsByParents")
     @ApiOperation(value = "通过父实体清单创建分配关系", notes = "通过父实体清单创建分配关系")
-    ResultData insertRelationsByParents(@QueryParam("childId") String childId, @QueryParam("parentIds") List<String> parentIds);
+    ResultData insertRelationsByParents(@RequestParam("childId") String childId, @RequestParam("parentIds") List<String> parentIds);
 
     /**
      * 通过父实体清单移除分配关系
@@ -119,10 +111,9 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param parentIds 父实体Id清单
      * @return 操作结果
      */
-    @DELETE
-    @Path("removeRelationsByParents")
+    @DeleteMapping(path = "removeRelationsByParents")
     @ApiOperation(value = "通过父实体清单移除分配关系", notes = "通过父实体清单移除分配关系")
-    ResultData removeRelationsByParents(@QueryParam("childId") String childId, @QueryParam("parentIds") List<String> parentIds);
+    ResultData removeRelationsByParents(@RequestParam("childId") String childId, @RequestParam("parentIds") List<String> parentIds);
 
     /**
      * 通过父实体Id获取分配关系清单
@@ -130,8 +121,7 @@ public interface BaseRelationService<T extends BaseEntityDto & RelationEntityDto
      * @param parentId 父实体Id
      * @return 分配关系清单
      */
-    @GET
-    @Path("getRelationsByParentId")
+    @GetMapping(path = "getRelationsByParentId")
     @ApiOperation(value = "通过父实体Id获取分配关系清单", notes = "通过父实体Id获取分配关系清单")
-    ResultData<List<T>> getRelationsByParentId(@QueryParam("parentId") String parentId);
+    ResultData<List<T>> getRelationsByParentId(@RequestParam("parentId") String parentId);
 }
