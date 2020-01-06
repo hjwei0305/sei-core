@@ -33,6 +33,7 @@ public class SwaggerFeaturesConfig {
         result.setVersion(version);
         result.setSchemes(new String[] { "http", "https" });
         result.setPrettyPrint(true);
+        result.setScan(true);
         return result;
     }
 }
