@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * User:liusonglin; Date:2018/6/13;ProjectName:ecmp-core;
  */
 @RestController
-@RequestMapping(value = "monitor",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "monitor", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface MonitorService {
     /**
      * 监控业务健康
