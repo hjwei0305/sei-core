@@ -12,7 +12,7 @@ subprojects  {
         repositories {
             mavenLocal()
             maven { url REPOSITORY }
-            mavenCentral()
+            //mavenCentral()
         }
         dependencies {
             classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
