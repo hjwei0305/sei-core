@@ -1,7 +1,5 @@
 package com.changhong.sei.core.dto.serach;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -100,9 +98,9 @@ public class Search implements Serializable {
      */
     public Search addQuickSearchProperty(String property) {
         if (quickSearchProperties == null) {
-            quickSearchProperties = new HashSet<String>();
+            quickSearchProperties = new HashSet<>();
         }
-        if (StringUtils.isNotBlank(property)) {
+        if (Objects.nonNull(property) && property.trim().length() > 0) {
             quickSearchProperties.add(property);
             this.setQuickSearchProperties(quickSearchProperties);
         }
@@ -135,7 +133,7 @@ public class Search implements Serializable {
     public Search addFilter(SearchFilter searchFilter) {
         if (searchFilter != null) {
             if (filters == null) {
-                filters = new ArrayList<SearchFilter>();
+                filters = new ArrayList<>();
             }
             filters.add(searchFilter);
         }

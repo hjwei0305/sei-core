@@ -11,7 +11,9 @@ import java.util.Objects;
  * @version 1.0.1 2019-12-19 15:42
  */
 public class ResultData<T> implements Serializable {
+    private static final long serialVersionUID = 5247687420568803130L;
     private final static String DEFAULT_SUCCESSFUL_MSG = "处理成功！";
+
     /**
      * 是成功的
      */
@@ -57,10 +59,11 @@ public class ResultData<T> implements Serializable {
 
     /**
      * 处理结果是成功的
+     *
      * @return 成功
      */
-    public boolean isSuccessful(){
-        if (Objects.isNull(successful)){
+    public boolean isSuccessful() {
+        if (Objects.isNull(successful)) {
             return false;
         }
         return successful;
@@ -68,10 +71,11 @@ public class ResultData<T> implements Serializable {
 
     /**
      * 处理结果是失败的
+     *
      * @return 成功
      */
-    public boolean isFailed(){
-        if (Objects.isNull(successful)){
+    public boolean isFailed() {
+        if (Objects.isNull(successful)) {
             return true;
         }
         return !successful;
@@ -79,31 +83,34 @@ public class ResultData<T> implements Serializable {
 
     /**
      * 处理成功
+     *
      * @param data 返回的数据对象
-     * @param <T> 数据对象类型
+     * @param <T>  数据对象类型
      * @return 处理结果
      */
-    public static <T> ResultData<T> success(T data){
+    public static <T> ResultData<T> success(T data) {
         return new ResultData<>(Boolean.TRUE, DEFAULT_SUCCESSFUL_MSG, data);
     }
 
     /**
      * 处理成功
+     *
      * @param message 成功的消息
-     * @param data 返回的数据对象
-     * @param <T> 数据对象类型
+     * @param data    返回的数据对象
+     * @param <T>     数据对象类型
      * @return 处理结果
      */
-    public static <T> ResultData<T> success(String message, T data){
+    public static <T> ResultData<T> success(String message, T data) {
         return new ResultData<>(Boolean.TRUE, message, data);
     }
 
     /**
      * 处理失败
+     *
      * @param message 失败的消息
      * @return 处理结果
      */
-    public static <T> ResultData<T> fail(String message){
+    public static <T> ResultData<T> fail(String message) {
         return new ResultData<>(Boolean.FALSE, message, null);
     }
 }

@@ -5,8 +5,7 @@ dependencies {
     compile project(':core-dto')
     compile(
             "org.springframework.boot:spring-boot-starter-web",
-            "io.springfox:springfox-swagger2:$foxSwaggerVersion",
-            "io.springfox:springfox-swagger-ui:$foxSwaggerVersion"
+            "io.springfox:springfox-swagger2:$foxSwaggerVersion"
     )
 }
 

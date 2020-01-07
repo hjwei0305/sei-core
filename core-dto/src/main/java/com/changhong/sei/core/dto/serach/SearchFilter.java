@@ -1,7 +1,7 @@
 package com.changhong.sei.core.dto.serach;
 
-import com.chonghong.sei.annotation.Remark;
-import com.chonghong.sei.util.ConverterUtils;
+import jodd.datetime.JDateTime;
+import jodd.typeconverter.Convert;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,64 +30,104 @@ public class SearchFilter implements Serializable {
      * 查询操作枚举
      */
     public enum Operator {
-        @Remark(value = "等于", comments = " = ")
+        /**
+         * 等于 =
+         */
         EQ,
 
-        @Remark(value = "不等于", comments = " != ")
+        /**
+         * 不等于 !=
+         */
         NE,
 
-        @Remark(value = "模糊查询", comments = " LIKE %abc% ")
+        /**
+         * 模糊查询  LIKE %abc%
+         */
         LK,
 
-        @Remark(value = "不包含", comments = " NOT LIKE %abc% ")
+        /**
+         * 不包含 NOT LIKE %abc%
+         */
         NC,
 
-        @Remark(value = "左匹配", comments = " LIKE abc% ")
+        /**
+         * 左匹配  LIKE abc%
+         */
         LLK,
 
-        @Remark(value = "不以什么开头", comments = " NOT LIKE abc% ")
+        /**
+         * 不以什么开头  NOT LIKE abc%
+         */
         BN,
 
-        @Remark(value = "右匹配", comments = " LIKE %abc ")
+        /**
+         * 右匹配  LIKE %abc
+         */
         RLK,
 
-        @Remark(value = "不以什么结尾", comments = " NOT LIKE %abc ")
+        /**
+         * 不以什么结尾  NOT LIKE %abc
+         */
         EN,
 
-        @Remark(value = "BETWEEN", comments = " BETWEEN 1 AND 2 ")
+        /**
+         * BETWEEN  BETWEEN 1 AND 2
+         */
         BT,
 
-        @Remark(value = "大于", comments = " > ")
+        /**
+         * 大于  >
+         */
         GT,
 
-        @Remark(value = "小于", comments = " < ")
+        /**
+         * 小于  <
+         */
         LT,
 
-        @Remark(value = "大等于", comments = " >= ")
+        /**
+         * 大等于  >=
+         */
         GE,
 
-        @Remark(value = "小等于", comments = " <= ")
+        /**
+         * 小等于  <=
+         */
         LE,
 
-        @Remark(value = "在其中", comments = "IN ( )")
+        /**
+         * 在其中 IN ( )
+         */
         IN,
 
-        @Remark(value = "为空", comments = "IS NULL OR ==''")
+        /**
+         * 为空 IS NULL OR ==''
+         */
         BK,
 
-        @Remark(value = "不为空", comments = "IS NOT NULL AND !=''")
+        /**
+         * 不为空 IS NOT NULL AND !=''
+         */
         NB,
 
-        @Remark(value = "为NULL", comments = "IS NULL")
+        /**
+         * 为NULL IS NULL
+         */
         NU,
 
-        @Remark(value = "不为NULL", comments = "IS NOT NULL")
+        /**
+         * 不为NULL IS NOT NULL
+         */
         NN,
 
-        @Remark(value = "属性比较", comments = "属性1 < 属性2")
+        /**
+         * 属性比较 属性1 < 属性2
+         */
         PLT,
 
-        @Remark(value = "属性比较", comments = "属性1 <= 属性2")
+        /**
+         * 属性比较 属性1 <= 属性2
+         */
         PLE
     }
 
@@ -136,7 +176,41 @@ public class SearchFilter implements Serializable {
     }
 
     public Object getValue() {
-        return ConverterUtils.convert(getFieldType(), this.value);
+        Object val = value;
+        String type = getFieldType();
+        if (Objects.nonNull(val) && val.toString().length() > 0) {
+            try {
+                if ("java.lang.String".equals(type) || "string".equalsIgnoreCase(type) || "str".equalsIgnoreCase(type)) {
+                    val = Convert.toString(val);
+                } else if ("java.lang.Boolean".equals(type) || "boolean".equalsIgnoreCase(type) || "bool".equalsIgnoreCase(type)) {
+                    val = Convert.toBoolean(val);
+                } else if ("java.lang.Short".equals(type) || "short".equalsIgnoreCase(type)) {
+                    val = Convert.toShort(val);
+                } else if ("java.lang.Integer".equals(type) || "int".equalsIgnoreCase(type)) {
+                    val = Convert.toInteger(val);
+                } else if ("java.lang.Long".equals(type) || "long".equalsIgnoreCase(type)) {
+                    val = Convert.toLong(val);
+                } else if ("java.lang.Float".equals(type) || "float".equalsIgnoreCase(type)) {
+                    val = Convert.toFloat(val);
+                } else if ("java.lang.Double".equals(type) || "double".equalsIgnoreCase(type)) {
+                    val = Convert.toDouble(val);
+                } else if ("java.math.BigDecimal".equals(type)) {
+                    val = Convert.toBigDecimal(val);
+                } else if ("java.util.Date".equals(type) || "date".equalsIgnoreCase(type)) {
+                    val = Convert.toDate(val);
+                } else if ("java.sql.Date".equals(type)) {
+                    JDateTime jDateTime = new JDateTime(val.toString());
+                    val = jDateTime.convertToSqlDate();
+                } else if ("java.sql.Timestamp".equals(type)) {
+                    JDateTime jDateTime = new JDateTime(val.toString());
+                    val = jDateTime.convertToSqlTimestamp();
+                } else if ("java.lang.Byte".equals(type)) {
+                    val = Convert.toByte(val);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return val;
     }
 
     public void setValue(Object value) {

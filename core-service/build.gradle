@@ -13,6 +13,7 @@ dependencies {
             "org.springframework.boot:spring-boot-starter-data-jpa",
             "org.springframework.boot:spring-boot-starter-data-redis",
             "org.modelmapper:modelmapper:$modelmapperVersion",
+            "io.springfox:springfox-swagger-ui:$foxSwaggerVersion",
             "joda-time:joda-time:$jodaTimeVersion"
     )
 }
