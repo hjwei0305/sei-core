@@ -1,7 +1,8 @@
 dependencies {
     // SEI平台依赖
     compile(
-            "com.changhong.sei:sei-util:$util_version"
+            "org.jodd:jodd-bean:3.8.5",
+            "org.jodd:jodd-core:3.8.5"
     )
 }
 
