@@ -18,12 +18,12 @@ public interface BaseEntityService<T extends BaseEntityDto> {
     /**
      * 保存业务实体
      *
-     * @param entity 业务实体
+     * @param dto 业务实体DTO
      * @return 操作结果
      */
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
-    ResultData<T> save(@RequestBody T entity);
+    ResultData<T> save(@RequestBody T dto);
 
     /**
      * 删除业务实体
