@@ -76,7 +76,7 @@ public interface DefaultBaseEntityService<T extends BaseEntity, D extends BaseEn
      */
     @Override
     default ResultData<D> findOne(String id){
-        T entity = null;
+        T entity;
         try {
             entity = getManager().findOne(id);
         } catch (Exception e) {
