@@ -21,7 +21,7 @@ dependencies {
     )
 
     // logback <if>标签
-    compile("org.codehaus.janino:janino:3.1.0")
+    // compile("org.codehaus.janino:janino:3.1.0")
 }
 
 //打jar包

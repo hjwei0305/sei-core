@@ -8,7 +8,6 @@
      -->
 
     <!-- 读取当前应用Environment中的属性 -->
-    <springProperty scope="context" name="IS_LOCAL" source="sei.global.local"/>
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <springProperty scope="context" name="APP_PORT" source="server.port"/>
     <springProperty scope="context" name="DEFAULT_APP_PORT" source="spring.application.port"/>
@@ -28,13 +27,9 @@
 <!--            <property name="LOG_PATH" value="${LOG_PATH:-/log}"/>-->
 <!--        </else>-->
 <!--    </if>-->
-<!--    <property name="LOG_DIR" value="${APP_NAME:-system}"/>-->
-<!--    <property name="APP_PORT" value="${APP_PORT:-${DEFAULT_APP_PORT:-0}}"/>-->
-<!--    <if condition='!property("APP_PORT").equals("0")'>-->
-<!--        <then>-->
-<!--            <property name="LOG_DIR" value="${LOG_DIR}-${APP_PORT}"/>-->
-<!--        </then>-->
-<!--    </if>-->
+    <property name="LOG_DIR" value="${APP_NAME:-sei}"/>
+    <property name="APP_PORT" value="${APP_PORT:-${DEFAULT_APP_PORT:-0}}"/>
+    <property name="LOG_FILE" value="${LOG_DIR}-${APP_PORT}"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -45,21 +40,11 @@
 
     <!-- 按照每天生成日志文件 -->
     <appender name="FILE" class="com.changhong.sei.core.log.SeiRollingFileAppender">
-<!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-<!--            <level>INFO</level>-->
-<!--        </filter>-->
-<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-<!--            <level>ERROR</level>-->
-<!--            <onMatch>ACCEPT</onMatch>-->
-<!--            <onMismatch>DENY</onMismatch>-->
-<!--        </filter>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
-            <fileNamePattern>info.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>logs/${LOG_FILE}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!--日志文件最大的大小 -->
-<!--            <maxFileSize>10MB</maxFileSize>-->
-            <maxFileSize>10KB</maxFileSize>
+            <maxFileSize>10MB</maxFileSize>
             <!--日志文件保留天数 -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -83,8 +68,6 @@
     <logger name="io.swagger" level="WARN"/>
     <!-- kafka log configure -->
     <logger name="org.apache.kafka" level="WARN"/>
-    <!-- cxf log configure -->
-    <logger name="org.apache.cxf" level="ERROR"/>
     <!-- thymeleaf log configure -->
     <logger name="org.thymeleaf" level="WARN"/>
     <!-- redisson log configure -->
@@ -94,21 +77,16 @@
     <logger name="druid" level="WARN"/>
     <logger name="com.alibaba" level="WARN"/>
     <logger name="com.zaxxer.hikari" level="WARN"/>
-    <logger name="org.apache.curator.framework" level="ERROR"/>
 
-    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
     <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
     <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
-    <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
     <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
-    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
     <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
 
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
 
         <appender-ref ref="FILE"/>
-<!--        <appender-ref ref="FILE-ERROR"/>-->
     </root>
 
 </configuration>
