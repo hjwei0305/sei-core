@@ -22,12 +22,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class SwaggerConfiguration {
+    @Value("${application.name}")
+    private String name;
     @Value("${application.version}")
     private String version;
     @Value("${spring.cloud.config.profile}")
     private String profile;
-    @Value("${spring.cloud.config.name}")
-    private String name;
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title(name+" API")
