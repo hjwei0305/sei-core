@@ -20,4 +20,9 @@ public class XssFilter extends BaseWebFilter {
 
         filterChain.doFilter(xssRequest, response);
     }
+
+    @Override
+    protected String getFilterName() {
+        return XssFilter.class.getSimpleName();
+    }
 }

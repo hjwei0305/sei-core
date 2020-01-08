@@ -5,10 +5,6 @@ dependencies {
     // 内部模块依赖
     compile project(':core-api')
     compile project(':core-context')
-    // SEI平台依赖
-    compile(
-            "com.changhong.sei:sei-util:$util_version"
-    )
 
     // 第三方的依赖
     compile(

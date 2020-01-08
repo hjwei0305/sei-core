@@ -3,6 +3,13 @@ dependencies {
     compile(
             "com.changhong.sei:sei-util:$util_version"
     )
+
+    compile(
+            //json
+            "com.fasterxml.jackson.core:jackson-core:$jacksonVersion",
+            "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
+            "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    )
 }
 
 //打jar包

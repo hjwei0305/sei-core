@@ -1,4 +1,4 @@
-package com.changhong.sei.core.serializer;
+package com.changhong.sei.core.dto.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;

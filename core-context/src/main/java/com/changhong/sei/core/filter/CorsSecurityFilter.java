@@ -23,6 +23,6 @@ public class CorsSecurityFilter extends CorsFilter {
      */
     @Override
     protected String getFilterName() {
-        return null;
+        return CorsSecurityFilter.class.getSimpleName();
     }
 }

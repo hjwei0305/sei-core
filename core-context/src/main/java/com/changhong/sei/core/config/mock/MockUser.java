@@ -1,28 +1,21 @@
-package com.changhong.sei.core.context;
+package com.changhong.sei.core.config.mock;
 
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.enums.UserType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.Serializable;
-import java.util.Objects;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 用户会话信息
- * 以sessionId是否为空判断用户是否登录
+ * 实现功能：
  *
- * @author <a href="mailto:chao2.ma@changhong.com">马超(Vision.Mac)</a>
- * @version 1.0.1 2017/3/30 19:24
+ * @author 马超(Vision.Mac)
+ * @version 1.0.00  2020-01-09 06:46
  */
-public class SessionUser implements Serializable {
-
-    private static final long serialVersionUID = -3948903856725857866L;
+@ConfigurationProperties("sei.mock.user")
+public class MockUser {
     /**
-     * 匿名用户名称
+     * 是否启用
      */
-    private final static String ANONYMOUS = "anonymous";
-    private final static String UNKNOWN = "Unknown";
+    private boolean enable = false;
     /**
      * 会话id
      */
@@ -30,15 +23,15 @@ public class SessionUser implements Serializable {
     /**
      * 用户id，平台唯一
      */
-    private String userId = ANONYMOUS;
+    private String userId;
     /**
      * 用户账号
      */
-    private String account = ANONYMOUS;
+    private String account;
     /**
      * 用户名
      */
-    private String userName = ANONYMOUS;
+    private String userName;
     /**
      * 租户代码
      */
@@ -50,19 +43,27 @@ public class SessionUser implements Serializable {
     /**
      * 用户类型
      */
-    private UserType userType = UserType.Employee;
+    private UserType userType;
     /**
      * 用户权限策略
      */
-    private UserAuthorityPolicy authorityPolicy = UserAuthorityPolicy.NormalUser;
+    private UserAuthorityPolicy authorityPolicy;
     /**
      * 客户端IP
      */
-    private String ip = UNKNOWN;
+    private String ip;
     /**
      * 语言环境
      */
     private String locale = "zh_CN";
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     public String getsId() {
         return sId;
@@ -142,41 +143,5 @@ public class SessionUser implements Serializable {
 
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    @JsonIgnore
-    public String getUserInfo() {
-        return toString();
-    }
-
-    @JsonIgnore
-    public boolean isAnonymous() {
-        return StringUtils.isBlank(getsId());
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append(userName).append(" [ ").append(tenantCode).append(" | ").append(account).append(" ] ");
-        return str.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof SessionUser)) {
-            return false;
-        }
-        SessionUser that = (SessionUser) o;
-        return Objects.equals(getsId(), that.getsId())
-                && Objects.equals(getUserId(), that.getUserId())
-                && Objects.equals(getTenantCode(), that.getTenantCode());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getsId(), getUserId(), getTenantCode());
     }
 }

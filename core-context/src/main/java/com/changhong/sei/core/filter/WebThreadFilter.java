@@ -1,7 +1,9 @@
 package com.changhong.sei.core.filter;
 
 import com.changhong.sei.core.config.cors.CorsConfig;
+import com.changhong.sei.core.config.mock.MockUser;
 import com.changhong.sei.core.context.SessionUser;
+import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import org.slf4j.MDC;
@@ -36,6 +38,11 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
      */
     private CorsConfig corsConfig;
     /**
+     * 模拟用户
+     */
+    private MockUser mockUser;
+
+    /**
      * 带参数构造器
      */
     public WebThreadFilter(List<WebFilter> filterDefs) {
@@ -46,6 +53,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     protected void initFilterBean() throws ServletException {
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
         corsConfig = applicationContext.getBean(CorsConfig.class);
+        mockUser = applicationContext.getBean(MockUser.class);
         super.initFilterBean();
     }
 
@@ -54,8 +62,10 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         super.handleInnerFilters(innerFilters);
         // 跨域
         innerFilters.add(0, new CorsSecurityFilter(corsConfig));
+        // 检查token
+        innerFilters.add(1, new CheckTokenFilter(mockUser));
         // 防止XSS攻击
-        innerFilters.add(1, new XssFilter());
+        innerFilters.add(2, new XssFilter());
     }
 
     @Override
@@ -64,11 +74,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
                                     FilterChain chain) throws ServletException, IOException {
         // 初始化
         ThreadLocalHolder.begin();
-
-        // todo 设置token
-        SessionUser user = new SessionUser();
-
-        ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
 
         try {
             compositeFilter.doFilter(request, response, chain);

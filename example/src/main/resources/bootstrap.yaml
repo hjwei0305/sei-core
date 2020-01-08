@@ -40,5 +40,19 @@ notify:
 application:
   version: 4.0.0
 
-server:
-  port: 8081
+
+sei:
+  mock:
+    user:
+#      enable: true
+      s-id: 123456
+      user-id: 1234
+      account: admin
+      user-name: 管理员
+      tenant-code: 10044
+      email: test.sei.com
+      ip: 127.0.0.1
+      locale: zh_CN
+
+
+

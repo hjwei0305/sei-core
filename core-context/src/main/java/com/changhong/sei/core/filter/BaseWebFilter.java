@@ -18,6 +18,6 @@ public abstract class BaseWebFilter extends OncePerRequestFilter {
      */
     @Override
     protected String getFilterName() {
-        return null;
+        return super.getFilterName();
     }
 }

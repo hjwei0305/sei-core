@@ -1,8 +1,11 @@
 package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.cors.CorsConfig;
+import com.changhong.sei.core.config.mock.MockUser;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
+import com.changhong.sei.core.util.JwtTokenUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +26,7 @@ import java.util.List;
  * @version 1.0.00  2020-01-07 11:35
  */
 @Configuration
-@EnableConfigurationProperties({GlobalConfig.class, CorsConfig.class})
+@EnableConfigurationProperties({GlobalConfig.class, CorsConfig.class, MockUser.class})
 public class WebAutoConfiguration {
     /**
      * 自定义过滤器定义
@@ -47,6 +50,21 @@ public class WebAutoConfiguration {
         // 设置优先级高于spring security
         registration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
         return registration;
+    }
+
+    @Bean
+    public JwtTokenUtil jwtTokenUtil(Environment env) {
+        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+        // JWT签名密钥
+        String secret = env.getProperty("sei.security.jwt.secret");
+        if (StringUtils.isNotBlank(secret)) {
+            jwtTokenUtil.setJwtSecret(secret);
+        }
+        // 会话超时时间。
+        int sessionTimeout = env.getProperty("server.servlet.session.timeout", Integer.class, 3600);
+        // JWT过期时间（秒）
+        jwtTokenUtil.setJwtExpiration(sessionTimeout + 300);
+        return jwtTokenUtil;
     }
 
 //    /**
