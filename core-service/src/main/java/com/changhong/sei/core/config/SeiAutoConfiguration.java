@@ -1,12 +1,11 @@
 package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.api.MonitorService;
-import com.changhong.sei.core.context.BaseApplicationContext;
+import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.service.MonitorServiceImpl;
 import com.chonghong.sei.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -20,8 +19,8 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class SeiAutoConfiguration {
     @Bean
-    public BaseApplicationContext seiContext() {
-        return new BaseApplicationContext();
+    public ApplicationContextHolder seiContext() {
+        return new ApplicationContextHolder();
     }
 
     @Bean

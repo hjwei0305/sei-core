@@ -2,4 +2,6 @@ rootProject.name = 'sei-core'
 include 'core-service'
 include 'core-dto'
 include 'core-api'
+include 'core-context'
+include 'example'
 

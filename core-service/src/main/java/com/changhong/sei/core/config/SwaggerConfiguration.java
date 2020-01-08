@@ -30,8 +30,8 @@ public class SwaggerConfiguration {
     private String profile;
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(name+" API")
-                .description(name+"的API文档"+"，运行环境："+profile)
+                .title(name + " API")
+                .description(name + "的API文档" + "，运行环境：" + profile)
                 .termsOfServiceUrl("")
                 .version(version)
                 .build();

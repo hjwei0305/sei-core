@@ -1,0 +1,20 @@
+${AnsiColor.MAGENTA}
+                    SSSSSSSSSSSSSSS      EEEEEEEEEEEEEEEEEEEEEE     IIIIIIIIII
+                  SS:::::::::::::::S     E::::::::::::::::::::E     I::::::::I
+                 S:::::SSSSSS::::::S     E::::::::::::::::::::E     I::::::::I
+                 S:::::S     SSSSSSS     EE::::::EEEEEEEEE::::E     II::::::II
+                 S:::::S                   E:::::E       EEEEEE       I::::I
+                 S:::::S                   E:::::E                    I::::I
+                  S::::SSSS                E::::::EEEEEEEEEE          I::::I
+                   SS::::::SSSSS           E:::::::::::::::E          I::::I
+                     SSS::::::::SS         E:::::::::::::::E          I::::I
+                        SSSSSS::::S        E::::::EEEEEEEEEE          I::::I
+                             S:::::S       E:::::E                    I::::I
+                             S:::::S       E:::::E       EEEEEE       I::::I
+                 SSSSSSS     S:::::S     EE::::::EEEEEEEE:::::E     II::::::II
+                 S::::::SSSSSS:::::S     E::::::::::::::::::::E     I::::::::I
+                 S:::::::::::::::SS      E::::::::::::::::::::E     I::::::::I
+                  SSSSSSSSSSSSSSS        EEEEEEEEEEEEEEEEEEEEEE     IIIIIIIIII
+${AnsiColor.BRIGHT_MAGENTA}
+::: Project (${appCode}:${envCode}) :::   ＼(^O^)／   ::: SEI ${ecmp-version}   Spring-Boot ${spring-boot.version}
+${AnsiColor.BLUE}

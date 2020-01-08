@@ -6,15 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 /**
- * <strong>实现功能：</strong>
- * <p>
  * 用户会话信息
  * 以sessionId是否为空判断用户是否登录
- * </p>
  *
  * @author <a href="mailto:chao2.ma@changhong.com">马超(Vision.Mac)</a>
  * @version 1.0.1 2017/3/30 19:24
@@ -28,10 +24,9 @@ public class SessionUser implements Serializable {
     private final static String ANONYMOUS = "anonymous";
     private final static String UNKNOWN = "Unknown";
     /**
-     * accessToken
+     * 会话id
      */
-    private String accessToken;
-    private String sessionId;
+    private String sId;
     /**
      * 用户id，平台唯一
      */
@@ -67,40 +62,14 @@ public class SessionUser implements Serializable {
     /**
      * 语言环境
      */
-    private String locale;
-    /**
-     * 应用代码
-     */
-    private String appId = UNKNOWN;
-    /**
-     * 登录时间
-     */
-    private Date loginTime;
+    private String locale = "zn_CN";
 
-    /**
-     * 登陆状态：1：登陆成功 2：登陆失败  3：多租户，需要传入租户代码
-     */
-    private LoginStatus loginStatus;
-    /**
-     * 退出成功的地址
-     * 主要用户单点登录场景下使用
-     */
-    private String logoutUrl;
-
-    public String getAccessToken() {
-        return accessToken;
+    public String getsId() {
+        return sId;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setsId(String sId) {
+        this.sId = sId;
     }
 
     public String getUserId() {
@@ -175,38 +144,6 @@ public class SessionUser implements Serializable {
         this.locale = locale;
     }
 
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public Date getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(Date loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public LoginStatus getLoginStatus() {
-        return loginStatus;
-    }
-
-    public void setLoginStatus(LoginStatus loginStatus) {
-        this.loginStatus = loginStatus;
-    }
-
-    public String getLogoutUrl() {
-        return logoutUrl;
-    }
-
-    public void setLogoutUrl(String logoutUrl) {
-        this.logoutUrl = logoutUrl;
-    }
-
     @JsonIgnore
     public String getUserInfo() {
         return toString();
@@ -214,7 +151,7 @@ public class SessionUser implements Serializable {
 
     @JsonIgnore
     public boolean isAnonymous() {
-        return StringUtils.isBlank(getAccessToken());
+        return StringUtils.isBlank(getsId());
     }
 
     @Override
@@ -233,13 +170,13 @@ public class SessionUser implements Serializable {
             return false;
         }
         SessionUser that = (SessionUser) o;
-        return Objects.equals(getAccessToken(), that.getAccessToken())
+        return Objects.equals(getsId(), that.getsId())
                 && Objects.equals(getUserId(), that.getUserId())
                 && Objects.equals(getTenantCode(), that.getTenantCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getAccessToken(), getUserId(), getTenantCode());
+        return Objects.hash(getsId(), getUserId(), getTenantCode());
     }
 }

@@ -19,7 +19,7 @@ import java.util.Locale;
  * @see ApplicationContextAware
  */
 @Component
-public class BaseApplicationContext implements ApplicationContextAware, EnvironmentAware {
+public class ApplicationContextHolder implements ApplicationContextAware, EnvironmentAware {
 
     /**
      * spring应用上下文对象
