@@ -7,8 +7,6 @@ import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * 实现功能：
  *
