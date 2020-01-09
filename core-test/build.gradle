@@ -3,23 +3,10 @@ apply plugin: 'io.spring.dependency-management'
 
 dependencies {
     // 内部模块依赖
-    compile project(':core-api')
     compile project(':core-context')
 
     // 第三方的依赖
     compile(
-            "org.springframework.boot:spring-boot-starter-data-jpa",
-            "org.springframework.boot:spring-boot-starter-data-redis",
-            "org.springframework.boot:spring-boot-starter-actuator",
-            "org.modelmapper:modelmapper:$modelmapperVersion",
-            "io.springfox:springfox-swagger-ui:$foxSwaggerVersion",
-            "joda-time:joda-time:$jodaTimeVersion"
-    )
-
-    // logback <if>标签
-    // compile("org.codehaus.janino:janino:3.1.0")
-
-    testCompile(
             "org.springframework.boot:spring-boot-starter-test"
     )
 }

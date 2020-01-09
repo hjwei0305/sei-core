@@ -1,8 +1,13 @@
 package com.changhong.sei.core.config.mock;
 
+import com.changhong.sei.core.context.SessionUser;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.enums.UserType;
+import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 实现功能：
@@ -143,5 +148,17 @@ public class MockUser {
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public SessionUser mock() {
+        SessionUser sessionUser = new SessionUser();
+        try {
+            BeanUtils.copyProperties(sessionUser, this);
+
+            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sessionUser;
     }
 }

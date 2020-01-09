@@ -21,9 +21,6 @@ dependencies {
             "mysql:mysql-connector-java:$mysqlVersion"
     )
 
-    testCompile(
-            "org.springframework.boot:spring-boot-starter-test"
-    )
 }
 
 bootJar { enabled = false }

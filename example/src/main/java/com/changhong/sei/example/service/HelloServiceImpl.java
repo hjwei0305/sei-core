@@ -1,5 +1,6 @@
 package com.changhong.sei.example.service;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.example.api.BaseHelloService;
 import com.changhong.sei.example.api.HelloService;
@@ -35,6 +36,7 @@ public class HelloServiceImpl implements BaseHelloServiceImpl,HelloService {
     @Override
     public ResultData<String> sayHello(String name){
         try {
+            System.out.println(ContextUtil.getSessionUser());
             String data = manager.sayHello(name, testKey);
             return ResultData.success(data);
         } catch (Exception e) {

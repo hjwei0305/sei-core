@@ -4,4 +4,5 @@ include 'core-dto'
 include 'core-api'
 include 'core-context'
 include 'example'
+include 'core-test'
 
