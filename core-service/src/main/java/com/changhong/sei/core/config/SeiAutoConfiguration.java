@@ -2,14 +2,11 @@ package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.api.MonitorService;
 import com.changhong.sei.core.context.ApplicationContextHolder;
-import com.changhong.sei.core.context.Version;
 import com.changhong.sei.core.service.MonitorServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
-import javax.annotation.PostConstruct;
 
 /**
  * SEI平台启动的基础配置
@@ -41,11 +38,5 @@ public class SeiAutoConfiguration {
     @Bean
     public MonitorService monitorService() {
         return new MonitorServiceImpl();
-    }
-
-    @PostConstruct
-    public void initSeiEnvironment(){
-        //版本
-        System.setProperty("sei-version", Version.getCurrentVersion());
     }
 }
