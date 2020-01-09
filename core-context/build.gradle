@@ -22,5 +22,12 @@ dependencies {
 
 //打jar包
 bootJar { enabled = false }
-jar { enabled = false }
+jar {
+    manifest {
+        attributes("Manifest-Version": "4.0")
+        attributes("Created-By": "Gradle")
+        attributes("Implementation-Title": "$project.name")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+    }
+}
 
