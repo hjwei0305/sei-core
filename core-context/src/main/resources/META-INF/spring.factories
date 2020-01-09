@@ -1,3 +1,8 @@
+org.springframework.boot.SpringApplicationRunListener=\
+  com.changhong.sei.core.banner.BannerListener
+#
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  com.changhong.sei.core.config.GlobalEnvironmentPostProcessor
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.changhong.sei.core.config.WebAutoConfiguration
+  com.changhong.sei.core.config.WebAutoConfiguration
