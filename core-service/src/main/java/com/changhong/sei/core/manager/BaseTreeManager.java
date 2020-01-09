@@ -1,14 +1,14 @@
 package com.changhong.sei.core.manager;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dao.BaseTreeDao;
-import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.dto.auth.AuthTreeEntityData;
 import com.changhong.sei.core.dto.auth.IDataAuthTreeEntity;
+import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
-import com.changhong.sei.core.context.ContextUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;

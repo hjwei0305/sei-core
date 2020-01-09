@@ -7,7 +7,6 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.log.LogUtil;
-import com.changhong.sei.core.manager.BaseEntityManager;
 import com.changhong.sei.core.manager.BaseTreeManager;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import org.modelmapper.ModelMapper;

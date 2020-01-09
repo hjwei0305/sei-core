@@ -23,6 +23,7 @@ dependencies {
 //打jar包
 bootJar { enabled = false }
 jar {
+    enabled = true
     manifest {
         attributes("Manifest-Version": "4.0")
         attributes("Created-By": "Gradle")

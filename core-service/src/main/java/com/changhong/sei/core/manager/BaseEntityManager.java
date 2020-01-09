@@ -1,14 +1,14 @@
 package com.changhong.sei.core.manager;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dao.BaseEntityDao;
+import com.changhong.sei.core.dto.auth.AuthEntityData;
+import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
-import com.changhong.sei.core.dto.auth.AuthEntityData;
-import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
-import com.changhong.sei.core.context.ContextUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.util.IdGenerator;
 

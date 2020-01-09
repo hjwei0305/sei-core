@@ -10,10 +10,8 @@ import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.RelationEntity;
 import com.changhong.sei.core.log.LogUtil;
-import com.changhong.sei.core.manager.BaseEntityManager;
 import com.changhong.sei.core.manager.BaseRelationManager;
 import com.changhong.sei.core.manager.bo.OperateResult;
-import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.changhong.sei.core.utils;
 
 import com.changhong.sei.core.context.ApplicationContextHolder;
-import com.changhong.sei.core.context.ContextUtil;
 import org.springframework.core.Ordered;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
