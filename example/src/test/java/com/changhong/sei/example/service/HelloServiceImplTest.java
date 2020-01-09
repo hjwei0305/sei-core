@@ -9,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
-
 /**
  * <strong>实现功能:</strong>
  * <p></p>
