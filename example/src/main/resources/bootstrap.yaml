@@ -40,11 +40,10 @@ notify:
 application:
   version: 4.0.0
 
-
 sei:
   mock:
     user:
-#      enable: true
+      enable: true
       s-id: 123456
       user-id: 1234
       account: admin
