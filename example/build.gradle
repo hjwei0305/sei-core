@@ -31,3 +31,6 @@ jar {
     enabled = false
 }
 
+uploadArchives {
+    enabled = false
+}
