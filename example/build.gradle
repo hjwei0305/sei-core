@@ -20,7 +20,10 @@ dependencies {
     compile(
             "mysql:mysql-connector-java:$mysqlVersion"
     )
-
+    testCompile(
+            "com.changhong.sei:core-test:$sei_version"
+//            "org.springframework.boot:spring-boot-starter-test"
+    )
 }
 
 bootJar { enabled = false }
