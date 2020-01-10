@@ -6,6 +6,7 @@ import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -72,6 +73,14 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+        String path = request.getServletPath();
+        if (StringUtils.startsWithAny(path,
+                "/favicon.ico", "/swagger-ui.html","/swagger-resources", "/v2/api-docs", "/webjars/", "/actuator", "/instances")) {
+
+            chain.doFilter(request, response);
+            return;
+        }
+
         // 初始化
         ThreadLocalHolder.begin();
 

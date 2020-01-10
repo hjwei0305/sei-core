@@ -6,6 +6,7 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -33,6 +34,14 @@ public class CheckTokenFilter extends BaseWebFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getServletPath();
+        if (StringUtils.endsWithAny(path,
+                "/", "/csrf")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (true) {
             //认证错误处理
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
