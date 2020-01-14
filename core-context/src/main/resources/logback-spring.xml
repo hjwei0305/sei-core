@@ -54,6 +54,25 @@
         </encoder>
     </appender>
 
+<!--    <appender name="FLUENT_LOG_SYNC" class="com.ecmp.log.LogDataFluentAppender">-->
+<!--        &lt;!&ndash; Tag for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file &ndash;&gt;-->
+<!--        &lt;!&ndash; LogDataFluentAppender.java &ndash;&gt;-->
+<!--        <appCode>${spring.cloud.config.name:-none}</appCode>-->
+<!--        <envCode>${spring.cloud.config.profile:-none}</envCode>-->
+<!--        &lt;!&ndash; Host name/address and port number which Flentd placed &ndash;&gt;-->
+<!--        <remoteHost>${FlentdHost:-10.4.68.77}</remoteHost>-->
+<!--        <port>${FlentdPort:-24224}</port>-->
+<!--    </appender>-->
+
+<!--    <appender name="FLUENT_LOG" class="ch.qos.logback.classic.AsyncAppender">-->
+<!--        &lt;!&ndash; 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 &ndash;&gt;-->
+<!--        <discardingThreshold>0</discardingThreshold>-->
+<!--        &lt;!&ndash; 更改默认的队列的深度,该值会影响性能.默认值为256 &ndash;&gt;-->
+<!--        &lt;!&ndash;<queueSize>20</queueSize>&ndash;&gt;-->
+<!--        &lt;!&ndash; 添加附加的appender,最多只能添加一个 &ndash;&gt;-->
+<!--        <appender-ref ref="FLUENT_LOG_SYNC"/>-->
+<!--    </appender>-->
+
     <!-- additivity="true" 是否重复记录 -->
     <!-- 3rd party Loggers -->
     <!-- spring -->

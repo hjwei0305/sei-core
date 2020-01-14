@@ -26,7 +26,11 @@ public class SessionUser implements Serializable {
     /**
      * 会话id
      */
-    private String sId;
+    private String sessionId;
+    /**
+     * token
+     */
+    private String token;
     /**
      * 用户id，平台唯一
      */
@@ -64,12 +68,20 @@ public class SessionUser implements Serializable {
      */
     private String locale = "zh_CN";
 
-    public String getsId() {
-        return sId;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setsId(String sId) {
-        this.sId = sId;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUserId() {
@@ -151,7 +163,7 @@ public class SessionUser implements Serializable {
 
     @JsonIgnore
     public boolean isAnonymous() {
-        return StringUtils.isBlank(getsId());
+        return StringUtils.isBlank(getSessionId());
     }
 
     @Override
@@ -170,13 +182,13 @@ public class SessionUser implements Serializable {
             return false;
         }
         SessionUser that = (SessionUser) o;
-        return Objects.equals(getsId(), that.getsId())
+        return Objects.equals(getSessionId(), that.getSessionId())
                 && Objects.equals(getUserId(), that.getUserId())
                 && Objects.equals(getTenantCode(), that.getTenantCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getsId(), getUserId(), getTenantCode());
+        return Objects.hash(getSessionId(), getUserId(), getTenantCode());
     }
 }

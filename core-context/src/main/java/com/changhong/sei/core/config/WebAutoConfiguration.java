@@ -5,6 +5,7 @@ import com.changhong.sei.core.config.mock.MockUser;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
 import com.changhong.sei.core.util.JwtTokenUtil;
+import com.chonghong.sei.util.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -62,8 +63,10 @@ public class WebAutoConfiguration {
         }
         // 会话超时时间。
         int sessionTimeout = env.getProperty("server.servlet.session.timeout", Integer.class, 3600);
+        // 设置随机数,避免再高并发时,缓存同时失效
+        int random = (int) RandomUtils.getInteger(1, 100);
         // JWT过期时间（秒）
-        jwtTokenUtil.setJwtExpiration(sessionTimeout + 300);
+        jwtTokenUtil.setJwtExpiration(sessionTimeout + random);
         return jwtTokenUtil;
     }
 
