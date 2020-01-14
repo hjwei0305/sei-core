@@ -2,6 +2,7 @@ package com.changhong.sei.core.config;
 
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,6 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableSwagger2
 @Configuration
+@ConditionalOnProperty(name = "enable", prefix = "swagger",havingValue = "true",matchIfMissing = true)
 public class SwaggerConfiguration {
     @Value("${application.name}")
     private String name;
