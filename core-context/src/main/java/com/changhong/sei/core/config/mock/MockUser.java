@@ -17,6 +17,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sei.mock.user")
 public class MockUser {
     /**
+     * 匿名用户名称
+     */
+    private final static String ANONYMOUS = "anonymous";
+    private final static String UNKNOWN = "Unknown";
+    /**
      * 是否启用
      */
     private boolean enable = false;
@@ -27,15 +32,15 @@ public class MockUser {
     /**
      * 用户id，平台唯一
      */
-    private String userId;
+    private String userId = ANONYMOUS;
     /**
      * 用户账号
      */
-    private String account;
+    private String account = ANONYMOUS;
     /**
      * 用户名
      */
-    private String userName;
+    private String userName = ANONYMOUS;
     /**
      * 租户代码
      */
@@ -47,15 +52,15 @@ public class MockUser {
     /**
      * 用户类型
      */
-    private UserType userType;
+    private UserType userType = UserType.Employee;
     /**
      * 用户权限策略
      */
-    private UserAuthorityPolicy authorityPolicy;
+    private UserAuthorityPolicy authorityPolicy = UserAuthorityPolicy.NormalUser;
     /**
      * 客户端IP
      */
-    private String ip;
+    private String ip = UNKNOWN;
     /**
      * 语言环境
      */
