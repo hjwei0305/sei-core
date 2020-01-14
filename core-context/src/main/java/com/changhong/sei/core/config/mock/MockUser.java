@@ -1,5 +1,6 @@
 package com.changhong.sei.core.config.mock;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.enums.UserType;
@@ -152,6 +153,8 @@ public class MockUser {
         SessionUser sessionUser = new SessionUser();
         try {
             BeanUtils.copyProperties(sessionUser, this);
+            // 生成token
+            ContextUtil.generateToken(sessionUser);
 
             ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
         } catch (Exception e) {
