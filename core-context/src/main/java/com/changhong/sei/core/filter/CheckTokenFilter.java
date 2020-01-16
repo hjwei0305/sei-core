@@ -48,18 +48,19 @@ public class CheckTokenFilter extends BaseWebFilter {
         String token = request.getHeader(ContextUtil.HEADER_TOKEN_KEY);
         if (StringUtils.isBlank(token)) {
             // 认证失败
-            unauthorized(response);
+            unauthorized("token为空,认证失败!", response);
             return;
         }
 
         // 检查token
-        SessionUser user = ContextUtil.getSessionUser(token);
-//        // token检查失败,则是 anonymous
-//        if (user.isAnonymous()) {
-//            // 认证失败
-//            unauthorized(response);
-//            return;
-//        }
+        SessionUser user;
+        try {
+            user = ContextUtil.getSessionUser(token);
+        } catch (Exception e) {
+            // 认证失败
+            unauthorized("token不合法,认证失败!", response);
+            return;
+        }
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
@@ -76,15 +77,15 @@ public class CheckTokenFilter extends BaseWebFilter {
     }
 
     /**
-     *  认证失败
+     * 认证失败
      */
-    private void unauthorized(HttpServletResponse response) throws IOException {
+    private void unauthorized(String msg, HttpServletResponse response) throws IOException {
         //认证错误处理
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8));
-        writer.write(JsonUtils.toJson(ResultData.fail("认证失败!")));
+        writer.write(JsonUtils.toJson(ResultData.fail(msg)));
         writer.close();
     }
 }

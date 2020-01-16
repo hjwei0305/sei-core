@@ -7,8 +7,7 @@ import com.chonghong.sei.enums.UserType;
 import com.chonghong.sei.util.EnumUtils;
 import com.chonghong.sei.util.IdGenerator;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -204,7 +203,7 @@ public final class ContextUtil {
         return token;
     }
 
-    public static SessionUser getSessionUser(String token) {
+    public static SessionUser getSessionUser(String token) throws Exception {
         SessionUser sessionUser = new SessionUser();
         sessionUser.setToken(token);
 
@@ -216,24 +215,18 @@ public final class ContextUtil {
                 jwtTokenUtil = new JwtTokenUtil();
             }
 
-            try {
-                Claims claims = jwtTokenUtil.getClaimFromToken(token);
-                //sessionUser.setSessionId(jwtTokenUtil.getRandomKeyFromToken(token));
-                sessionUser.setSessionId(claims.get(JwtTokenUtil.RANDOM_KEY, String.class));
-                sessionUser.setTenantCode(claims.get("tenant", String.class));
-                sessionUser.setAccount(claims.get("account", String.class));
-                sessionUser.setUserId(claims.get("userId", String.class));
-                sessionUser.setUserName(claims.get("userName", String.class));
-                sessionUser.setUserType(EnumUtils.getEnum(UserType.class, (String) claims.get("userType")));
-                sessionUser.setEmail(claims.get("email", String.class));
-                sessionUser.setLocale(claims.get("locale", String.class));
-                sessionUser.setAuthorityPolicy(EnumUtils.getEnum(UserAuthorityPolicy.class, (String) claims.get("authorityPolicy")));
-                sessionUser.setIp(claims.get("ip", String.class));
-            } catch (ExpiredJwtException e) {
-                LogUtil.error("token已过期", e);
-            } catch (Exception e) {
-                LogUtil.error("错误的token", e);
-            }
+            Claims claims = jwtTokenUtil.getClaimFromToken(token);
+            //sessionUser.setSessionId(jwtTokenUtil.getRandomKeyFromToken(token));
+            sessionUser.setSessionId(claims.get(JwtTokenUtil.RANDOM_KEY, String.class));
+            sessionUser.setTenantCode(claims.get("tenant", String.class));
+            sessionUser.setAccount(claims.get("account", String.class));
+            sessionUser.setUserId(claims.get("userId", String.class));
+            sessionUser.setUserName(claims.get("userName", String.class));
+            sessionUser.setUserType(EnumUtils.getEnum(UserType.class, (String) claims.get("userType")));
+            sessionUser.setEmail(claims.get("email", String.class));
+            sessionUser.setLocale(claims.get("locale", String.class));
+            sessionUser.setAuthorityPolicy(EnumUtils.getEnum(UserAuthorityPolicy.class, (String) claims.get("authorityPolicy")));
+            sessionUser.setIp(claims.get("ip", String.class));
         }
         return sessionUser;
     }

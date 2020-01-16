@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config;
+package com.changhong.sei.core.config.global;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,4 +22,5 @@ public class GlobalConfig {
     public void setDebugger(boolean debugger) {
         this.debugger = debugger;
     }
+
 }

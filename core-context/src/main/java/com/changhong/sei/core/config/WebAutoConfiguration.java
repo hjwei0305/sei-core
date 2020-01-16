@@ -1,6 +1,7 @@
 package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.cors.CorsConfig;
+import com.changhong.sei.core.config.global.GlobalConfig;
 import com.changhong.sei.core.config.mock.MockUser;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
