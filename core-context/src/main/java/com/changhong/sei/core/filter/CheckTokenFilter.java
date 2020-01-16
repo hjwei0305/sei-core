@@ -38,7 +38,7 @@ public class CheckTokenFilter extends BaseWebFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if (StringUtils.endsWithAny(path,
-                "/", "/csrf")) {
+                "/", "/csrf", "/auth/getAnonymousToken")) {
 
             filterChain.doFilter(request, response);
             return;
