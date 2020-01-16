@@ -1,8 +1,13 @@
 package com.changhong.sei.core.utils;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
+import com.chonghong.sei.util.EnumUtils;
+
+import java.util.Map;
 
 /**
  * <strong>实现功能:</strong>
@@ -36,5 +41,22 @@ public class ResultDataUtil {
         } else {
             return ResultData.fail(operateResult.getMessage());
         }
+    }
+
+    /**
+     * 获取枚举值的键值对(name,remark)
+     * @param enumClass 枚举类
+     * @return 枚举值的键值对
+     */
+    public static <T extends Enum> ResultData<Map<String, String>> getEnumMap(Class<T> enumClass){
+        Map map;
+        try {
+            map = EnumUtils.getEnumMap(enumClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.error("获取枚举值的键值对(name,remark)异常！", e);
+            return ResultData.fail(ContextUtil.getMessage("core_service_00025", e.getMessage()));
+        }
+        return ResultData.success(map);
     }
 }
