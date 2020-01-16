@@ -48,8 +48,8 @@ public class ResultDataUtil {
      * @param enumClass 枚举类
      * @return 枚举值的键值对
      */
-    public static ResultData<Map<String, String>> getEnumMap(Class<? extends Enum> enumClass){
-        Map<String, String> map = null;
+    public static <T extends Enum> ResultData<Map<String, String>> getEnumMap(Class<T> enumClass){
+        Map map;
         try {
             map = EnumUtils.getEnumMap(enumClass);
         } catch (Exception e) {
