@@ -5,7 +5,7 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
-import org.apache.commons.lang3.EnumUtils;
+import com.chonghong.sei.util.EnumUtils;
 
 import java.util.Map;
 
