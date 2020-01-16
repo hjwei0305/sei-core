@@ -1,0 +1,58 @@
+# 应用全局配置
+application:
+  name: 消息通知服务
+  version: 4.0.1
+
+# 本应用的参数配置
+notify:
+  test-key: test_value_on_local
+
+# spring 环境配置
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false
+    username: sei
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: none
+      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true
+  cache:
+    redis:
+      time-to-live: 20s
+  redis: # redis 缓存参数配置
+    host: 10.4.208.132
+    port: 6379
+    password: ZmkDbgaua3Rso33T
+    database: 0
+  mail: # MAIL 参数配置
+    username: seiadmin@changhong.com
+    password: 1plmjvCR
+    port: 25
+    host: 10.3.15.240
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+          ssl:
+            trust: 10.3.15.240
+          writetimeout: 5000
+          connectiontimeout: 5000
+          timeout: 5000
+
+# sei 参数配置
+sei:
+  mq: # 消息队列
+    group-id: sei_notify
+    topic: sei_notify_message
+  mail:
+    default-sender: SEI4.0-开发环境

@@ -9,7 +9,9 @@ import com.changhong.sei.core.filter.WebThreadFilter;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import com.chonghong.sei.util.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -18,6 +20,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
 
 /**
@@ -72,6 +77,17 @@ public class WebAutoConfiguration {
         // JWT过期时间（秒）
         jwtTokenUtil.setJwtExpiration(sessionTimeout + random);
         return jwtTokenUtil;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public Validator validator() {
+        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
+                .configure()
+                // 配置hibernate Validator为快速失败返回模式
+                .failFast(true)
+                .buildValidatorFactory();
+        return validatorFactory.getValidator();
     }
 
 //    /**

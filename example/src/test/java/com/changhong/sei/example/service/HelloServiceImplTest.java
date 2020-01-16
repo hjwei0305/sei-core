@@ -1,10 +1,13 @@
 package com.changhong.sei.example.service;
 
 import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
+import org.hibernate.service.spi.ServiceException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +31,18 @@ public class HelloServiceImplTest extends BaseUnitTest {
         System.out.println(JsonUtils.toJson(sessionUser));
         ResultData result = service.sayHello(name);
         System.out.println(JsonUtils.toJson(result));
+    }
+
+    @Test
+    public void testLog() {
+        LogUtil.debug("测试debug " + ApplicationContextHolder.getId());
+        LogUtil.info("测试info " + ApplicationContextHolder.getId());
+        LogUtil.warn("测试warn " + ApplicationContextHolder.getId());
+        try {
+            throw new ServiceException("测试异常");
+        } catch (Exception e) {
+            LogUtil.error("测试error " + ApplicationContextHolder.getId(), e);
+
+        }
     }
 }

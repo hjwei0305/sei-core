@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
+    <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <!--<charset>utf8</charset>-->
+        </encoder>
+    </appender>
+
+<!--    <springProfile name="dev,test">-->
+
+<!--    </springProfile>-->
+
+<!--    <springProfile name="!dev">-->
+
+<!--    </springProfile>-->
+
+    <appender name="FLUENT_LOG_SYNC" class="com.changhong.sei.core.log.LogDataFluentAppender">
+        <!-- Tag for Fluentd. Farther information: http://docs.fluentd.org/articles/config-file -->
+        <!-- LogDataFluentAppender.java -->
+        <appCode>${appCode:-none}</appCode>
+        <envCode>${envCode:-none}</envCode>
+        <!-- Host name/address and port number which Flentd placed -->
+        <remoteHost>${FlentdHost:-10.4.68.77}</remoteHost>
+        <port>${FlentdPort:-24224}</port>
+
+        <!-- Additional fields(Pairs of key: value) -->
+        <!--<additionalField>-->
+        <!--<key>foo</key>-->
+        <!--<value>bar</value>-->
+        <!--</additionalField>-->
+        <!--<additionalField>-->
+        <!--<key>foo2</key>-->
+        <!--<value>bar2</value>-->
+        <!--</additionalField>-->
+
+        <!--<filter class="com.ecmp.log.LogMarkerFilter">-->
+            <!--<marker>BIZ_LOG</marker>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>NEUTRAL</onMismatch>-->
+        <!--</filter>-->
+
+        <!-- 过滤掉 TRACE 、 DEBUG 、 INFO 级别的日志-->
+        <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+            <!--<level>WARN</level>-->
+        <!--</filter>-->
+
+        <!-- 非ERROR级别的日志，被过滤掉 -->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>ERROR</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+    </appender>
+
+    <appender name="FLUENT_LOG" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold >0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <!--<queueSize>20</queueSize>-->
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="FLUENT_LOG_SYNC"/>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FLUENT_LOG"/>
+    </root>
+
+    <!-- additivity="true" 是否重复记录 -->
+    <!-- 3rd party Loggers -->
+    <!-- spring -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.jboss.logging" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.elasticsearch" level="WARN"/>
+    <logger name="org.mongodb" level="WARN"/>
+    <logger name="io.lettuce" level="WARN"/>
+    <!-- swagger log configure -->
+    <logger name="io.swagger" level="WARN"/>
+    <!-- kafka log configure -->
+    <logger name="org.apache.kafka" level="WARN"/>
+    <!-- cxf log configure -->
+    <logger name="org.apache.cxf" level="ERROR"/>
+    <!-- thymeleaf log configure -->
+    <logger name="org.thymeleaf" level="WARN"/>
+    <!-- redisson log configure -->
+    <logger name="org.redisson" level="WARN"/>
+    <!--<logger name="io.netty.util.internal" level="WARN"/>-->
+    <logger name="io.netty" level="WARN"/>
+    <logger name="druid" level="WARN"/>
+    <logger name="com.alibaba" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+    <logger name="org.apache.curator.framework" level="ERROR"/>
+
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+    <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+
+
+</configuration>

@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: sei-notify
   cloud:
     bus:
       trace:
@@ -7,43 +9,16 @@ spring:
     config:
       uri: http://10.4.208.86:8100/config-center
       profile: DEV
-      name: sei-notify
-
-
-  datasource:
-    driverClassName: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8
-#    username: sei
-#    password: 123456
-  jpa:
-    hibernate:
-      ddl-auto: none
-      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        format_sql: true
-    show-sql: true
-  cache:
-    redis:
-      time-to-live: 20s
-
-  redis:
-    host: 10.4.208.132
-    port: 6379
-    password: ZmkDbgaua3Rso33T
-    database: 0
-
-notify:
-  test-key: test_value_on_local
-
-application:
-  version: 4.0.0
+      name: ${spring.application.name}
+#    zookeeper:
+      # zk 地址
+#      connect-string: 10.4.208.132:2181
+      # 关闭zk可用不用依赖zk
+#      enabled: true
 
 sei:
-  mock:
+  mock: # 本地调试的当前用户配置
     user:
-      enable: true
       s-id: 123456
       user-id: 1234
       account: admin
@@ -53,5 +28,7 @@ sei:
       ip: 127.0.0.1
       locale: zh_CN
 
-
-
+  global:
+    log:
+      elk:
+        enable: true
