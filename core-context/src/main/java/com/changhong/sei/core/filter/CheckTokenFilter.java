@@ -54,12 +54,12 @@ public class CheckTokenFilter extends BaseWebFilter {
 
         // 检查token
         SessionUser user = ContextUtil.getSessionUser(token);
-        // token检查失败,则是 anonymous
-        if (user.isAnonymous()) {
-            // 认证失败
-            unauthorized(response);
-            return;
-        }
+//        // token检查失败,则是 anonymous
+//        if (user.isAnonymous()) {
+//            // 认证失败
+//            unauthorized(response);
+//            return;
+//        }
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
