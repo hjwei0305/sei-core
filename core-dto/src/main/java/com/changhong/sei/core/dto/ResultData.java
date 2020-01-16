@@ -1,5 +1,7 @@
 package com.changhong.sei.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -74,6 +76,7 @@ public class ResultData<T> implements Serializable {
      *
      * @return 成功
      */
+    @JsonIgnore
     public boolean isFailed() {
         if (Objects.isNull(successful)) {
             return true;
