@@ -46,17 +46,10 @@ public abstract class BaseCompositeFilterProxy extends OncePerRequestFilter {
         this.filterDefs = filterDefs;
     }
 
-    /**
-     * 设置过滤器定义
-     */
-    public void setFilterDefs(List<? extends WebFilter> filterDefs) {
-        this.filterDefs = filterDefs;
-    }
-
     @Override
     protected void initFilterBean() throws ServletException {
         super.initFilterBean();
-        List<Filter> innerFilters = new ArrayList<Filter>(1);
+        List<Filter> innerFilters = new ArrayList<>(1);
         if (!CollectionUtils.isEmpty(filterDefs)) {
             // 按order注解定义优先级处理
             AnnotationAwareOrderComparator.sort(filterDefs);

@@ -1,12 +1,10 @@
 package com.changhong.sei.core.filter;
 
-import com.changhong.sei.core.config.mock.MockUser;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -28,17 +25,12 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0.00  2020-01-07 15:58
  */
 public class CheckTokenFilter extends BaseWebFilter {
-    private final MockUser mockUser;
-
-    public CheckTokenFilter(MockUser mockUser) {
-        this.mockUser = mockUser;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if (StringUtils.endsWithAny(path,
-                "/", "/csrf", "/auth/getAnonymousToken")) {
+                "/", "/csrf", "/auth/check", "/auth/getAnonymousToken")) {
 
             filterChain.doFilter(request, response);
             return;

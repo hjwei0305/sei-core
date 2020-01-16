@@ -3,6 +3,7 @@ package com.changhong.sei.core.config;
 import com.changhong.sei.core.config.cors.CorsConfig;
 import com.changhong.sei.core.config.global.GlobalConfig;
 import com.changhong.sei.core.config.mock.MockUser;
+import com.changhong.sei.core.error.GlobalExceptionTranslator;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
 import com.changhong.sei.core.util.JwtTokenUtil;
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
  * @version 1.0.00  2020-01-07 11:35
  */
 @Configuration
+@Import(value = {GlobalExceptionTranslator.class})
 @EnableConfigurationProperties({GlobalConfig.class, CorsConfig.class, MockUser.class})
 public class WebAutoConfiguration {
     /**

@@ -38,10 +38,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
      * 应用上下文
      */
     private CorsConfig corsConfig;
-    /**
-     * 模拟用户
-     */
-    private MockUser mockUser;
 
     /**
      * 带参数构造器
@@ -54,7 +50,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     protected void initFilterBean() throws ServletException {
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
         corsConfig = applicationContext.getBean(CorsConfig.class);
-        mockUser = applicationContext.getBean(MockUser.class);
         super.initFilterBean();
     }
 
@@ -64,7 +59,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         // 跨域
         innerFilters.add(0, new CorsSecurityFilter(corsConfig));
         // 检查token
-        innerFilters.add(1, new CheckTokenFilter(mockUser));
+        innerFilters.add(1, new CheckTokenFilter());
         // 防止XSS攻击
         innerFilters.add(2, new XssFilter());
     }

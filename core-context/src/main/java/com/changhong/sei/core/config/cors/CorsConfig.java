@@ -15,12 +15,7 @@ import java.util.Collections;
  * @version 1.0.00  2020-01-07 12:06
  */
 @ConfigurationProperties("sei.cors")
-//@RefreshScope
 public class CorsConfig implements CorsConfigurationSource {
-    /**
-     * 是否启用
-     */
-    private boolean enable = false;
 
     /**
      * 允许访问域名列表
@@ -36,14 +31,6 @@ public class CorsConfig implements CorsConfigurationSource {
      * 允许头访问列表
      */
     private String[] allowedHeaders;
-
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
 
     public String[] getAllowedOrigins() {
         return allowedOrigins;
