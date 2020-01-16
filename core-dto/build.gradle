@@ -5,7 +5,10 @@ dependencies {
     )
 
     compile(
-            //json
+            // validator
+            "org.hibernate.validator:hibernate-validator:$validatorVersion",
+
+            // json
             "com.fasterxml.jackson.core:jackson-core:$jacksonVersion",
             "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
             "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
