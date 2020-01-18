@@ -1,8 +1,6 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.api.MonitorService;
 import com.changhong.sei.core.context.ApplicationContextHolder;
-import com.changhong.sei.core.service.MonitorServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +31,5 @@ public class SeiAutoConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
-    }
-
-    @Bean
-    public MonitorService monitorService() {
-        return new MonitorServiceImpl();
     }
 }
