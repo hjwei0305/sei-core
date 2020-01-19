@@ -9,8 +9,11 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.BaseTreeManager;
 import com.changhong.sei.core.manager.bo.OperateResult;
+import com.changhong.sei.core.manager.bo.OperateResultWithData;
+import com.changhong.sei.core.utils.ResultDataUtil;
 import org.modelmapper.ModelMapper;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -179,5 +182,75 @@ public interface DefaultTreeService<T extends BaseEntity & TreeEntity<T>, D exte
             return ResultData.fail(ContextUtil.getMessage("core_service_00024", e.getMessage()));
         }
         return ResultData.success(data);
+    }
+
+    /**
+     * 保存业务实体
+     *
+     * @param dto 业务实体DTO
+     * @return 操作结果
+     */
+    @Override
+    default ResultData<D> save(@Valid D dto){
+        OperateResultWithData<T> result;
+        try {
+            T entity = convertToEntity(dto);
+            result = getManager().save(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 捕获异常，并返回
+            LogUtil.error("保存业务实体异常！", e);
+            // 保存业务实体异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("core_service_00003", e.getMessage()));
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultDataUtil.convertFromOperateResult(result);
+    }
+
+    /**
+     * 删除业务实体
+     *
+     * @param id 业务实体Id
+     * @return 操作结果
+     */
+    @Override
+    default ResultData delete(String id){
+        OperateResult result;
+        try {
+            result = getManager().delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 捕获异常，并返回
+            LogUtil.error("删除业务实体异常！", e);
+            // 保存业务实体异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("core_service_00004", e.getMessage()));
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultDataUtil.convertFromOperateResult(result);
+    }
+
+    /**
+     * 通过Id获取一个业务实体
+     *
+     * @param id 业务实体Id
+     * @return 业务实体
+     */
+    @Override
+    default ResultData<D> findOne(String id){
+        T entity;
+        try {
+            entity = getManager().findOne(id);
+        } catch (Exception e) {
+            LogUtil.error("获取业务实体异常！", e);
+            // 获取业务实体异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("core_service_00005", e.getMessage()));
+        }
+        // 转换数据 to DTO
+        D dto = convertToDto(entity);
+        return ResultData.success(dto);
     }
 }
