@@ -45,7 +45,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 //                System.setProperty("FlentdHost", environment.getProperty("sei.global.fluentd.host", "10.4.208.131"));
 //                System.setProperty("FlentdPort", environment.getProperty("sei.global.fluentd.port", "24224"));
                 //指定配置efk文件
-//                properties.setProperty("logging.config", "classpath:logback-efk.xml");
+//                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
                 properties.setProperty("logging.config", "classpath:logback-logstash.xml");
             }
 

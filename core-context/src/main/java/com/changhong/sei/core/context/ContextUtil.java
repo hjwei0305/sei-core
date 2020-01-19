@@ -1,13 +1,12 @@
 package com.changhong.sei.core.context;
 
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.enums.UserType;
 import com.chonghong.sei.util.EnumUtils;
 import com.chonghong.sei.util.IdGenerator;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -149,6 +148,44 @@ public final class ContextUtil {
         } else {
             return "";
         }
+    }
+
+    //////////////////////////
+
+    public static boolean containsProperty(String key) {
+        return ApplicationContextHolder.containsProperty(key);
+    }
+
+    public static String getProperty(String key) {
+        return ApplicationContextHolder.getProperty(key);
+    }
+
+    public static String getProperty(String key, String defaultValue) {
+        return ApplicationContextHolder.getProperty(key, defaultValue);
+    }
+
+    public static <T> T getProperty(String key, Class<T> targetType) {
+        return ApplicationContextHolder.getProperty(key, targetType);
+    }
+
+    public static <T> T getProperty(String key, Class<T> targetType, T defaultValue) {
+        return ApplicationContextHolder.getProperty(key, targetType, defaultValue);
+    }
+
+    public static String getRequiredProperty(String key) throws IllegalStateException {
+        return ApplicationContextHolder.getRequiredProperty(key);
+    }
+
+    public static <T> T getRequiredProperty(String key, Class<T> targetType) throws IllegalStateException {
+        return ApplicationContextHolder.getRequiredProperty(key, targetType);
+    }
+
+    public static String resolvePlaceholders(String key) {
+        return ApplicationContextHolder.resolvePlaceholders(key);
+    }
+
+    public static String resolveRequiredPlaceholders(String key) throws IllegalArgumentException {
+        return ApplicationContextHolder.resolveRequiredPlaceholders(key);
     }
 
     ///////////////////////////////
