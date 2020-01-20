@@ -70,12 +70,8 @@ public class WebAutoConfiguration {
         if (StringUtils.isNotBlank(secret)) {
             jwtTokenUtil.setJwtSecret(secret);
         }
-        // 会话超时时间。
-        int sessionTimeout = env.getProperty("server.servlet.session.timeout", Integer.class, 3600);
-        // 设置随机数,避免再高并发时,缓存同时失效
-        int random = (int) RandomUtils.getInteger(1, 100);
-        // JWT过期时间（秒）
-        jwtTokenUtil.setJwtExpiration(sessionTimeout + random);
+        // JWT过期时间（秒） 一天
+        jwtTokenUtil.setJwtExpiration(86400);
         return jwtTokenUtil;
     }
 
