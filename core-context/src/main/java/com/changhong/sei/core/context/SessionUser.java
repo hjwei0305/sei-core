@@ -53,6 +53,10 @@ public class SessionUser implements Serializable {
      */
     private String tenantCode;
     /**
+     * 用户权限策略
+     */
+    private UserAuthorityPolicy authorityPolicy = UserAuthorityPolicy.NormalUser;
+    /**
      * 客户端IP
      */
     private String ip = UNKNOWN;
@@ -115,6 +119,14 @@ public class SessionUser implements Serializable {
 
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
+    }
+
+    public UserAuthorityPolicy getAuthorityPolicy() {
+        return authorityPolicy;
+    }
+
+    public void setAuthorityPolicy(UserAuthorityPolicy authorityPolicy) {
+        this.authorityPolicy = authorityPolicy;
     }
 
     public String getIp() {
