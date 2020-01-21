@@ -230,11 +230,9 @@ public final class ContextUtil {
         claims.put("account", sessionUser.getAccount());
         claims.put("userId", sessionUser.getUserId());
         claims.put("userName", sessionUser.getUserName());
-        claims.put("userType", sessionUser.getUserType().name());
-        claims.put("email", sessionUser.getEmail());
         claims.put("locale", sessionUser.getLocale());
-        claims.put("authorityPolicy", sessionUser.getAuthorityPolicy().name());
         claims.put("ip", sessionUser.getIp());
+        claims.put("traceId", sessionUser.getTraceId());
         String token = jwtTokenUtil.generateToken(sessionUser.getAccount(), randomKey, claims);
         sessionUser.setToken(token);
         return token;
@@ -259,11 +257,9 @@ public final class ContextUtil {
             sessionUser.setAccount(claims.get("account", String.class));
             sessionUser.setUserId(claims.get("userId", String.class));
             sessionUser.setUserName(claims.get("userName", String.class));
-            sessionUser.setUserType(EnumUtils.getEnum(UserType.class, (String) claims.get("userType")));
-            sessionUser.setEmail(claims.get("email", String.class));
             sessionUser.setLocale(claims.get("locale", String.class));
-            sessionUser.setAuthorityPolicy(EnumUtils.getEnum(UserAuthorityPolicy.class, (String) claims.get("authorityPolicy")));
             sessionUser.setIp(claims.get("ip", String.class));
+            sessionUser.setTraceId(claims.get("traceId", String.class));
         }
         return sessionUser;
     }
