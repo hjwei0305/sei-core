@@ -282,4 +282,29 @@ public final class ContextUtil {
     public static <T> T getBean(String beanId) {
         return ApplicationContextHolder.getBean(beanId);
     }
+
+    /**
+     * @return 返回当前语言环境
+     */
+    public static String getLocaleLang() {
+        SessionUser user = getSessionUser();
+        if (!user.isAnonymous()) {
+            String language = user.getLocale();
+            if (StringUtils.isNotBlank(language)) {
+                return language;
+            }
+        }
+        Locale locale = Locale.getDefault();
+        return locale.getLanguage() + "_" + locale.getCountry();
+    }
+
+    /**
+     * 获取当前应用代码.
+     *
+     * @return 返回当前应用代码。
+     */
+    public static String getAppCode() {
+        String appCode = getProperty("spring.application.name", "sei-basic");
+        return appCode;
+    }
 }
