@@ -263,4 +263,14 @@ public final class ContextUtil {
         }
         return sessionUser;
     }
+
+    /**
+     * 获取一个上下文注入的组件实例
+     * @param clazz 组件类类型
+     * @param <T> 组件泛型类
+     * @return 组件实例
+     */
+    public static <T> T getBean(Class<T> clazz) {
+        return ApplicationContextHolder.getBean(clazz);
+    }
 }
