@@ -273,4 +273,13 @@ public final class ContextUtil {
     public static <T> T getBean(Class<T> clazz) {
         return ApplicationContextHolder.getBean(clazz);
     }
+
+    /**
+     * 获取一个上下文注入的组件实例
+     * @param beanId 组件Id
+     * @return 组件实例
+     */
+    public static <T> T getBean(String beanId) {
+        return ApplicationContextHolder.getBean(beanId);
+    }
 }
