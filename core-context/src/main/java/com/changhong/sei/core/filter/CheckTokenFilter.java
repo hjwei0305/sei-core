@@ -37,12 +37,16 @@ public class CheckTokenFilter extends BaseWebFilter {
             return;
         }
 
-        // 从请求头中获取token
-        String token = request.getHeader(ContextUtil.HEADER_TOKEN_KEY);
+        // 从可传播的线程全局变量中获取token
+        String token = ThreadLocalUtil.getTranVar(ContextUtil.HEADER_TOKEN_KEY);
         if (StringUtils.isBlank(token)) {
-            // 认证失败
-            unauthorized("token为空,认证失败!", response);
-            return;
+            // 从请求头中获取token
+            token = request.getHeader(ContextUtil.HEADER_TOKEN_KEY);
+            if (StringUtils.isBlank(token)) {
+                // 认证失败
+                unauthorized("token为空,认证失败!", response);
+                return;
+            }
         }
 
         LogUtil.debug("请求token: {}", token);
@@ -64,6 +68,8 @@ public class CheckTokenFilter extends BaseWebFilter {
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
+        // 设置token到可传播的线程全局变量中
+        ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, token);
 
         filterChain.doFilter(request, response);
     }

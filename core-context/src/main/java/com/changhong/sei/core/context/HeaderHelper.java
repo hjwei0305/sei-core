@@ -2,8 +2,6 @@ package com.changhong.sei.core.context;
 
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +46,6 @@ public final class HeaderHelper {
                 headers.put(ThreadLocalUtil.TRAN_PREFIX + entry.getKey(), (String) entry.getValue());
             }
         }
-        //增加远程调用协议信息，因为系统所有请求是基于json请求参数的，MediaType 含编码,MimeTypeUtils不含编码
-        headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         return headers;
     }
