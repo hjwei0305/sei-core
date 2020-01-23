@@ -1,11 +1,7 @@
 package com.changhong.sei.core.filter;
 
 import com.changhong.sei.core.config.cors.CorsConfig;
-import com.changhong.sei.core.config.mock.MockUser;
-import com.changhong.sei.core.context.SessionUser;
-import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
-import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
@@ -58,10 +54,14 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         super.handleInnerFilters(innerFilters);
         // 跨域
         innerFilters.add(0, new CorsSecurityFilter(corsConfig));
+        // 传播线程变量拦截器
+        innerFilters.add(1, new ThreadLocalTranVarFilter());
+        // 调用链拦截器
+        innerFilters.add(2, new TraceFilter());
         // 检查token
-        innerFilters.add(1, new CheckTokenFilter());
+        innerFilters.add(3, new CheckTokenFilter());
         // 防止XSS攻击
-        innerFilters.add(2, new XssFilter());
+        innerFilters.add(4, new XssFilter());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
                                     FilterChain chain) throws ServletException, IOException {
         String path = request.getServletPath();
         if (StringUtils.startsWithAny(path,
-                "/favicon.ico", "/swagger-ui.html","/swagger-resources", "/v2/api-docs", "/webjars/", "/actuator", "/instances")) {
+                "/favicon.ico", "/swagger-ui.html", "/swagger-resources", "/v2/api-docs", "/webjars/", "/actuator", "/instances")) {
 
             chain.doFilter(request, response);
             return;

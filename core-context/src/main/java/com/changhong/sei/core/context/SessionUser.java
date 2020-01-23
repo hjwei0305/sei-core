@@ -25,10 +25,6 @@ public class SessionUser implements Serializable {
     private final static String UNKNOWN = "Unknown";
 
     /**
-     * 跟踪id
-     */
-    private String traceId;
-    /**
      * 会话id
      */
     private String sessionId;
@@ -53,6 +49,10 @@ public class SessionUser implements Serializable {
      */
     private String tenantCode;
     /**
+     * 用户类型
+     */
+    private UserType userType = UserType.Employee;
+    /**
      * 用户权限策略
      */
     private UserAuthorityPolicy authorityPolicy = UserAuthorityPolicy.NormalUser;
@@ -64,14 +64,6 @@ public class SessionUser implements Serializable {
      * 语言环境
      */
     private String locale = "zh_CN";
-
-    public String getTraceId() {
-        return traceId;
-    }
-
-    public void setTraceId(String traceId) {
-        this.traceId = traceId;
-    }
 
     public String getSessionId() {
         return sessionId;
@@ -119,6 +111,14 @@ public class SessionUser implements Serializable {
 
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public UserAuthorityPolicy getAuthorityPolicy() {

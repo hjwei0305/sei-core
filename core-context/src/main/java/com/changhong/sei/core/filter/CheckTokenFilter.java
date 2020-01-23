@@ -3,6 +3,7 @@ package com.changhong.sei.core.filter;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -44,11 +45,18 @@ public class CheckTokenFilter extends BaseWebFilter {
             return;
         }
 
+        LogUtil.debug("请求token: {}", token);
+        if (token.startsWith("Bearer ")) {
+            // 截取token
+            token = token.substring("Bearer ".length());
+        }
+
         // 检查token
         SessionUser user;
         try {
             user = ContextUtil.getSessionUser(token);
         } catch (Exception e) {
+            LogUtil.error("token不合法,认证失败. token: {}", token);
             // 认证失败
             unauthorized("token不合法,认证失败!", response);
             return;

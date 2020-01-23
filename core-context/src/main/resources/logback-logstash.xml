@@ -33,7 +33,7 @@
 
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
                 <version>${sei-version:-}</version>
-                <customFields>{"serviceName":"${APP_NAME:-}","pid": "${PID:-}","line":"%line"}</customFields>
+                <customFields>{"serviceName":"${APP_NAME:-}","pid": "${PID:-}","traceId":${TRACE_ID:-}}</customFields>
             </encoder>
 <!--        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
 <!--            <jsonFactoryDecorator class="net.logstash.logback.decorate.CharacterEscapesJsonFactoryDecorator">-->

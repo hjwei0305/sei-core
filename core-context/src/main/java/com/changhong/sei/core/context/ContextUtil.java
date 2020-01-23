@@ -21,13 +21,16 @@ import java.util.Map;
  */
 public final class ContextUtil {
     /**
-     * 会话id传输key
-     */
-    public static final String REQUEST_SID_KEY = "_s";
-    /**
      * 请求头token key
      */
     public static final String HEADER_TOKEN_KEY = "X-Authorization";
+
+    /**
+     * 当前链路信息获取
+     */
+    public final static String TRACE_ID = "TRACE_ID";
+    public final static String TRACE_FROM_SERVER = "FROM_SERVER";
+    public final static String TRACE_CURRENT_SERVER = "CURRENT_SERVER";
 
     /**
      * 获取当前用户的Id
@@ -230,9 +233,10 @@ public final class ContextUtil {
         claims.put("account", sessionUser.getAccount());
         claims.put("userId", sessionUser.getUserId());
         claims.put("userName", sessionUser.getUserName());
+        claims.put("userType", sessionUser.getUserType().name());
         claims.put("locale", sessionUser.getLocale());
+        claims.put("authorityPolicy", sessionUser.getAuthorityPolicy().name());
         claims.put("ip", sessionUser.getIp());
-        claims.put("traceId", sessionUser.getTraceId());
         String token = jwtTokenUtil.generateToken(sessionUser.getAccount(), randomKey, claims);
         sessionUser.setToken(token);
         return token;
@@ -257,17 +261,19 @@ public final class ContextUtil {
             sessionUser.setAccount(claims.get("account", String.class));
             sessionUser.setUserId(claims.get("userId", String.class));
             sessionUser.setUserName(claims.get("userName", String.class));
+            sessionUser.setUserType(EnumUtils.getEnum(UserType.class, (String) claims.get("userType")));
             sessionUser.setLocale(claims.get("locale", String.class));
+            sessionUser.setAuthorityPolicy(EnumUtils.getEnum(UserAuthorityPolicy.class, (String) claims.get("authorityPolicy")));
             sessionUser.setIp(claims.get("ip", String.class));
-            sessionUser.setTraceId(claims.get("traceId", String.class));
         }
         return sessionUser;
     }
 
     /**
      * 获取一个上下文注入的组件实例
+     *
      * @param clazz 组件类类型
-     * @param <T> 组件泛型类
+     * @param <T>   组件泛型类
      * @return 组件实例
      */
     public static <T> T getBean(Class<T> clazz) {
@@ -276,6 +282,7 @@ public final class ContextUtil {
 
     /**
      * 获取一个上下文注入的组件实例
+     *
      * @param beanId 组件Id
      * @return 组件实例
      */
@@ -307,4 +314,26 @@ public final class ContextUtil {
         String appCode = getProperty("spring.application.name", "sei-basic");
         return appCode;
     }
+
+    /**
+     * 获取当前跟踪ID
+     */
+    public static String getTraceId() {
+        return ThreadLocalUtil.getTranVar(TRACE_ID);
+    }
+
+    /**
+     * 获取来源服务
+     */
+    public static String getFromServer() {
+        return ThreadLocalUtil.getLocalVar(TRACE_FROM_SERVER);
+    }
+
+    /**
+     * 获取当前服务
+     */
+    public static String getCurrentServer() {
+        return ThreadLocalUtil.getLocalVar(TRACE_CURRENT_SERVER);
+    }
+
 }
