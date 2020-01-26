@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity;
+package com.changhong.sei.core.dto;
 
 /**
  * 实现功能：数据字典特征接口

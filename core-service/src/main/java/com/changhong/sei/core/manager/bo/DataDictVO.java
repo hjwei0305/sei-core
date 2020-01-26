@@ -1,6 +1,6 @@
 package com.changhong.sei.core.manager.bo;
 
-import com.changhong.sei.core.entity.IDataDict;
+import com.changhong.sei.core.dto.IDataDict;
 
 import java.io.Serializable;
 

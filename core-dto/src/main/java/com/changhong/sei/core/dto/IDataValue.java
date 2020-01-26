@@ -1,4 +1,4 @@
-package com.changhong.sei.core.entity;
+package com.changhong.sei.core.dto;
 
 /**
  * @author 马超(Vision.Mac)

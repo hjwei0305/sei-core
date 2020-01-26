@@ -6,7 +6,7 @@ import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
-import com.changhong.sei.core.entity.IDataDict;
+import com.changhong.sei.core.dto.IDataDict;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.manager.bo.DataDictVO;
 import com.changhong.sei.core.manager.bo.OperateResult;
