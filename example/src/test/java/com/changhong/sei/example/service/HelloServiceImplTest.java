@@ -7,9 +7,11 @@ import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
+import com.chonghong.sei.util.IdGenerator;
 import org.hibernate.service.spi.ServiceException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -35,6 +37,7 @@ public class HelloServiceImplTest extends BaseUnitTest {
 
     @Test
     public void testLog() {
+        MDC.put(ContextUtil.TRACE_ID, IdGenerator.uuid2());
         LogUtil.debug("测试debug " + ApplicationContextHolder.getId());
         LogUtil.info("测试info " + ApplicationContextHolder.getId());
         LogUtil.warn("测试warn " + ApplicationContextHolder.getId());

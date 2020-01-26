@@ -2,8 +2,8 @@
 <configuration>
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
 
-
-    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+    <!-- 应用服务名称 -->
+    <springProperty scope="context" name="serviceName" source="spring.application.name"/>
 
     <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
@@ -31,34 +31,12 @@
         <!-- 请求者信息字段 打开有性能影响 -->
         <includeCallerData>false</includeCallerData>
 
-            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-                <version>${sei-version:-}</version>
-<!--                <customFields>{"serviceName":"${APP_NAME:-}","pid": "${PID:-}","traceId":${TRACE_ID:-}}</customFields>-->
-                <customFields>{"serviceName":"${APP_NAME:-}","pid": "${PID:-}"}</customFields>
-            </encoder>
-<!--        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
-<!--            <jsonFactoryDecorator class="net.logstash.logback.decorate.CharacterEscapesJsonFactoryDecorator">-->
-<!--                <escape>-->
-<!--                    <targetCharacterCode>10</targetCharacterCode>-->
-<!--                    <escapeSequence>\u2028</escapeSequence>-->
-<!--                </escape>-->
-<!--            </jsonFactoryDecorator>-->
-<!--            <providers>-->
-<!--                <pattern>-->
-<!--                    <pattern>-->
-<!--                        {-->
-<!--                        &lt;!&ndash;                        "date":"%d{yyyy-MM-dd HH:mm:ss.SSS}",&ndash;&gt;-->
-<!--                        "level": "%level",-->
-<!--                        "serviceName": "${APP_NAME:-}",-->
-<!--                        "pid": "${PID:-}",-->
-<!--                        "thread": "%thread",-->
-<!--                        "class": "%class:%line",-->
-<!--                        "rest": "%msg%n"-->
-<!--                        }-->
-<!--                    </pattern>-->
-<!--                </pattern>-->
-<!--            </providers>-->
-<!--        </encoder>-->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <version>${sei-version:-}</version>
+            <includeMdcKeyName>TRACE_ID</includeMdcKeyName>
+            <customFields>{"HOSTNAME":"${HOSTNAME:- }","PID": "${PID:-}"}</customFields>
+<!--            <customFields>{"serviceName":"${serviceName}","pid": "${PID:-}"}</customFields>-->
+        </encoder>
         <keepAliveDuration>5 minutes</keepAliveDuration>
     </appender>
 
