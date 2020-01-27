@@ -5,8 +5,10 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
+import com.changhong.sei.core.manager.bo.ResponseData;
 import com.chonghong.sei.util.EnumUtils;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -32,10 +34,23 @@ public class ResultDataUtil {
 
     /**
      * 将操作处理结果转换为返回结果
+     * @param response 操作处理结果
+     * @return 返回结果
+     */
+    public static <T extends Serializable> ResultData convertFromResponseData(ResponseData<T> response){
+        if (response.successful()){
+            return ResultData.success(response.getMessage(), response.getData());
+        } else {
+            return ResultData.fail(response.getMessage());
+        }
+    }
+
+    /**
+     * 将操作处理结果转换为返回结果
      * @param operateResult 操作处理结果
      * @return 返回结果
      */
-    public static ResultData convertFromOperateResult(OperateResultWithData operateResult){
+    public static <T extends Serializable> ResultData convertFromOperateResult(OperateResultWithData<T> operateResult){
         if (operateResult.successful()){
             return ResultData.success(operateResult.getMessage(), operateResult.getData());
         } else {
