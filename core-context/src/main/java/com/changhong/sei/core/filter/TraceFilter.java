@@ -48,4 +48,12 @@ public class TraceFilter extends BaseWebFilter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * 返回类名，避免filter不被执行
+     */
+    @Override
+    protected String getFilterName() {
+        return TraceFilter.class.getSimpleName();
+    }
+
 }

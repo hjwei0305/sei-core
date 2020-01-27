@@ -1,6 +1,5 @@
 package com.changhong.sei.core.filter;
 
-import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.HeaderHelper;
 import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
@@ -16,10 +15,10 @@ import java.util.Objects;
 
 /**
  * 实现功能：传播线程变量处理
- * @see HeaderHelper#getRequestHeaderInfo()
  *
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-23 14:02
+ * @see HeaderHelper#getRequestHeaderInfo()
  */
 public class ThreadLocalTranVarFilter extends BaseWebFilter {
     @Override
@@ -27,16 +26,24 @@ public class ThreadLocalTranVarFilter extends BaseWebFilter {
             throws ServletException, IOException {
         Enumeration<String> headers = request.getHeaderNames();
         if (Objects.nonNull(headers)) {
-            LogUtil.info("请求头: {}", headers);
             int length = ThreadLocalUtil.TRAN_PREFIX.length();
             while (headers.hasMoreElements()) {
                 String key = headers.nextElement();
-//                if (StringUtils.isNotBlank(key) && key.startsWith(ThreadLocalUtil.TRAN_PREFIX)) {
-                if (StringUtils.isNotBlank(key) && key.equalsIgnoreCase(ContextUtil.HEADER_TOKEN_KEY)) {
+                if (StringUtils.isNotBlank(key) && key.startsWith(ThreadLocalUtil.TRAN_PREFIX)) {
+                    LogUtil.info("从请求头设置可传播的线程变量: {}", key);
                     ThreadLocalUtil.setTranVar(key.substring(length), request.getHeader(key));
                 }
             }
         }
         chain.doFilter(request, response);
     }
+
+    /**
+     * 返回类名，避免filter不被执行
+     */
+    @Override
+    protected String getFilterName() {
+        return ThreadLocalTranVarFilter.class.getSimpleName();
+    }
+
 }
