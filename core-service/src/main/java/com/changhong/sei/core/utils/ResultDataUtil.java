@@ -37,7 +37,7 @@ public class ResultDataUtil {
      * @param response 操作处理结果
      * @return 返回结果
      */
-    public static <T extends Serializable> ResultData<T> convertFromResponseData(ResponseData response, T data){
+    public static <T> ResultData<T> convertFromResponseData(ResponseData response, T data){
         if (response.successful()){
             return ResultData.success(response.getMessage(), data);
         } else {
@@ -50,7 +50,7 @@ public class ResultDataUtil {
      * @param operateResult 操作处理结果
      * @return 返回结果
      */
-    public static <T extends Serializable> ResultData<T> convertFromOperateResult(OperateResultWithData operateResult, T data){
+    public static <T> ResultData<T> convertFromOperateResult(OperateResultWithData operateResult, T data){
         if (operateResult.successful()){
             return ResultData.success(operateResult.getMessage(), data);
         } else {
