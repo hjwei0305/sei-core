@@ -162,6 +162,8 @@ public class MockUser {
             ContextUtil.generateToken(sessionUser);
 
             ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+            // 设置token到可传播的线程全局变量中
+            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
         } catch (Exception e) {
             e.printStackTrace();
         }
