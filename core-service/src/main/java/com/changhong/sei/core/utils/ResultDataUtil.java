@@ -37,9 +37,9 @@ public class ResultDataUtil {
      * @param response 操作处理结果
      * @return 返回结果
      */
-    public static <T extends Serializable> ResultData convertFromResponseData(ResponseData<T> response){
+    public static <T extends Serializable> ResultData<T> convertFromResponseData(ResponseData response, T data){
         if (response.successful()){
-            return ResultData.success(response.getMessage(), response.getData());
+            return ResultData.success(response.getMessage(), data);
         } else {
             return ResultData.fail(response.getMessage());
         }
@@ -50,9 +50,9 @@ public class ResultDataUtil {
      * @param operateResult 操作处理结果
      * @return 返回结果
      */
-    public static <T extends Serializable> ResultData convertFromOperateResult(OperateResultWithData<T> operateResult){
+    public static <T extends Serializable> ResultData<T> convertFromOperateResult(OperateResultWithData operateResult, T data){
         if (operateResult.successful()){
-            return ResultData.success(operateResult.getMessage(), operateResult.getData());
+            return ResultData.success(operateResult.getMessage(), data);
         } else {
             return ResultData.fail(operateResult.getMessage());
         }
@@ -64,7 +64,7 @@ public class ResultDataUtil {
      * @return 枚举值的键值对
      */
     public static <T extends Enum> ResultData<Map<String, String>> getEnumMap(Class<T> enumClass){
-        Map map;
+        Map<String, String> map;
         try {
             map = EnumUtils.getEnumMap(enumClass);
         } catch (Exception e) {

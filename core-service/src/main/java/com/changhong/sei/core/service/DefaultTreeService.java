@@ -206,7 +206,7 @@ public interface DefaultTreeService<T extends BaseEntity & TreeEntity<T>, D exte
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
         }
-        return ResultDataUtil.convertFromOperateResult(result);
+        return ResultDataUtil.convertFromOperateResult(result, convertToDto(result.getData()));
     }
 
     /**
