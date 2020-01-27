@@ -23,14 +23,14 @@ public final class ContextUtil {
     /**
      * 请求头token key
      */
-    public static final String HEADER_TOKEN_KEY = "X-Authorization";
+    public static final String HEADER_TOKEN_KEY = "x-authorization";
 
     /**
      * 当前链路信息获取
      */
-    public final static String TRACE_ID = "TRACE_ID";
-    public final static String TRACE_FROM_SERVER = "FROM_SERVER";
-    public final static String TRACE_CURRENT_SERVER = "CURRENT_SERVER";
+    public final static String TRACE_ID = "trace_id";
+    public final static String TRACE_FROM_SERVER = "from_server";
+    public final static String TRACE_CURRENT_SERVER = "current_server";
 
     /**
      * 获取当前用户的Id

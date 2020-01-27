@@ -33,7 +33,7 @@
 
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <version>${sei-version:-}</version>
-            <includeMdcKeyName>TRACE_ID</includeMdcKeyName>
+            <includeMdcKeyName>trace_id</includeMdcKeyName>
             <customFields>{"HOSTNAME":"${HOSTNAME:- }","PID": "${PID:-}"}</customFields>
 <!--            <customFields>{"serviceName":"${serviceName}","pid": "${PID:-}"}</customFields>-->
         </encoder>

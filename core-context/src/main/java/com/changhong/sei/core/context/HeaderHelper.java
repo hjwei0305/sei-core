@@ -43,7 +43,7 @@ public final class HeaderHelper {
         Map<String, Object> transMap = ThreadLocalHolder.getTranVars();
         if (Objects.nonNull(transMap) && !transMap.isEmpty()) {
             for (Map.Entry<String, Object> entry : transMap.entrySet()) {
-                headers.put(entry.getKey(), (String) entry.getValue());
+                headers.put(ThreadLocalUtil.TRAN_PREFIX + entry.getKey(), (String) entry.getValue());
             }
         }
 
