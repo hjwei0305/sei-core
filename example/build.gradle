@@ -34,3 +34,7 @@ jar {
 uploadArchives {
     enabled = false
 }
+
+install {
+    enabled = false
+}
