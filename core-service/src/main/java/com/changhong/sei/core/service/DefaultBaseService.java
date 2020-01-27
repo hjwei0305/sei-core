@@ -5,9 +5,13 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.manager.BaseEntityManager;
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
@@ -63,6 +67,21 @@ public interface DefaultBaseService<T extends BaseEntity, D extends BaseEntityDt
             return null;
         }
         return getModelMapper().map(entity, getDtoClass());
+    }
+
+    /**
+     * 将数据实体清单转换成DTO清单
+     * @param entities 数据实体清单
+     * @return DTO清单
+     */
+    default List<D> convertToDtos(List<T> entities){
+        if (Objects.isNull(entities)){
+            return null;
+        }
+        if (CollectionUtils.isEmpty(entities)){
+            return new ArrayList<>();
+        }
+        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     /**
