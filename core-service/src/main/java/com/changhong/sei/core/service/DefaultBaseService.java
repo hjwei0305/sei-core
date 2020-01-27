@@ -3,11 +3,13 @@ package com.changhong.sei.core.service;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.manager.BaseEntityManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -82,6 +84,18 @@ public interface DefaultBaseService<T extends BaseEntity, D extends BaseEntityDt
             return new ArrayList<>();
         }
         return entities.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    /**
+     * 将分页查询结果转换为返回结果
+     * @param pageResult 分页查询结果
+     * @return 返回结果
+     */
+    default ResultData<PageResult<D>> convertToDtoPageResult(PageResult<T> pageResult){
+        PageResult<D> result = new PageResult<>(pageResult);
+        List<D> dtos = convertToDtos(pageResult.getRows());
+        result.setRows(dtos);
+        return ResultData.success(result);
     }
 
     /**

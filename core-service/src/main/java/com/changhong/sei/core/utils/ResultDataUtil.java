@@ -2,6 +2,7 @@ package com.changhong.sei.core.utils;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
@@ -9,6 +10,7 @@ import com.changhong.sei.core.manager.bo.ResponseData;
 import com.chonghong.sei.util.EnumUtils;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
