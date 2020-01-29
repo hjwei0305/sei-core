@@ -11,9 +11,11 @@ import com.changhong.sei.core.manager.BaseTreeManager;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -58,6 +60,21 @@ public interface DefaultTreeService<T extends BaseEntity & TreeEntity<T>, D exte
             return null;
         }
         return getModelMapper().map(entity, getDtoClass());
+    }
+
+    /**
+     * 将数据实体清单转换成DTO清单
+     * @param entities 数据实体清单
+     * @return DTO清单
+     */
+    default List<D> convertToDtos(List<T> entities){
+        if (Objects.isNull(entities)){
+            return null;
+        }
+        if (CollectionUtils.isEmpty(entities)){
+            return new ArrayList<>();
+        }
+        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     /**
