@@ -5,6 +5,7 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.TreeEntity;
+import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.manager.BaseTreeManager;
@@ -75,6 +76,18 @@ public interface DefaultTreeService<T extends BaseEntity & TreeEntity<T>, D exte
             return new ArrayList<>();
         }
         return entities.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    /**
+     * 将分页查询结果转换为返回结果
+     * @param pageResult 分页查询结果
+     * @return 返回结果
+     */
+    default ResultData<PageResult<D>> convertToDtoPageResult(PageResult<T> pageResult){
+        PageResult<D> result = new PageResult<>(pageResult);
+        List<D> dtos = convertToDtos(pageResult.getRows());
+        result.setRows(dtos);
+        return ResultData.success(result);
     }
 
     /**
