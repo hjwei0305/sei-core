@@ -12,8 +12,6 @@ import com.changhong.sei.core.manager.bo.DataDictVO;
 import com.changhong.sei.core.manager.bo.OperateResult;
 import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import com.changhong.sei.core.manager.bo.ResponseData;
-import com.changhong.sei.core.manager.proxy.DataDictProxy;
-import com.changhong.sei.core.manager.proxy.UserProxy;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -289,8 +287,12 @@ public abstract class BaseManager<T extends Persistable<ID> & Serializable, ID e
      */
     protected List<String> getNormalUserAuthorizedEntityIds(String featureCode, String userId) {
         Class<T> entityClass = getDao().getEntityClass();
-        //判断是否实现数据权限业务实体接口
+        // 判断是否实现数据权限业务实体接口
         if (!IDataAuthEntity.class.isAssignableFrom(entityClass)) {
+            return Collections.emptyList();
+        }
+        // 判断当前业务逻辑实现类是否实现了数据权限接口
+        if (!DataAuthEntityManager.class.isAssignableFrom(this.getClass())){
             return Collections.emptyList();
         }
         List<String> entityIds = null;
@@ -309,9 +311,10 @@ public abstract class BaseManager<T extends Persistable<ID> & Serializable, ID e
             }
         }
         if (Objects.isNull(entityIds)) {
-            //缓存不存在，调用API服务获取用户有权限的数据Id清单
+            // 缓存不存在，调用API服务获取用户有权限的数据Id清单
+            DataAuthEntityManager authEntityManager = (DataAuthEntityManager)this;
             String entityClassName = entityClass.getName();
-            entityIds = UserProxy.getNormalUserAuthorizedEntities(entityClassName, userId, featureCode);
+            entityIds = authEntityManager.getNormalUserAuthorizedEntitiesFromBasic(entityClassName, userId, featureCode);
         }
         return entityIds;
     }
@@ -342,7 +345,7 @@ public abstract class BaseManager<T extends Persistable<ID> & Serializable, ID e
         }
         if (dataDictVos == null) {
             try {
-                List<DataDictVO> dataDicts = DataDictProxy.getDataDictItemsUnFrozen(categoryCode);
+                List<DataDictVO> dataDicts = getDataDictItemsUnFrozenFromBasic(categoryCode);
                 if (CollectionUtils.isNotEmpty(dataDicts)){
                     dataDictVos = new ArrayList<>(dataDicts);
                 }
@@ -352,6 +355,16 @@ public abstract class BaseManager<T extends Persistable<ID> & Serializable, ID e
         }
         responseData.setData(dataDictVos);
         return responseData;
+    }
+
+    /**
+     * 从平台基础应用通过分类码获取数据字典的值清单
+     * 对于数据字典的业务实体，需要override，使用BASIC提供的通用工具来获取
+     * @param categoryCode 数据字典分类码
+     * @return 数据字典的值清单
+     */
+    protected List<DataDictVO> getDataDictItemsUnFrozenFromBasic(String categoryCode){
+        return new ArrayList<>();
     }
 
     /**
