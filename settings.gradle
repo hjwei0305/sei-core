@@ -1,8 +1,8 @@
 rootProject.name = 'sei-core'
-include 'core-service'
-include 'core-dto'
-include 'core-api'
-include 'core-context'
+include 'sei-core-controller'
+include 'sei-core-dto'
+include 'sei-core-api'
+include 'sei-core-context'
 include 'example'
-include 'core-test'
+include 'sei-core-test'
 

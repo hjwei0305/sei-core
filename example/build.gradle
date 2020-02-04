@@ -9,7 +9,8 @@ dependencyManagement {
 }
 
 dependencies {
-    compile project(':core-service')
+    compile project(':sei-core-controller')
+    compile project(':sei-core-test')
 
 //    compile("org.springframework.boot:spring-boot-starter")
 //    compile("org.springframework.boot:spring-boot-starter-aop")
@@ -21,8 +22,8 @@ dependencies {
             "mysql:mysql-connector-java:$mysqlVersion"
     )
     testCompile(
-            "com.changhong.sei:core-test:$sei_version"
-//            "org.springframework.boot:spring-boot-starter-test"
+    //        "com.changhong.sei:sei-core-test:$sei_version"
+     //   "org.springframework.boot:spring-boot-starter-test"
     )
 }
 
