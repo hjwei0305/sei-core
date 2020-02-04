@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public interface DefaultRelationController<TT extends BaseEntity & RelationEntity<PT, CT>, PT extends AbstractEntity<String>, CT extends AbstractEntity<String>, TD extends BaseEntityDto & RelationEntityDto<PD, CD>, PD extends BaseEntityDto, CD extends BaseEntityDto>
         extends BaseRelationApi<TD, PD, CD> {
     // 注入业务逻辑实现
-    BaseRelationService<TT, PT, CT> getManager();
+    BaseRelationService<TT, PT, CT> getService();
 
     // 获取实体转换类
     ModelMapper getModelMapper();
@@ -163,7 +163,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData<List<CD>> getChildrenFromParentId(String parentId){
         List<CD> data;
         try {
-            List<CT> entities = getManager().getChildrenFromParentId(parentId);
+            List<CT> entities = getService().getChildrenFromParentId(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,7 +185,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData insertRelations(String parentId, List<String> childIds){
         OperateResult result;
         try {
-            result = getManager().insertRelations(parentId, childIds);
+            result = getService().insertRelations(parentId, childIds);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -209,7 +209,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData insertRelationsByParam(RelationParam relationParam){
         OperateResult result;
         try {
-            result = getManager().insertRelationsByParam(relationParam);
+            result = getService().insertRelationsByParam(relationParam);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -234,7 +234,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData removeRelations(String parentId, List<String> childIds){
         OperateResult result;
         try {
-            result = getManager().removeRelations(parentId, childIds);
+            result = getService().removeRelations(parentId, childIds);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -258,7 +258,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData removeRelationsByParam(RelationParam relationParam){
         OperateResult result;
         try {
-            result = getManager().removeRelationsByParam(relationParam);
+            result = getService().removeRelationsByParam(relationParam);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -282,7 +282,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData<List<CD>> getUnassignedChildren(String parentId){
         List<CD> data;
         try {
-            List<CT> entities = getManager().getUnassignedChildren(parentId);
+            List<CT> entities = getService().getUnassignedChildren(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,7 +303,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData<List<PD>> getParentsFromChildId(String childId){
         List<PD> data;
         try {
-            List<PT> entities = getManager().getParentsFromChildId(childId);
+            List<PT> entities = getService().getParentsFromChildId(childId);
             data = entities.stream().map(this::convertParentToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,7 +325,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData insertRelationsByParents(String childId, List<String> parentIds){
         OperateResult result;
         try {
-            result = getManager().insertRelationsByParents(childId, parentIds);
+            result = getService().insertRelationsByParents(childId, parentIds);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -350,7 +350,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData removeRelationsByParents(String childId, List<String> parentIds){
         OperateResult result;
         try {
-            result = getManager().removeRelationsByParents(childId, parentIds);
+            result = getService().removeRelationsByParents(childId, parentIds);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -374,7 +374,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     default ResultData<List<TD>> getRelationsByParentId(String parentId){
         List<TD> data;
         try {
-            List<TT> entities = getManager().getRelationsByParentId(parentId);
+            List<TT> entities = getService().getRelationsByParentId(parentId);
             data = entities.stream().map(this::convertRelationToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();

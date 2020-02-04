@@ -33,7 +33,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
         T entity = convertToEntity(dto);
         OperateResultWithData<T> result;
         try {
-            result = getManager().save(entity);
+            result = getService().save(entity);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -58,7 +58,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
     @Override
     default ResultData delete(String id){
         try {
-            OperateResult result = getManager().delete(id);
+            OperateResult result = getService().delete(id);
             return ResultData.success(result.getMessage(), null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +78,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
     default ResultData<D> findOne(String id){
         T entity;
         try {
-            entity = getManager().findOne(id);
+            entity = getService().findOne(id);
         } catch (Exception e) {
             e.printStackTrace();
             LogUtil.error("获取业务实体异常！", e);

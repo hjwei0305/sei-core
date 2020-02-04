@@ -58,7 +58,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待创建数据对象
      */
     protected OperateResultWithData<T> preInsert(T entity) {
-        return OperateResultWithData.operationSuccessWithData(entity, "core_manager_00003");
+        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待更新数据对象
      */
     protected OperateResultWithData<T> preUpdate(T entity) {
-        return OperateResultWithData.operationSuccessWithData(entity, "core_manager_00003");
+        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param id 待删除数据对象主键
      */
     protected OperateResult preDelete(ID id) {
-        return OperateResult.operationSuccess("core_manager_00003");
+        return OperateResult.operationSuccess("core_service_00028");
     }
 
     /**
@@ -106,9 +106,9 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
                 logger.debug("Saved entity id is {}", entity.getId());
             }
             if (isNew) {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "core_manager_00001");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "core_service_00026");
             } else {
-                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "core_manager_00002");
+                operateResultWithData = OperateResultWithData.operationSuccessWithData(saveEntity, "core_service_00027");
             }
         }
         return operateResultWithData;
@@ -179,9 +179,9 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
             T entity = findOne(id);
             if (entity != null) {
                 getDao().delete(entity);
-                return OperateResult.operationSuccess("core_manager_00003");
+                return OperateResult.operationSuccess("core_service_00028");
             } else {
-                return OperateResult.operationWarning("core_manager_00004");
+                return OperateResult.operationWarning("core_service_00029");
             }
         }
         return operateResult;

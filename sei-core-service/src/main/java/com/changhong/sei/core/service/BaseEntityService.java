@@ -138,11 +138,11 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                 ITenant tenantEntity = (ITenant) entity;
                 if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), IdGenerator.uuid())) {
                     //代码[{0}]在租户[{1}]已存在，请重新输入！
-                    return OperateResultWithData.operationFailureWithData(entity, "core_manager_00013", codeUnique.getCode(), tenantEntity.getTenantCode());
+                    return OperateResultWithData.operationFailureWithData(entity, "core_service_00038", codeUnique.getCode(), tenantEntity.getTenantCode());
                 }
             } else if (getDao().isCodeExists(codeUnique.getCode(), IdGenerator.uuid())) {
                 //代码[{0}]已存在，请重新输入！
-                return OperateResultWithData.operationFailureWithData(entity, "core_manager_00012", codeUnique.getCode());
+                return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
             }
         }
         return super.preInsert(entity);
@@ -163,11 +163,11 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                 ITenant tenantEntity = (ITenant) entity;
                 if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), entity.getId())) {
                     //代码[{0}]已存在，请重新输入！
-                    return OperateResultWithData.operationFailureWithData(entity, "core_manager_00013", codeUnique.getCode(), tenantEntity.getTenantCode());
+                    return OperateResultWithData.operationFailureWithData(entity, "core_service_00038", codeUnique.getCode(), tenantEntity.getTenantCode());
                 }
             } else if (getDao().isCodeExists(codeUnique.getCode(), entity.getId())) {
                 //代码[{0}]已存在，请重新输入！
-                return OperateResultWithData.operationFailureWithData(entity, "core_manager_00012", codeUnique.getCode());
+                return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
             }
         }
         return super.preUpdate(entity);

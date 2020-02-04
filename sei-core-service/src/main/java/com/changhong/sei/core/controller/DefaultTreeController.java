@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D extends BaseEntityDto>
         extends BaseTreeApi<D> {
     // 注入业务逻辑实现
-    BaseTreeService<T> getManager();
+    BaseTreeService<T> getService();
 
     // 获取实体转换类
     ModelMapper getModelMapper();
@@ -65,14 +65,15 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
 
     /**
      * 将数据实体清单转换成DTO清单
+     *
      * @param entities 数据实体清单
      * @return DTO清单
      */
-    default List<D> convertToDtos(List<T> entities){
-        if (Objects.isNull(entities)){
+    default List<D> convertToDtos(List<T> entities) {
+        if (Objects.isNull(entities)) {
             return null;
         }
-        if (CollectionUtils.isEmpty(entities)){
+        if (CollectionUtils.isEmpty(entities)) {
             return new ArrayList<>();
         }
         return entities.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -80,10 +81,11 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
 
     /**
      * 将分页查询结果转换为返回结果
+     *
      * @param pageResult 分页查询结果
      * @return 返回结果
      */
-    default ResultData<PageResult<D>> convertToDtoPageResult(PageResult<T> pageResult){
+    default ResultData<PageResult<D>> convertToDtoPageResult(PageResult<T> pageResult) {
         PageResult<D> result = new PageResult<>(pageResult);
         List<D> dtos = convertToDtos(pageResult.getRows());
         result.setRows(dtos);
@@ -111,10 +113,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作状态
      */
     @Override
-    default ResultData move(String nodeId, String targetParentId){
+    default ResultData move(String nodeId, String targetParentId) {
         OperateResult result;
         try {
-            result = getManager().move(nodeId, targetParentId);
+            result = getService().move(nodeId, targetParentId);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -134,10 +136,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 根节点清单
      */
     @Override
-    default ResultData<List<D>> getAllRootNode(){
+    default ResultData<List<D>> getAllRootNode() {
         List<D> data;
         try {
-            List<T> entities = getManager().getAllRootNode();
+            List<T> entities = getService().getAllRootNode();
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,10 +157,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 节点树
      */
     @Override
-    default ResultData<D> getTree(String nodeId){
+    default ResultData<D> getTree(String nodeId) {
         T entity;
         try {
-            entity = getManager().getTree(nodeId);
+            entity = getService().getTree(nodeId);
         } catch (Exception e) {
             e.printStackTrace();
             LogUtil.error("获取一个节点的树异常！", e);
@@ -178,10 +180,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 子节点清单
      */
     @Override
-    default ResultData<List<D>> getChildrenNodes(String nodeId, boolean includeSelf){
+    default ResultData<List<D>> getChildrenNodes(String nodeId, boolean includeSelf) {
         List<D> data;
         try {
-            List<T> entities = getManager().getChildrenNodes(nodeId, includeSelf);
+            List<T> entities = getService().getChildrenNodes(nodeId, includeSelf);
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,10 +202,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 父节点清单
      */
     @Override
-    default ResultData<List<D>> getParentNodes(String nodeId, boolean includeSelf){
+    default ResultData<List<D>> getParentNodes(String nodeId, boolean includeSelf) {
         List<D> data;
         try {
-            List<T> entities = getManager().getParentNodes(nodeId, includeSelf);
+            List<T> entities = getService().getParentNodes(nodeId, includeSelf);
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -221,11 +223,11 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作结果
      */
     @Override
-    default ResultData<D> save(@Valid D dto){
+    default ResultData<D> save(@Valid D dto) {
         OperateResultWithData<T> result;
         try {
             T entity = convertToEntity(dto);
-            result = getManager().save(entity);
+            result = getService().save(entity);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -246,10 +248,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作结果
      */
     @Override
-    default ResultData delete(String id){
+    default ResultData delete(String id) {
         OperateResult result;
         try {
-            result = getManager().delete(id);
+            result = getService().delete(id);
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -270,10 +272,10 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 业务实体
      */
     @Override
-    default ResultData<D> findOne(String id){
+    default ResultData<D> findOne(String id) {
         T entity;
         try {
-            entity = getManager().findOne(id);
+            entity = getService().findOne(id);
         } catch (Exception e) {
             LogUtil.error("获取业务实体异常！", e);
             // 获取业务实体异常！{0}

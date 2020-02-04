@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntityDto> {
     // 注入业务逻辑实现
-    BaseEntityService<T> getManager();
+    BaseEntityService<T> getService();
 
     // 获取实体转换类
     ModelMapper getModelMapper();
