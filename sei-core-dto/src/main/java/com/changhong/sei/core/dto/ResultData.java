@@ -47,6 +47,10 @@ public class ResultData<T> implements Serializable {
         this.data = data;
     }
 
+    public Boolean getSuccess() {
+        return success;
+    }
+
     public String getMessage() {
         return message;
     }

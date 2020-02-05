@@ -8,6 +8,8 @@ import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.service.bo.ResponseData;
 import com.chonghong.sei.util.EnumUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,5 +74,22 @@ public class ResultDataUtil {
             return ResultData.fail(ContextUtil.getMessage("core_service_00025", e.getMessage()));
         }
         return ResultData.success(map);
+    }
+
+    /**
+     * 获取枚举值的实体清单
+     * @param enumClass 枚举类
+     * @return 枚举值的值
+     */
+    public static <T extends Enum> ResultData<List<EnumUtils.EnumEntity>> getEnumEntities(Class<T> enumClass){
+        List<EnumUtils.EnumEntity> enumEntities;
+        try {
+            enumEntities = EnumUtils.getEnumDataList(enumClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LogUtil.error("获取枚举值的实体清单异常！", e);
+            return ResultData.fail(ContextUtil.getMessage("core_service_00039", e.getMessage()));
+        }
+        return ResultData.success(enumEntities);
     }
 }
