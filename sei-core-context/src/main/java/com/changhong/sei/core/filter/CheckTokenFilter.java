@@ -65,6 +65,7 @@ public class CheckTokenFilter extends BaseWebFilter {
             unauthorized("token不合法,认证失败!", response);
             return;
         }
+        LogUtil.info("当前用户: {}", user);
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
@@ -86,6 +87,7 @@ public class CheckTokenFilter extends BaseWebFilter {
      * 认证失败
      */
     private void unauthorized(String msg, HttpServletResponse response) throws IOException {
+        LogUtil.warn("认证失败: {}", msg);
         //认证错误处理
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");

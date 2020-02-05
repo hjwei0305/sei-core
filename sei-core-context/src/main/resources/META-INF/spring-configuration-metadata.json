@@ -2,12 +2,26 @@
   "hints": [],
   "groups": [
     {
+      "sourceType": "com.changhong.sei.core.config.global.GlobalConfig",
+      "name": "sei.global",
+      "type": "com.changhong.sei.core.config.global.GlobalConfig"
+    },
+    {
       "sourceType": "com.changhong.sei.core.config.mock.MockUser",
       "name": "sei.mock.user",
       "type": "com.changhong.sei.core.config.mock.MockUser"
     }
   ],
   "properties": [
+    {
+      "sourceType": "com.changhong.sei.core.config.global.GlobalConfig",
+      "defaultValue": false,
+      "name": "sei.global.debugger",
+      "description": "本地调试模式",
+      "type": "java.lang.Boolean"
+    },
+
+
     {
       "sourceType": "com.changhong.sei.core.config.mock.MockUser",
       "defaultValue": false,
