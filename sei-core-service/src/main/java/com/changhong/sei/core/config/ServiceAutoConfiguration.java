@@ -12,7 +12,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * @version 1.0.1 2018/5/28 23:48
  */
 @Configuration
-public class SeiAutoConfiguration {
+public class ServiceAutoConfiguration {
+
     @Bean
     public ApplicationContextHolder seiContext() {
         return new ApplicationContextHolder();

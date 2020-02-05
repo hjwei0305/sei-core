@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config.global;
+package com.changhong.sei.core.config.property.global;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

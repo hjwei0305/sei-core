@@ -11,10 +11,8 @@ dependencies {
     )
 
     // 第三方的依赖
-    compile(
-            "org.springframework.boot:spring-boot-configuration-processor",
-            "org.springframework.boot:spring-boot-starter-web"
-    )
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compile("org.springframework.boot:spring-boot-starter-web")
 
     //jwt
     compile("io.jsonwebtoken:jjwt:0.9.0")
@@ -31,6 +29,8 @@ dependencies {
 //            "com.sndyuk:logback-more-appenders:1.4.3"
 //    )
 }
+
+//compileJava.dependsOn(processResources)
 
 //打jar包
 bootJar { enabled = false }

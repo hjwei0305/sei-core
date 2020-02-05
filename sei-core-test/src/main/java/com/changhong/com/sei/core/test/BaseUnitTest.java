@@ -1,10 +1,8 @@
 package com.changhong.com.sei.core.test;
 
-import com.changhong.sei.core.config.mock.MockUser;
-import com.changhong.sei.core.context.ApplicationContextHolder;
+import com.changhong.sei.core.config.property.mock.MockUser;
 import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -12,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 /**
  * 实现功能：

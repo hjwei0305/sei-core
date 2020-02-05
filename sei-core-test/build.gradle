@@ -3,7 +3,7 @@ apply plugin: 'io.spring.dependency-management'
 
 dependencies {
     // 内部模块依赖
-    compile project(':sei-core-context')
+    compile project(':sei-commons')
 
     // 第三方的依赖
     compile(

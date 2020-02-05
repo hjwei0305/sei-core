@@ -1,6 +1,8 @@
-package com.changhong.sei.core.config.cors;
+package com.changhong.sei.core.config.property.http.filter;
 
+import com.changhong.sei.core.config.property.http.filter.cors.CorsConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -10,66 +12,60 @@ import java.util.Collections;
 
 /**
  * 实现功能：
+ * http filter 配置
  *
  * @author 马超(Vision.Mac)
- * @version 1.0.00  2020-01-07 12:06
+ * @version 1.0.00  2020-02-05 21:32
  */
-@ConfigurationProperties("sei.cors")
-public class CorsConfig implements CorsConfigurationSource {
+@ConfigurationProperties(prefix = "sei.http.filter")
+public class FilterConfig implements CorsConfigurationSource {
 
     /**
-     * 允许访问域名列表
+     * 是否启用
      */
-    private String[] allowedOrigins;
-
+    private boolean enable = false;
     /**
-     * 允许方法列表
+     *
      */
-    private String[] allowedMethods;
+    @NestedConfigurationProperty
+    private CorsConfig cors = new CorsConfig();
 
-    /**
-     * 允许头访问列表
-     */
-    private String[] allowedHeaders;
-
-    public String[] getAllowedOrigins() {
-        return allowedOrigins;
+    public boolean isEnable() {
+        return enable;
     }
 
-    public void setAllowedOrigins(String[] allowedOrigins) {
-        this.allowedOrigins = allowedOrigins;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
-    public String[] getAllowedMethods() {
-        return allowedMethods;
+    public CorsConfig getCors() {
+        return cors;
     }
 
-    public void setAllowedMethods(String[] allowedMethods) {
-        this.allowedMethods = allowedMethods;
-    }
-
-    public String[] getAllowedHeaders() {
-        return allowedHeaders;
-    }
-
-    public void setAllowedHeaders(String[] allowedHeaders) {
-        this.allowedHeaders = allowedHeaders;
+    public void setCors(CorsConfig cors) {
+        this.cors = cors;
     }
 
     @Override
     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
         CorsConfiguration configuration = new CorsConfiguration();
+
+        String[] allowedOrigins = cors.getAllowedOrigins();
         if (allowedOrigins != null && allowedOrigins.length > 0) {
             configuration.setAllowCredentials(true);
             configuration.setAllowedOrigins(Collections.unmodifiableList(Arrays.asList(allowedOrigins)));
         } else {
             configuration.setAllowedOrigins(Collections.unmodifiableList(Collections.singletonList(CorsConfiguration.ALL)));
         }
+
+        String[] allowedMethods = cors.getAllowedMethods();
         if (allowedMethods != null && allowedMethods.length > 0) {
             configuration.setAllowedMethods(Collections.unmodifiableList(Arrays.asList(allowedMethods)));
         } else {
             configuration.setAllowedMethods(Collections.unmodifiableList(Collections.singletonList(CorsConfiguration.ALL)));
         }
+
+        String[] allowedHeaders = cors.getAllowedHeaders();
         if (allowedHeaders != null && allowedHeaders.length > 0) {
             configuration.setAllowedHeaders(Collections.unmodifiableList(Arrays.asList(allowedHeaders)));
         } else {

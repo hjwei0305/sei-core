@@ -1,0 +1,130 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "name": "sei.global",
+      "type": "com.changhong.sei.core.config.property.global.GlobalConfig",
+      "sourceType": "com.changhong.sei.core.config.property.global.GlobalConfig"
+    },
+    {
+      "name": "sei.mock.user",
+      "type": "com.changhong.sei.core.config.property.mock.MockUser",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.http.filter",
+      "type": "com.changhong.sei.core.config.property.http.filter.FilterConfig",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.FilterConfig"
+    },
+    {
+      "name": "sei.http.filter.cors",
+      "type": "com.changhong.sei.core.config.property.http.filter.cors.CorsConfig",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.FilterConfig",
+      "sourceMethod": "getCors()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sei.global.debugger",
+      "type": "java.lang.Boolean",
+      "description": "本地调试模式",
+      "sourceType": "com.changhong.sei.core.config.property.global.GlobalConfig",
+      "defaultValue": false
+    },
+
+
+    {
+      "name": "sei.mock.user.enable",
+      "type": "java.lang.Boolean",
+      "description": "enable mock user",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser",
+      "defaultValue": false
+    },
+    {
+      "name": "sei.mock.user.s-id",
+      "type": "java.lang.String",
+      "description": "session id",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.user-id",
+      "type": "java.lang.String",
+      "description": "user id",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.account",
+      "type": "java.lang.String",
+      "description": "account",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.user-name",
+      "type": "java.lang.String",
+      "description": "user name",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.tenant-code",
+      "type": "java.lang.String",
+      "description": "租户",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.email",
+      "type": "java.lang.String",
+      "description": "邮箱",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser"
+    },
+    {
+      "name": "sei.mock.user.ip",
+      "type": "java.lang.String",
+      "description": "客户端ip",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser",
+      "defaultValue": "127.0.0.1"
+    },
+    {
+      "name": "sei.mock.user.locale",
+      "type": "java.lang.String",
+      "description": "语言 如: zh_CN",
+      "sourceType": "com.changhong.sei.core.config.property.mock.MockUser",
+      "defaultValue": "zh_CN"
+    },
+
+
+    {
+      "name": "sei.http.filter.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启sei平台定义的http filter",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.FilterConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "sei.http.filter.cors.allowedOrigins",
+      "type": "java.lang.String[]",
+      "description": "允许访问域名列表",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.cors.CorsConfig",
+      "defaultValue": [
+        "*"
+      ]
+    },
+    {
+      "name": "sei.http.filter.cors.allowedMethods",
+      "type": "java.lang.String[]",
+      "description": "允许方法列表",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.cors.CorsConfig",
+      "defaultValue": [
+        "*"
+      ]
+    },
+    {
+      "name": "sei.http.filter.cors.allowedHeaders",
+      "type": "java.lang.String[]",
+      "description": "允许头访问列表",
+      "sourceType": "com.changhong.sei.core.config.property.http.filter.cors.CorsConfig",
+      "defaultValue": [
+        "*"
+      ]
+    }
+  ]
+}

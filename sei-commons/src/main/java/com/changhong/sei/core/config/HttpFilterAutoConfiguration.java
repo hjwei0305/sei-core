@@ -1,17 +1,11 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.config.cors.CorsConfig;
-import com.changhong.sei.core.config.global.GlobalConfig;
-import com.changhong.sei.core.config.mock.MockUser;
+import com.changhong.sei.core.config.property.http.filter.FilterConfig;
 import com.changhong.sei.core.error.GlobalExceptionTranslator;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
-import com.changhong.sei.core.util.JwtTokenUtil;
-import com.chonghong.sei.util.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,9 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.List;
 
 /**
@@ -35,9 +26,11 @@ import java.util.List;
  * @version 1.0.00  2020-01-07 11:35
  */
 @Configuration
+@ConditionalOnProperty(prefix = "sei.http.filter", name = "enable", havingValue = "true", matchIfMissing = true)
 @Import(value = {GlobalExceptionTranslator.class})
-@EnableConfigurationProperties({GlobalConfig.class, CorsConfig.class, MockUser.class})
-public class WebAutoConfiguration {
+@EnableConfigurationProperties({FilterConfig.class})
+public class HttpFilterAutoConfiguration {
+
     /**
      * 自定义过滤器定义
      */
@@ -62,38 +55,4 @@ public class WebAutoConfiguration {
         return registration;
     }
 
-    @Bean
-    public JwtTokenUtil jwtTokenUtil(Environment env) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        // JWT签名密钥
-        String secret = env.getProperty("sei.security.jwt.secret");
-        if (StringUtils.isNotBlank(secret)) {
-            jwtTokenUtil.setJwtSecret(secret);
-        }
-        // JWT过期时间（秒） 一天
-        jwtTokenUtil.setJwtExpiration(86400);
-        return jwtTokenUtil;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public Validator validator() {
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
-                .configure()
-                // 配置hibernate Validator为快速失败返回模式
-                .failFast(true)
-                .buildValidatorFactory();
-        return validatorFactory.getValidator();
-    }
-
-//    /**
-//     * jsonutil 初始化处理
-//     * jsonutil 初始化处理
-//     *
-//     * @param mapper
-//     */
-//    @Autowired
-//    public void setObjectMapper(@SuppressWarnings("SpringJavaAutowiringInspection") @Autowired ObjectMapper mapper) {
-//        JsonUtils.setMapper(mapper);
-//    }
 }

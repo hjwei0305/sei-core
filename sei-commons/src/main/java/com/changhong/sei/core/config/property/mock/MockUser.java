@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config.mock;
+package com.changhong.sei.core.config.property.mock;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
