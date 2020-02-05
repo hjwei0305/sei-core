@@ -64,6 +64,7 @@ public class ResultData<T> implements Serializable {
      *
      * @return 成功
      */
+    @JsonIgnore
     public boolean successful() {
         if (Objects.isNull(success)) {
             return false;
