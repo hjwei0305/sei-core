@@ -13,10 +13,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  */
 @Configuration
 public class SeiAutoConfiguration {
-//    @Bean
-//    public ApplicationContextHolder seiContext() {
-//        return new ApplicationContextHolder();
-//    }
+    @Bean
+    public ApplicationContextHolder seiContext() {
+        return new ApplicationContextHolder();
+    }
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
