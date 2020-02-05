@@ -1,7 +1,7 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.config.property.global.GlobalConfig;
-import com.changhong.sei.core.config.property.mock.MockUser;
+import com.changhong.sei.core.config.properties.global.GlobalProperties;
+import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
@@ -23,7 +23,7 @@ import javax.validation.ValidatorFactory;
  * @version 1.0.00  2020-01-07 11:35
  */
 @Configuration
-@EnableConfigurationProperties({GlobalConfig.class, MockUser.class})
+@EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
 
     @Bean

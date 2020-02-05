@@ -1,6 +1,6 @@
-package com.changhong.sei.core.config.property.http.filter;
+package com.changhong.sei.core.config.properties.http.filter;
 
-import com.changhong.sei.core.config.property.http.filter.cors.CorsConfig;
+import com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,7 +18,7 @@ import java.util.Collections;
  * @version 1.0.00  2020-02-05 21:32
  */
 @ConfigurationProperties(prefix = "sei.http.filter")
-public class FilterConfig implements CorsConfigurationSource {
+public class FilterProperties implements CorsConfigurationSource {
 
     /**
      * 是否启用
@@ -28,7 +28,7 @@ public class FilterConfig implements CorsConfigurationSource {
      *
      */
     @NestedConfigurationProperty
-    private CorsConfig cors = new CorsConfig();
+    private CorsProperties cors = new CorsProperties();
 
     public boolean isEnable() {
         return enable;
@@ -38,11 +38,11 @@ public class FilterConfig implements CorsConfigurationSource {
         this.enable = enable;
     }
 
-    public CorsConfig getCors() {
+    public CorsProperties getCors() {
         return cors;
     }
 
-    public void setCors(CorsConfig cors) {
+    public void setCors(CorsProperties cors) {
         this.cors = cors;
     }
 

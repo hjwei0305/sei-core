@@ -1,6 +1,6 @@
 package com.changhong.sei.core.filter;
 
-import com.changhong.sei.core.config.property.http.filter.FilterConfig;
+import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -33,7 +33,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     /**
      * 应用上下文
      */
-    private FilterConfig filterConfig;
+    private FilterProperties filterConfig;
 
     /**
      * 带参数构造器
@@ -45,7 +45,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     @Override
     protected void initFilterBean() throws ServletException {
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        filterConfig = applicationContext.getBean(FilterConfig.class);
+        filterConfig = applicationContext.getBean(FilterProperties.class);
         super.initFilterBean();
     }
 

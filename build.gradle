@@ -31,7 +31,7 @@ subprojects  {
     repositories {
         mavenLocal()
         maven { url REPOSITORY }
-        mavenCentral()
+        //mavenCentral()
     }
 }
 

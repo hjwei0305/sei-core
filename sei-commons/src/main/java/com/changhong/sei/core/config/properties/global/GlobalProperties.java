@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config.property.global;
+package com.changhong.sei.core.config.properties.global;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version 1.0.00  2020-01-07 12:06
  */
 @ConfigurationProperties("sei.global")
-public class GlobalConfig {
+public class GlobalProperties {
     /**
      * 是否启用调试模式
      */

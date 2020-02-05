@@ -1,6 +1,6 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.config.property.http.filter.FilterConfig;
+import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
 import com.changhong.sei.core.error.GlobalExceptionTranslator;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
@@ -28,7 +28,7 @@ import java.util.List;
 @Configuration
 @ConditionalOnProperty(prefix = "sei.http.filter", name = "enable", havingValue = "true", matchIfMissing = true)
 @Import(value = {GlobalExceptionTranslator.class})
-@EnableConfigurationProperties({FilterConfig.class})
+@EnableConfigurationProperties({FilterProperties.class})
 public class HttpFilterAutoConfiguration {
 
     /**

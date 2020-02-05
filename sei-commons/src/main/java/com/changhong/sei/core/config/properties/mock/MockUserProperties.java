@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config.property.mock;
+package com.changhong.sei.core.config.properties.mock;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
@@ -15,7 +15,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @version 1.0.00  2020-01-09 06:46
  */
 @ConfigurationProperties("sei.mock.user")
-public class MockUser {
+public class MockUserProperties {
     /**
      * 匿名用户名称
      */

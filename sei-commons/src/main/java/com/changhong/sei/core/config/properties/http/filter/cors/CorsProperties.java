@@ -1,4 +1,4 @@
-package com.changhong.sei.core.config.property.http.filter.cors;
+package com.changhong.sei.core.config.properties.http.filter.cors;
 
 
 /**
@@ -7,7 +7,7 @@ package com.changhong.sei.core.config.property.http.filter.cors;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-07 12:06
  */
-public class CorsConfig {
+public class CorsProperties {
 
     /**
      * 允许访问域名列表

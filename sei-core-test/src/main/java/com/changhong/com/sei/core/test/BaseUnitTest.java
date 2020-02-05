@@ -1,6 +1,6 @@
 package com.changhong.com.sei.core.test;
 
-import com.changhong.sei.core.config.property.mock.MockUser;
+import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import org.junit.AfterClass;
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class BaseUnitTest {
     @Autowired
-    public MockUser mockUser;
+    public MockUserProperties mockUser;
 
     @BeforeClass
     public static void setup() {
