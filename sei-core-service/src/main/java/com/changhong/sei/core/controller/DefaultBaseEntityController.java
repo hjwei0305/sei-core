@@ -26,7 +26,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
     @Override
     default ResultData<D> save(D dto){
         ResultData checkResult = checkDto(dto);
-        if (checkResult.isFailed()) {
+        if (checkResult.failed()) {
             return checkResult;
         }
         // 数据转换 to Entity

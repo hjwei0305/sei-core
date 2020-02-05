@@ -5,6 +5,7 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.TreeEntity;
+import com.changhong.sei.core.dto.TreeNodeMoveParam;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.log.LogUtil;
@@ -108,15 +109,14 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
     /**
      * 移动一个节点
      *
-     * @param nodeId         节点Id
-     * @param targetParentId 目标父节点Id
+     * @param moveParam         节点移动参数
      * @return 操作状态
      */
     @Override
-    default ResultData move(String nodeId, String targetParentId) {
+    default ResultData move(TreeNodeMoveParam moveParam) {
         OperateResult result;
         try {
-            result = getService().move(nodeId, targetParentId);
+            result = getService().move(moveParam.getNodeId(), moveParam.getTargetParentId());
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回

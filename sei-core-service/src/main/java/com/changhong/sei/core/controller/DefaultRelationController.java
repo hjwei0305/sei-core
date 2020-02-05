@@ -2,10 +2,7 @@ package com.changhong.sei.core.controller;
 
 import com.changhong.sei.core.api.BaseRelationApi;
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.dto.BaseEntityDto;
-import com.changhong.sei.core.dto.RelationEntityDto;
-import com.changhong.sei.core.dto.RelationParam;
-import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.*;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.RelationEntity;
@@ -177,36 +174,11 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     /**
      * 创建分配关系
      *
-     * @param parentId 父实体Id
-     * @param childIds 子实体Id清单
-     * @return 操作结果
-     */
-    @Override
-    default ResultData insertRelations(String parentId, List<String> childIds){
-        OperateResult result;
-        try {
-            result = getService().insertRelations(parentId, childIds);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 捕获异常，并返回
-            LogUtil.error("创建分配关系异常！", e);
-            // 创建分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00013", e.getMessage()));
-        }
-        if (result.notSuccessful()) {
-            return ResultData.fail(result.getMessage());
-        }
-        return ResultData.success(result.getMessage());
-    }
-
-    /**
-     * 创建分配关系
-     *
      * @param relationParam 分配关系参数
      * @return 操作结果
      */
     @Override
-    default ResultData insertRelationsByParam(RelationParam relationParam){
+    default ResultData insertRelations(RelationParam relationParam){
         OperateResult result;
         try {
             result = getService().insertRelationsByParam(relationParam);
@@ -226,36 +198,11 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     /**
      * 移除分配关系
      *
-     * @param parentId 父实体Id
-     * @param childIds 子实体Id清单
-     * @return 操作结果
-     */
-    @Override
-    default ResultData removeRelations(String parentId, List<String> childIds){
-        OperateResult result;
-        try {
-            result = getService().removeRelations(parentId, childIds);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 捕获异常，并返回
-            LogUtil.error("移除分配关系异常！", e);
-            // 移除分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00014", e.getMessage()));
-        }
-        if (result.notSuccessful()) {
-            return ResultData.fail(result.getMessage());
-        }
-        return ResultData.success(result.getMessage());
-    }
-
-    /**
-     * 移除分配关系
-     *
      * @param relationParam 分配关系参数
      * @return 操作结果
      */
     @Override
-    default ResultData removeRelationsByParam(RelationParam relationParam){
+    default ResultData removeRelations(RelationParam relationParam){
         OperateResult result;
         try {
             result = getService().removeRelationsByParam(relationParam);
@@ -317,15 +264,14 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     /**
      * 通过父实体清单创建分配关系
      *
-     * @param childId   子实体Id
-     * @param parentIds 父实体Id清单
+     * @param relationParam 父实体Id清单的分配关系
      * @return 操作结果
      */
     @Override
-    default ResultData insertRelationsByParents(String childId, List<String> parentIds){
+    default ResultData insertRelationsByParents(ParentRelationParam relationParam){
         OperateResult result;
         try {
-            result = getService().insertRelationsByParents(childId, parentIds);
+            result = getService().insertRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回
@@ -342,15 +288,14 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     /**
      * 通过父实体清单移除分配关系
      *
-     * @param childId   子实体Id
-     * @param parentIds 父实体Id清单
+     * @param relationParam 父实体Id清单的分配关系
      * @return 操作结果
      */
     @Override
-    default ResultData removeRelationsByParents(String childId, List<String> parentIds){
+    default ResultData removeRelationsByParents(ParentRelationParam relationParam){
         OperateResult result;
         try {
-            result = getService().removeRelationsByParents(childId, parentIds);
+            result = getService().removeRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
             e.printStackTrace();
             // 捕获异常，并返回

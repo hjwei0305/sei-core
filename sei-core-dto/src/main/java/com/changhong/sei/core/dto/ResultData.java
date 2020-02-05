@@ -19,7 +19,7 @@ public class ResultData<T> implements Serializable {
     /**
      * 是成功的
      */
-    private Boolean successful;
+    private Boolean success;
     /**
      * 返回信息
      */
@@ -33,7 +33,7 @@ public class ResultData<T> implements Serializable {
      * 私有构造函数
      */
     private ResultData() {
-        this.successful = Boolean.FALSE;
+        this.success = Boolean.FALSE;
         this.message = "";
         this.data = null;
     }
@@ -41,14 +41,10 @@ public class ResultData<T> implements Serializable {
     /**
      * 私有构造函数
      */
-    private ResultData(Boolean successful, String message, T data) {
-        this.successful = successful;
+    private ResultData(Boolean success, String message, T data) {
+        this.success = success;
         this.message = message;
         this.data = data;
-    }
-
-    public Boolean getSuccessful() {
-        return successful;
     }
 
     public String getMessage() {
@@ -64,11 +60,11 @@ public class ResultData<T> implements Serializable {
      *
      * @return 成功
      */
-    public boolean isSuccessful() {
-        if (Objects.isNull(successful)) {
+    public boolean successful() {
+        if (Objects.isNull(success)) {
             return false;
         }
-        return successful;
+        return success;
     }
 
     /**
@@ -77,11 +73,11 @@ public class ResultData<T> implements Serializable {
      * @return 成功
      */
     @JsonIgnore
-    public boolean isFailed() {
-        if (Objects.isNull(successful)) {
+    public boolean failed() {
+        if (Objects.isNull(success)) {
             return true;
         }
-        return !successful;
+        return !success;
     }
 
     /**
