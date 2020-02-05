@@ -16,7 +16,7 @@ bootJar { enabled = false }
 jar {
     enabled = true
     manifest {
-        attributes("Manifest-Version": "4.0")
+        attributes("Manifest-Version": "6.0")
         attributes("Created-By": "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString())
         attributes("Implementation-Title": "SEI-$project.name")
         attributes("Implementation-Version": "$project.version")
