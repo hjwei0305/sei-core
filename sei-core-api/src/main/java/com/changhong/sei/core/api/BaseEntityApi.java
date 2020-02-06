@@ -33,7 +33,7 @@ public interface BaseEntityApi<T extends BaseEntityDto> {
      * @param id 业务实体Id
      * @return 操作结果
      */
-    @DeleteMapping(path = "delete")
+    @DeleteMapping(path = "delete", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
     ResultData delete(@RequestBody String id);
 
