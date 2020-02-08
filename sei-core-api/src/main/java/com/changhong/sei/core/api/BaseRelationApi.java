@@ -25,7 +25,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      * @return 子实体清单
      */
     @GetMapping(path = "getChildrenFromParentId")
-    @ApiOperation(value = "通过角色获取功能项清单", notes = "通过角色Id获取已分配的功能项清单")
+    @ApiOperation(value = "通过父实体Id获取子实体清单", notes = "通过父实体Id获取已分配的子实体清单")
     ResultData<List<C>> getChildrenFromParentId(@RequestParam("parentId") String parentId);
 
     /**
@@ -55,7 +55,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      * @return 子实体清单
      */
     @GetMapping(path = "getUnassigned")
-    @ApiOperation(value = "获取未分配的功能项", notes = "获取用户有权限且未分配的功能项清单")
+    @ApiOperation(value = "获取未分配的子实体清单", notes = "通过父实体Id获取未分配的子实体清单")
     ResultData<List<C>> getUnassignedChildren(@RequestParam("parentId") String parentId);
 
     /**
@@ -65,7 +65,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      * @return 父实体清单
      */
     @GetMapping(path = "getParentsFromChildId")
-    @ApiOperation(value = "通过子实体Id获取父实体清单", notes = "通过子实体Id获取父实体清单")
+    @ApiOperation(value = "通过子实体Id获取父实体清单", notes = "通过子实体Id获取关联的父实体清单")
     ResultData<List<P>> getParentsFromChildId(@RequestParam("childId") String childId);
 
     /**
