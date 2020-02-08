@@ -10,6 +10,7 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseRelationService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 
 import java.util.List;
 import java.util.Objects;
@@ -82,7 +83,20 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         if (Objects.isNull(entity)) {
             return null;
         }
-        return getModelMapper().map(entity, getRelationDtoClass());
+        ModelMapper custMapper = new ModelMapper();
+        // 创建自定义映射规则
+        PropertyMap<TT, TD> propertyMap = new PropertyMap<TT, TD>() {
+            @Override
+            protected void configure() {
+                // 自定义转换规则
+                map().setParent(convertParentToDto(source.getParent()));
+                map().setChild(convertChildToDto(source.getChild()));
+            }
+        };
+        // 添加映射器
+        custMapper.addMappings(propertyMap);
+        // 转换
+        return custMapper.map(entity, getRelationDtoClass());
     }
 
     /**
