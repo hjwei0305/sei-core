@@ -84,25 +84,19 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         if (Objects.isNull(entity)) {
             return null;
         }
+        // 自定义数据映射
         ModelMapper custMapper = new ModelMapper();
         // 严格匹配
         custMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         // 定义父类转换器
-        Converter<PT, PD> parentConverter = new AbstractConverter<PT, PD>() {
-            @Override
-            protected PD convert(PT source) {
-                return convertParentToDto(source);
-            }
-        };
+        Converter<PT, PD> parentConverter = context -> convertParentToDto(context.getSource());
         // 定义子类转换器
-        Converter<CT, CD> childConverter = new AbstractConverter<CT, CD>() {
-            @Override
-            protected CD convert(CT source) {
-                return convertChildToDto(source);
-            }
-        };
-        custMapper.addConverter(parentConverter);
-        custMapper.addConverter(childConverter);
+        Converter<CT, CD> childConverter = context -> convertChildToDto(context.getSource());
+        // 添加类型映射器
+        TypeMap<PT, PD> parentTypeMap = custMapper.createTypeMap(getParentEntityClass(), getParentDtoClass());
+        parentTypeMap.setConverter(parentConverter);
+        TypeMap<CT, CD> childTypeMap = custMapper.createTypeMap(getChildEntityClass(), getChildDtoClass());
+        childTypeMap.setConverter(childConverter);
         // 转换
         return custMapper.map(entity, getRelationDtoClass());
     }
