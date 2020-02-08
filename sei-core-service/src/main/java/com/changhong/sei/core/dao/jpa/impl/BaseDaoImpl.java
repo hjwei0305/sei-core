@@ -199,20 +199,20 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @return the entity with the given id or {@literal Optional#empty()} if none found
      * @throws IllegalArgumentException if {@code id} is {@literal null}.
      */
-    @Override
-    public Optional<T> findById(ID id) {
-        T entity = null;
-        if (Objects.nonNull(id)) {
-            entity = super.findById(id).orElse(null);
-            if (Objects.nonNull(entity) && ITenant.class.isAssignableFrom(domainClass)) {
-                ITenant tenantEntity = (ITenant) entity;
-                if (!StringUtils.equals(ContextUtil.getTenantCode(), tenantEntity.getTenantCode())) {
-                    return Optional.empty();
-                }
-            }
-        }
-        return Optional.ofNullable(entity);
-    }
+//    @Override
+//    public Optional<T> findById(ID id) {
+//        T entity = null;
+//        if (Objects.nonNull(id)) {
+//            entity = super.findById(id).orElse(null);
+//            if (Objects.nonNull(entity) && ITenant.class.isAssignableFrom(domainClass)) {
+//                ITenant tenantEntity = (ITenant) entity;
+//                if (!StringUtils.equals(ContextUtil.getTenantCode(), tenantEntity.getTenantCode())) {
+//                    return Optional.empty();
+//                }
+//            }
+//        }
+//        return Optional.ofNullable(entity);
+//    }
 
     /**
      * {@inheritDoc}
