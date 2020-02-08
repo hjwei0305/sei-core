@@ -9,9 +9,8 @@ import com.changhong.sei.core.entity.RelationEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseRelationService;
 import com.changhong.sei.core.service.bo.OperateResult;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
+import org.modelmapper.*;
+import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 
 import java.util.List;
@@ -86,21 +85,24 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             return null;
         }
         ModelMapper custMapper = new ModelMapper();
+        // 严格匹配
+        custMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         // 定义父类转换器
-        Converter<PT, PD> parentConverter = context -> convertParentToDto(entity.getParent());
-        // 定义子类转换器
-        Converter<CT, CD> childConverter = context -> convertChildToDto(entity.getChild());
-        // 创建自定义映射规则
-        PropertyMap<TT, TD> propertyMap = new PropertyMap<TT, TD>() {
+        Converter<PT, PD> parentConverter = new AbstractConverter<PT, PD>() {
             @Override
-            protected void configure() {
-                // 自定义转换规则
-                using(parentConverter).map(source.getParent(), destination.getParent());
-                using(childConverter).map(source.getChild(), destination.getChild());
+            protected PD convert(PT source) {
+                return convertParentToDto(source);
             }
         };
-        // 添加映射器
-        custMapper.addMappings(propertyMap);
+        // 定义子类转换器
+        Converter<CT, CD> childConverter = new AbstractConverter<CT, CD>() {
+            @Override
+            protected CD convert(CT source) {
+                return convertChildToDto(source);
+            }
+        };
+        custMapper.addConverter(parentConverter);
+        custMapper.addConverter(childConverter);
         // 转换
         return custMapper.map(entity, getRelationDtoClass());
     }
