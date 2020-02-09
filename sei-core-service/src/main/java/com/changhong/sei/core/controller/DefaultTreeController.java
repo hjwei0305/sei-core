@@ -35,7 +35,9 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
     BaseTreeService<T> getService();
 
     // 获取实体转换类
-    ModelMapper getModelMapper();
+    default ModelMapper getModelMapper(){
+        return new ModelMapper();
+    }
 
     /**
      * 获取数据实体的类型

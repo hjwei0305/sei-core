@@ -30,7 +30,9 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
     BaseRelationService<TT, PT, CT> getService();
 
     // 获取实体转换类
-    ModelMapper getModelMapper();
+    default ModelMapper getModelMapper(){
+      return new ModelMapper();
+    }
 
     /**
      * 获取关系型数据实体的类型
