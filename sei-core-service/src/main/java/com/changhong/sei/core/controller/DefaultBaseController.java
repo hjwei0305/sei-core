@@ -8,6 +8,7 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.service.BaseEntityService;
 import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,7 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
         }
         ModelMapper mapper = getModelMapper();
         // 设置为严格匹配
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         return mapper.map(dto, getEntityClass());
     }
 }
