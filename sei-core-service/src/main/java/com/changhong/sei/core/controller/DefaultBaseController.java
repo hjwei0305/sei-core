@@ -26,7 +26,9 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
     BaseEntityService<T> getService();
 
     // 获取实体转换类
-    ModelMapper getModelMapper();
+    default ModelMapper getModelMapper() {
+        return new ModelMapper();
+    }
 
     /**
      * 获取数据实体的类型
@@ -107,6 +109,8 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
         if (Objects.isNull(dto)) {
             return null;
         }
-        return getModelMapper().map(dto, getEntityClass());
+        ModelMapper mapper = getModelMapper();
+        // 设置为严格匹配
+        return mapper.map(dto, getEntityClass());
     }
 }
