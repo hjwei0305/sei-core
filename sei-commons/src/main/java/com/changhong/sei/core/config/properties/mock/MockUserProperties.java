@@ -26,10 +26,6 @@ public class MockUserProperties {
      */
     private boolean enable = false;
     /**
-     * 会话id
-     */
-    private String sId;
-    /**
      * 用户id，平台唯一
      */
     private String userId = ANONYMOUS;
@@ -45,10 +41,6 @@ public class MockUserProperties {
      * 租户代码
      */
     private String tenantCode;
-    /**
-     * 邮箱
-     */
-    private String email;
     /**
      * 用户类型
      */
@@ -72,14 +64,6 @@ public class MockUserProperties {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public String getsId() {
-        return sId;
-    }
-
-    public void setsId(String sId) {
-        this.sId = sId;
     }
 
     public String getUserId() {
@@ -112,14 +96,6 @@ public class MockUserProperties {
 
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public UserType getUserType() {
@@ -158,12 +134,8 @@ public class MockUserProperties {
         SessionUser sessionUser = new SessionUser();
         try {
             BeanUtils.copyProperties(sessionUser, this);
-            // 生成token
-            ContextUtil.generateToken(sessionUser);
-
-            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
-            // 设置token到可传播的线程全局变量中
-            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
+            // 设置当前用户信息
+            ContextUtil.setSessionUser(sessionUser);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -41,12 +41,6 @@
       "defaultValue": false
     },
     {
-      "name": "sei.mock.user.s-id",
-      "type": "java.lang.String",
-      "description": "session id",
-      "sourceType": "com.changhong.sei.core.config.properties.mock.MockUserProperties"
-    },
-    {
       "name": "sei.mock.user.user-id",
       "type": "java.lang.String",
       "description": "user id",
@@ -68,12 +62,6 @@
       "name": "sei.mock.user.tenant-code",
       "type": "java.lang.String",
       "description": "租户",
-      "sourceType": "com.changhong.sei.core.config.properties.mock.MockUserProperties"
-    },
-    {
-      "name": "sei.mock.user.email",
-      "type": "java.lang.String",
-      "description": "邮箱",
       "sourceType": "com.changhong.sei.core.config.properties.mock.MockUserProperties"
     },
     {

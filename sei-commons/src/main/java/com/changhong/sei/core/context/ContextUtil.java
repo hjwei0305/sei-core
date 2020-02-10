@@ -7,6 +7,7 @@ import com.chonghong.sei.util.EnumUtils;
 import com.chonghong.sei.util.IdGenerator;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
 import io.jsonwebtoken.Claims;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -192,6 +193,19 @@ public final class ContextUtil {
     }
 
     ///////////////////////////////
+
+    /**
+     * 设置当前用户信息到线程
+     * 注意使用,会改变请求当前用户信息
+     */
+    public static void setSessionUser(SessionUser sessionUser) {
+        // 生成token
+        ContextUtil.generateToken(sessionUser);
+
+        ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+        // 设置token到可传播的线程全局变量中
+        ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
+    }
 
     /**
      * @return 返回AccessToken
