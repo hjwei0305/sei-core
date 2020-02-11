@@ -60,6 +60,37 @@ public class ResultDataUtil {
     }
 
     /**
+     * 通过多语言消息KEY返回处理成功
+     * @param messagekey 多语言消息KEY
+     * @param args 消息参数
+     * @return 处理成功
+     */
+    public static ResultData success(String messagekey, Object... args){
+        return ResultData.success(ContextUtil.getMessage(messagekey, args), null);
+    }
+
+    /**
+     * 通过多语言消息KEY返回处理成功(带数据)
+     * @param messagekey 多语言消息KEY
+     * @param args 消息参数
+     * @return 处理成功
+     */
+    public static <T> ResultData<T> success(T data, String messagekey, Object... args){
+        return ResultData.success(ContextUtil.getMessage(messagekey, args), data);
+    }
+
+    /**
+     * 通过多语言消息KEY返回处理失败
+     * @param messagekey 多语言消息KEY
+     * @param args 消息参数
+     * @return 处理失败
+     */
+    public static ResultData fail(String messagekey, Object... args){
+        return ResultData.fail(ContextUtil.getMessage(messagekey, args));
+    }
+
+
+    /**
      * 获取枚举值的键值对(name,remark)
      * @param enumClass 枚举类
      * @return 枚举值的键值对
