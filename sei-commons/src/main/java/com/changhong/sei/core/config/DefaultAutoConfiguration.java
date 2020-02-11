@@ -2,6 +2,8 @@ package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
+import com.changhong.sei.core.context.mock.LocalMockUser;
+import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
@@ -25,6 +27,12 @@ import javax.validation.ValidatorFactory;
 @Configuration
 @EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MockUser mockUser() {
+        return new LocalMockUser();
+    }
 
     @Bean
     @ConditionalOnMissingBean

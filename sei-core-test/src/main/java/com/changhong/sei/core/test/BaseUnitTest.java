@@ -1,6 +1,7 @@
-package com.changhong.com.sei.core.test;
+package com.changhong.sei.core.test;
 
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
+import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.log.LogUtil;
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import org.junit.AfterClass;
@@ -21,7 +22,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class BaseUnitTest {
     @Autowired
-    public MockUserProperties mockUser;
+    public MockUserProperties properties;
+    @Autowired
+    public MockUser mockUser;
 
     @BeforeClass
     public static void setup() {
@@ -33,7 +36,7 @@ public class BaseUnitTest {
 
     @Before
     public void mock() {
-        LogUtil.debug("当前模拟用户: {}", mockUser.mock());
+        LogUtil.debug("当前模拟用户: {}", mockUser.mockUser(properties.getTenantCode(), properties.getAccount()));
     }
 
 
