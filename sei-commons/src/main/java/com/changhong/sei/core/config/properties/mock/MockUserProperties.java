@@ -134,8 +134,12 @@ public class MockUserProperties {
         SessionUser sessionUser = new SessionUser();
         try {
             BeanUtils.copyProperties(sessionUser, this);
-            // 设置当前用户信息
-            ContextUtil.setSessionUser(sessionUser);
+            // 生成token
+            ContextUtil.generateToken(sessionUser);
+
+            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+            // 设置token到可传播的线程全局变量中
+            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
         } catch (Exception e) {
             e.printStackTrace();
         }

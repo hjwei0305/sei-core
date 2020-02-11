@@ -195,19 +195,6 @@ public final class ContextUtil {
     ///////////////////////////////
 
     /**
-     * 设置当前用户信息到线程
-     * 注意使用,会改变请求当前用户信息
-     */
-    public static void setSessionUser(SessionUser sessionUser) {
-        // 生成token
-        ContextUtil.generateToken(sessionUser);
-
-        ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
-        // 设置token到可传播的线程全局变量中
-        ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
-    }
-
-    /**
      * @return 返回AccessToken
      */
     public static String getToken() {
