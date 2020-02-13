@@ -2,6 +2,7 @@ package com.changhong.sei.core.context;
 
 import com.chonghong.sei.util.thread.ThreadLocalHolder;
 import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +49,10 @@ public final class HeaderHelper {
         }
 
         // TODO 兼容SEI3.0认证token
-        headers.put("Authorization", ThreadLocalUtil.getTranVar(ContextUtil.HEADER_TOKEN_KEY));
+        String token = ThreadLocalUtil.getTranVar(ContextUtil.HEADER_TOKEN_KEY);
+        if (StringUtils.isNotBlank(token)) {
+            headers.put("Authorization", token);
+        }
 
         return headers;
     }
