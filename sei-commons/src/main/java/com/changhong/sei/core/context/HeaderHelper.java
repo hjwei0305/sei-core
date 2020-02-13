@@ -47,6 +47,9 @@ public final class HeaderHelper {
             }
         }
 
+        // TODO 兼容SEI3.0认证token
+        headers.put("Authorization", ThreadLocalUtil.getTranVar(ContextUtil.HEADER_TOKEN_KEY));
+
         return headers;
     }
 }

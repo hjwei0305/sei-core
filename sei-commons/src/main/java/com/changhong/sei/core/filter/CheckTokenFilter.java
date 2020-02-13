@@ -43,9 +43,13 @@ public class CheckTokenFilter extends BaseWebFilter {
             // 从请求头中获取token
             token = request.getHeader(ContextUtil.HEADER_TOKEN_KEY);
             if (StringUtils.isBlank(token)) {
-                // 认证失败
-                unauthorized("token为空,认证失败!", response);
-                return;
+                // TODO 兼容SEI3.0验证
+                token = request.getHeader("Authorization");
+                if (StringUtils.isBlank(token)) {
+                    // 认证失败
+                    unauthorized("token为空,认证失败!", response);
+                    return;
+                }
             }
         }
 
