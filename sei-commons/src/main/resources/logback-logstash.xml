@@ -4,6 +4,7 @@
 
     <!-- 应用服务名称 -->
     <springProperty scope="context" name="serviceName" source="spring.application.name"/>
+    <springProperty scope="context" name="remoteHost" source="sei.log.remote.host"/>
 
     <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
@@ -25,17 +26,46 @@
 
     <!--    </springProfile>-->
 
-    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+<!--    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+    <appender name="LOG_STASH" class="com.changhong.sei.core.log.LogstashAppender">
         <!-- logstash服务器地址 端口-->
+<!--        <destination>${sei.log.remote.host}</destination>-->
         <destination>10.4.208.132:5044</destination>
         <!-- 请求者信息字段 打开有性能影响 -->
         <includeCallerData>false</includeCallerData>
 
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <version>sei-${sei-version:-}</version>
-            <includeMdcKeyName>trace_id</includeMdcKeyName>
-            <customFields>{"HOSTNAME":"${HOSTNAME:- }","PID": "${PID:-}"}</customFields>
-<!--            <customFields>{"serviceName":"${serviceName}","pid": "${PID:-}"}</customFields>-->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                            "userId": "%X{userId}",
+                            "account": "%X{account}",
+                            "userName": "%X{userName}",
+                            "tenantCode": "%X{tenantCode}",
+                            "accessToken": "%X{accessToken}",
+
+                            "classMethod": "%X{classMethod}",
+                            "args": "%X{args}",
+
+                            "timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}",
+                            "trace_id": "%X{trace_id}",
+                            "version": "sei-${sei-version:-}",
+                            "level": "%level",
+                            "hostName": "${HOSTNAME:-}",
+                            "serviceName": "${serviceName:-}",
+                            "pid": "${PID:-}",
+                            "thread": "%thread",
+                            "logger": "%logger",
+                            "message": "%message",
+                            "stack_trace": "%exception"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
         </encoder>
         <keepAliveDuration>5 minutes</keepAliveDuration>
     </appender>

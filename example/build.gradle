@@ -1,0 +1,36 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile project(':sei-core-service')
+    compile project(':sei-core-test')
+
+    compile(
+            "org.hibernate:hibernate-java8:5.3.7.Final",
+            "mysql:mysql-connector-java:$mysqlVersion"
+    )
+
+    testCompile(
+            "org.springframework.boot:spring-boot-starter-test"
+    )
+}
+
+//打ar包
+bootJar  {
+    enabled = false
+}
+
+//上传到nexus
+uploadArchives {
+    enabled = false
+}
+
+install {
+    enabled = false
+}

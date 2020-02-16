@@ -1,9 +1,8 @@
 package com.changhong.sei.core.context.mock;
 
-import com.changhong.sei.core.config.properties.mock.MockUserProperties;
-import com.changhong.sei.core.context.ApplicationContextHolder;
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
-import com.changhong.sei.core.log.LogUtil;
+import com.chonghong.sei.util.thread.ThreadLocalUtil;
 
 /**
  * 实现功能：
@@ -21,4 +20,24 @@ public interface MockUser {
      * @return 返回模拟用户
      */
     SessionUser mockUser(String tenant, String account);
+
+    /**
+     * 模拟用户
+     *
+     * @param sessionUser 模拟用户
+     * @return 返回模拟用户
+     */
+    default SessionUser mock(SessionUser sessionUser) {
+        try {
+            // 生成token
+            ContextUtil.generateToken(sessionUser);
+
+            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+            // 设置token到可传播的线程全局变量中
+            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sessionUser;
+    }
 }

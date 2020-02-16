@@ -5,3 +5,5 @@ include 'sei-core-service'
 include 'sei-core-dto'
 include 'sei-core-api'
 include 'sei-core-test'
+include 'example'
+

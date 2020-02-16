@@ -1,11 +1,7 @@
 package com.changhong.sei.core.config.properties.mock;
 
-import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.SessionUser;
 import com.chonghong.sei.enums.UserAuthorityPolicy;
 import com.chonghong.sei.enums.UserType;
-import com.chonghong.sei.util.thread.ThreadLocalUtil;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -130,19 +126,19 @@ public class MockUserProperties {
         this.locale = locale;
     }
 
-    public SessionUser mock() {
-        SessionUser sessionUser = new SessionUser();
-        try {
-            BeanUtils.copyProperties(sessionUser, this);
-            // 生成token
-            ContextUtil.generateToken(sessionUser);
-
-            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
-            // 设置token到可传播的线程全局变量中
-            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sessionUser;
-    }
+//    public SessionUser mock() {
+//        SessionUser sessionUser = new SessionUser();
+//        try {
+//            BeanUtils.copyProperties(sessionUser, this);
+//            // 生成token
+//            ContextUtil.generateToken(sessionUser);
+//
+//            ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
+//            // 设置token到可传播的线程全局变量中
+//            ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return sessionUser;
+//    }
 }

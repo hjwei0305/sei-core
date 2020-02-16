@@ -1,0 +1,21 @@
+# 应用全局配置
+application:
+  name: core测试
+  version: 6.0.1
+
+# spring 环境配置
+spring:
+  cache:
+    redis:
+      time-to-live: 20s
+  redis:
+    host: 10.4.208.132
+    port: 6379
+    password: ZmkDbgaua3Rso33T
+    database: 0
+
+sei:
+  log:
+    remote:
+      host: 10.4.208.132:5044
+

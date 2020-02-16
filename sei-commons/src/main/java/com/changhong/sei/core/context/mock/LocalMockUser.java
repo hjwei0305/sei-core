@@ -1,11 +1,9 @@
 package com.changhong.sei.core.context.mock;
 
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
-import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.context.SessionUser;
-import com.changhong.sei.core.log.LogUtil;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * 实现功能：
@@ -17,6 +15,7 @@ public class LocalMockUser implements MockUser {
 
     @Autowired
     public MockUserProperties mockUser;
+
     /**
      * 模拟用户
      *
@@ -26,13 +25,11 @@ public class LocalMockUser implements MockUser {
      */
     @Override
     public SessionUser mockUser(String tenant, String account) {
-        MockUserProperties mockUser;
+        SessionUser sessionUser = new SessionUser();
         try {
-            mockUser = ApplicationContextHolder.getBean(MockUserProperties.class);
-        } catch (Exception e) {
-            LogUtil.error("模拟用户异常", e);
-            mockUser = new MockUserProperties();
+            BeanUtils.copyProperties(sessionUser, mockUser);
+        } catch (Exception ignored) {
         }
-        return mockUser.mock();
+        return mock(sessionUser);
     }
 }

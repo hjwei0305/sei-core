@@ -6,11 +6,13 @@
       "type": "com.changhong.sei.core.config.properties.global.GlobalProperties",
       "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties"
     },
+
     {
       "name": "sei.mock.user",
       "type": "com.changhong.sei.core.config.properties.mock.MockUserProperties",
       "sourceType": "com.changhong.sei.core.config.properties.mock.MockUserProperties"
     },
+
     {
       "name": "sei.http.filter",
       "type": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
@@ -21,6 +23,18 @@
       "type": "com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties",
       "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
       "sourceMethod": "getCors()"
+    },
+
+    {
+      "name": "sei.log",
+      "type": "com.changhong.sei.core.config.properties.log.LogProperties",
+      "sourceType": "com.changhong.sei.core.config.properties.log.LogProperties"
+    },
+    {
+      "name": "sei.log.remote",
+      "type": "com.changhong.sei.core.config.properties.log.LogProperties$RemoteProperties",
+      "sourceType": "com.changhong.sei.core.config.properties.log.LogProperties",
+      "sourceMethod": "getRemote()"
     }
   ],
   "properties": [
@@ -113,6 +127,21 @@
       "defaultValue": [
         "*"
       ]
+    },
+
+
+    {
+      "name": "sei.log.remote.enable",
+      "type": "java.lang.Boolean",
+      "description": "允许远程记录日志",
+      "sourceType": "com.changhong.sei.core.config.properties.log.LogProperties$RemoteProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "sei.log.remote.host",
+      "type": "java.lang.String[]",
+      "description": "远程地址. logstash, flented",
+      "sourceType": "com.changhong.sei.core.config.properties.log.LogProperties$RemoteProperties"
     }
   ]
 }

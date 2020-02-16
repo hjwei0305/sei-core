@@ -1,6 +1,8 @@
 package com.changhong.sei.core.config;
 
+import com.changhong.sei.core.aop.SysLogAspect;
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
+import com.changhong.sei.core.config.properties.log.LogProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.mock.LocalMockUser;
 import com.changhong.sei.core.context.mock.MockUser;
@@ -11,6 +13,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 
 import javax.validation.Validation;
@@ -24,9 +29,17 @@ import javax.validation.ValidatorFactory;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-07 11:35
  */
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
-@EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
+@EnableAspectJAutoProxy
+@EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class, LogProperties.class})
 public class DefaultAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SysLogAspect sysLogAspect() {
+        return new SysLogAspect();
+    }
 
     @Bean
     @ConditionalOnMissingBean

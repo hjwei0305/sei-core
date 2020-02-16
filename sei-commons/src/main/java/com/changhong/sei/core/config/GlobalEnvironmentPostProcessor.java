@@ -40,6 +40,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 
             //日志采集器
             if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
+//            if (environment.containsProperty("sei.log.remote.host")) {
 //                System.setProperty("appCode", environment.getProperty("spring.cloud.config.name", "example"));
 //                System.setProperty("envCode", environment.getProperty("spring.cloud.config.profile", "example"));
 //                System.setProperty("FlentdHost", environment.getProperty("sei.global.fluentd.host", "10.4.208.131"));
