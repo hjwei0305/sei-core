@@ -6,4 +6,5 @@ include 'sei-core-dto'
 include 'sei-core-api'
 include 'sei-core-test'
 include 'example'
+include 'sei-core-entity3'
 
