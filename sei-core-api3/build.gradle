@@ -9,6 +9,7 @@ dependencyManagement {
 
 dependencies {
     compile project(':sei-core-entity3')
+    compile project(':sei-commons')
     compile(
             "org.springframework.boot:spring-boot-starter-web",
             "org.springframework.cloud:spring-cloud-starter-openfeign",

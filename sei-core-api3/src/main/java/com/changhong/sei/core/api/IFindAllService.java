@@ -1,6 +1,5 @@
 package com.changhong.sei.core.api;
 
-import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,7 @@ public interface IFindAllService<T extends BaseEntity> {
      */
     @GetMapping(path = "findAll")
     @ApiOperation(value = "获取所有业务实体", notes = "获取所有业务实体")
-    ResultData<List<T>> findAll();
+    List<T> findAll();
 
     /**
      * 获取所有未冻结的业务实体
@@ -32,5 +31,5 @@ public interface IFindAllService<T extends BaseEntity> {
      */
     @GetMapping(path = "findAllUnfrozen")
     @ApiOperation(value = "获取所有未冻结业务实体", notes = "获取所有未冻结业务实体(适用与实现了冻结接口的业务实体)")
-    ResultData<List<T>> findAllUnfrozen();
+    List<T> findAllUnfrozen();
 }

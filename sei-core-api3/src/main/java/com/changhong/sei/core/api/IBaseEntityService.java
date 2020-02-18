@@ -1,12 +1,14 @@
 package com.changhong.sei.core.api;
 
-import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
+import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.core.service.bo.OperateResultWithData;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <strong>实现功能:</strong>
@@ -20,12 +22,12 @@ public interface IBaseEntityService<T extends BaseEntity> {
     /**
      * 保存业务实体
      *
-     * @param dto 业务实体DTO
+     * @param entity 业务实体
      * @return 操作结果
      */
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
-    ResultData<T> save(@RequestBody @Valid T dto);
+    OperateResultWithData<T> save(T entity);
 
     /**
      * 删除业务实体
@@ -35,7 +37,7 @@ public interface IBaseEntityService<T extends BaseEntity> {
      */
     @DeleteMapping(path = "delete")
     @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
-    ResultData delete(@RequestParam("id") String id);
+    OperateResult delete(@RequestParam("id") String id);
 
     /**
      * 通过Id获取一个业务实体
@@ -45,5 +47,5 @@ public interface IBaseEntityService<T extends BaseEntity> {
      */
     @GetMapping(path = "findOne")
     @ApiOperation(value = "获取一个业务实体", notes = "通过Id获取一个业务实体")
-    ResultData<T> findOne(@RequestParam("id") String id);
+    T  findOne(@RequestParam("id") String id);
 }

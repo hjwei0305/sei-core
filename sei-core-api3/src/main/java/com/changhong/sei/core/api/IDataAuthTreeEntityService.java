@@ -1,6 +1,5 @@
 package com.changhong.sei.core.api;
 
-import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.auth.AuthTreeEntityData;
 import com.changhong.sei.core.dto.auth.IDataAuthTreeEntity;
 import com.changhong.sei.core.entity.BaseEntity;
@@ -30,7 +29,7 @@ public interface IDataAuthTreeEntityService<T extends BaseEntity & IDataAuthTree
      */
     @PostMapping(path = "getAuthTreeEntityDataByIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取数据权限树形实体清单", notes = "通过业务实体Id清单获取数据权限树形实体清单")
-    ResultData<List<AuthTreeEntityData>> getAuthTreeEntityDataByIds(@RequestBody List<String> ids);
+    List<AuthTreeEntityData> getAuthTreeEntityDataByIds(@RequestBody List<String> ids);
 
     /**
      * 获取所有数据权限树形实体清单
@@ -39,7 +38,7 @@ public interface IDataAuthTreeEntityService<T extends BaseEntity & IDataAuthTree
      */
     @GetMapping(path = "findAllAuthTreeEntityData")
     @ApiOperation(value = "获取所有数据权限树形实体清单", notes = "获取当前租户所有数据权限树形实体清单")
-    ResultData<List<AuthTreeEntityData>> findAllAuthTreeEntityData();
+    List<AuthTreeEntityData> findAllAuthTreeEntityData();
 
     /**
      * 获取当前用户有权限的树形业务实体清单
@@ -49,5 +48,5 @@ public interface IDataAuthTreeEntityService<T extends BaseEntity & IDataAuthTree
      */
     @GetMapping(path = "getUserAuthorizedTreeEntities")
     @ApiOperation(value = "获取当前用户有权限的树形业务实体清单", notes = "获取当前用户有权限的树形业务实体清单")
-    ResultData<List<T>> getUserAuthorizedTreeEntities(@RequestParam("featureCode") String featureCode);
+    List<T> getUserAuthorizedTreeEntities(@RequestParam("featureCode") String featureCode);
 }

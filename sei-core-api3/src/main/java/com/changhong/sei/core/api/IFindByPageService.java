@@ -1,6 +1,5 @@
 package com.changhong.sei.core.api;
 
-import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.entity.BaseEntity;
@@ -26,5 +25,5 @@ public interface IFindByPageService<T extends BaseEntity> {
      */
     @PostMapping(path = "findByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "分页查询业务实体", notes = "分页查询业务实体")
-    ResultData<PageResult<T>> findByPage(@RequestBody Search search);
+    PageResult<T> findByPage(@RequestBody Search search);
 }
