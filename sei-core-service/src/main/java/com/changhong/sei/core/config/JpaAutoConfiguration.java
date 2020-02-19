@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 @ConditionalOnBean({DataSource.class})
 @ConditionalOnClass({BaseDaoFactoryBean.class, BaseEntityDaoImpl.class})
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@EnableJpaRepositories(basePackages = {"com.changhong.sei.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"com.changhong.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EnableTransactionManagement
 public class JpaAutoConfiguration {
 }
