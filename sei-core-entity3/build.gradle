@@ -3,9 +3,9 @@ dependencies {
     compile project(':sei-core-dto')
     // 其他包依赖
     compile(
-            "org.springframework.data:spring-data-jpa:$springBootVersion",
+            "org.springframework.data:spring-data-jpa:$spring_jpa_version",
             "org.hibernate:hibernate-core:$hibernate_version",
-            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$hibernate_jpa_version",
+            "javax.persistence:javax.persistence-api:$javax_persistence_version",
     )
 }
 
