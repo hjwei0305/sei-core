@@ -34,7 +34,7 @@ public interface IBaseEntityService<T extends BaseEntity> {
      */
     @DeleteMapping(path = "delete")
     @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
-    OperateResult delete(@RequestParam("id") String id);
+    OperateResult delete(@RequestBody String id);
 
     /**
      * 通过Id获取一个业务实体
