@@ -5,10 +5,7 @@ import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <strong>实现功能:</strong>
@@ -27,7 +24,7 @@ public interface IBaseEntityService<T extends BaseEntity> {
      */
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
-    OperateResultWithData<T> save(T entity);
+    OperateResultWithData<T> save(@RequestBody T entity);
 
     /**
      * 删除业务实体
