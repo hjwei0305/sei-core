@@ -48,5 +48,5 @@ public interface DataAuthEntityApi<T extends BaseEntityDto> {
      */
     @GetMapping(path = "getUserAuthorizedEntities")
     @ApiOperation(value = "获取当前用户有权限的业务实体清单", notes = "获取当前用户有权限的业务实体清单")
-    ResultData<List<T>> getUserAuthorizedEntities(@RequestParam("featureCode") String featureCode);
+    ResultData<List<T>> getUserAuthorizedEntities(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }

@@ -49,5 +49,5 @@ public interface DataAuthTreeEntityApi<T extends BaseEntityDto & IDataAuthTreeEn
      */
     @GetMapping(path = "getUserAuthorizedTreeEntities")
     @ApiOperation(value = "获取当前用户有权限的树形业务实体清单", notes = "获取当前用户有权限的树形业务实体清单")
-    ResultData<List<T>> getUserAuthorizedTreeEntities(@RequestParam("featureCode") String featureCode);
+    ResultData<List<T>> getUserAuthorizedTreeEntities(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }
