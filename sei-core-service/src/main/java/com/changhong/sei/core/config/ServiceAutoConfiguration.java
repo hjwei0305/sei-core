@@ -22,7 +22,7 @@ public class ServiceAutoConfiguration {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:/lang/sei-lang", "classpath:/lang/messages");
+        messageSource.setBasenames("classpath:/lang/cust-messages", "classpath:/lang/messages");
         messageSource.setCacheSeconds(120);
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
