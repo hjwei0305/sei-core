@@ -13,9 +13,9 @@ public interface DataAuthEntityService {
      * 从平台基础应用获取一般用户有权限的数据实体Id清单
      * 对于数据权限对象的业务实体，需要override，使用BASIC提供的通用工具来获取
      * @param entityClassName 权限对象实体类型
-     * @param userId 用户Id
      * @param featureCode 功能项代码
+     * @param userId 用户Id
      * @return 数据实体Id清单
      */
-    List<String> getNormalUserAuthorizedEntitiesFromBasic(String entityClassName, String userId, String featureCode);
+    List<String> getNormalUserAuthorizedEntitiesFromBasic(String entityClassName, String featureCode, String userId);
 }
