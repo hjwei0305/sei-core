@@ -314,7 +314,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
             // 缓存不存在，调用API服务获取用户有权限的数据Id清单
             DataAuthEntityService authEntityManager = (DataAuthEntityService)this;
             String entityClassName = entityClass.getName();
-            entityIds = authEntityManager.getNormalUserAuthorizedEntitiesFromBasic(entityClassName, userId, featureCode);
+            entityIds = authEntityManager.getNormalUserAuthorizedEntitiesFromBasic(entityClassName, featureCode, userId);
         }
         return entityIds;
     }
