@@ -1,149 +1,202 @@
-package com.changhong.sei.core.entity;
+package com.changhong.sei.core.dto.flow;
 
-import com.changhong.sei.core.dto.IAuditable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 实现功能：
- * 业务实体持久化基类
- * 主要的业务实体类(持久化实体和非持久化实体)都应是该类的子类
- * 提供了乐观锁支持和基本字段(创建人，创建时间，最后编辑人和编辑时间)
- *
- * @author Vision.Mac
- * @version 1.0.00      2017/3/12 13:08
- */
-@MappedSuperclass
-@Access(AccessType.FIELD)
-public abstract class BaseAuditableEntity extends BaseEntity implements IAuditable {
+public class AppModule implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    public static final String CREATED_DATE = "createdDate";
+    /**
+     * 名称
+     */
+    private String name;
+
+    /**
+     * 代码
+     */
+    private String code;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+
+    /**
+     * web基地址
+     */
+    private String webBaseAddress;
+
+    /**
+     * api基地址
+     */
+    private String apiBaseAddress;
+
+
+    /**
+     * 租户代码
+     */
+    private String tenantCode;
+
+    /**
+     * 排序号
+     */
+    private Integer rank;
 
     /**
      * 创建者
      */
-    @Column(name = "creator_id", length = 36, updatable = false)
     protected String creatorId;
 
-    @Column(name = "creator_account", length = 50, updatable = false)
     protected String creatorAccount;
 
-    @Column(name = "creator_name", length = 50, updatable = false)
     protected String creatorName;
 
     /**
      * 创建时间
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", updatable = false)
     protected Date createdDate;
 
     /**
      * 最后修改者
      */
-    @Column(name = "last_editor_id", length = 36)
     protected String lastEditorId;
 
-    @Column(name = "last_editor_account", length = 50)
     protected String lastEditorAccount;
 
-    @Column(name = "last_editor_name", length = 50)
     protected String lastEditorName;
 
     /**
      * 最后修改时间
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_edited_date")
     protected Date lastEditedDate;
 
-    @Override
-    @JsonIgnore
+    protected String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getWebBaseAddress() {
+        return webBaseAddress;
+    }
+
+    public void setWebBaseAddress(String webBaseAddress) {
+        this.webBaseAddress = webBaseAddress;
+    }
+
+    public String getApiBaseAddress() {
+        return apiBaseAddress;
+    }
+
+    public void setApiBaseAddress(String apiBaseAddress) {
+        this.apiBaseAddress = apiBaseAddress;
+    }
+
+    public String getTenantCode() {
+        return tenantCode;
+    }
+
+    public void setTenantCode(String tenantCode) {
+        this.tenantCode = tenantCode;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
     public String getCreatorId() {
         return creatorId;
     }
 
-    @Override
     public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
     }
 
-    @Override
-    @JsonIgnore
     public String getCreatorAccount() {
         return creatorAccount;
     }
 
-    @Override
     public void setCreatorAccount(String creatorAccount) {
         this.creatorAccount = creatorAccount;
     }
 
-    @Override
-    @JsonIgnore
     public String getCreatorName() {
         return creatorName;
     }
 
-    @Override
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
     }
 
-    @Override
-    @JsonIgnore
     public Date getCreatedDate() {
         return createdDate;
     }
 
-    @Override
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    @Override
-    @JsonIgnore
     public String getLastEditorId() {
         return lastEditorId;
     }
 
-    @Override
     public void setLastEditorId(String lastEditorId) {
         this.lastEditorId = lastEditorId;
     }
 
-    @Override
-    @JsonIgnore
     public String getLastEditorAccount() {
         return lastEditorAccount;
     }
 
-    @Override
     public void setLastEditorAccount(String lastEditorAccount) {
         this.lastEditorAccount = lastEditorAccount;
     }
 
-    @Override
-    @JsonIgnore
     public String getLastEditorName() {
         return lastEditorName;
     }
 
-    @Override
     public void setLastEditorName(String lastEditorName) {
         this.lastEditorName = lastEditorName;
     }
 
-    @Override
-    @JsonIgnore
     public Date getLastEditedDate() {
         return lastEditedDate;
     }
 
-    @Override
     public void setLastEditedDate(Date lastEditedDate) {
         this.lastEditedDate = lastEditedDate;
     }
