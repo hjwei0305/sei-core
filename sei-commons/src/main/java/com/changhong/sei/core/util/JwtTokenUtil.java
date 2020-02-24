@@ -1,6 +1,6 @@
 package com.changhong.sei.core.util;
 
-import com.chonghong.sei.util.IdGenerator;
+import com.changhong.sei.util.IdGenerator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

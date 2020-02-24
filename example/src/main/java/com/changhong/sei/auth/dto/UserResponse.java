@@ -1,7 +1,7 @@
 package com.changhong.sei.auth.dto;
 
-import com.chonghong.sei.enums.UserAuthorityPolicy;
-import com.chonghong.sei.enums.UserType;
+import com.changhong.sei.enums.UserAuthorityPolicy;
+import com.changhong.sei.enums.UserType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

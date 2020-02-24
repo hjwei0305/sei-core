@@ -5,7 +5,7 @@ import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.util.JsonUtils;
-import com.chonghong.sei.util.IdGenerator;
+import com.changhong.sei.util.IdGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.MDC;

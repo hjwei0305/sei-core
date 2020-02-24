@@ -5,7 +5,7 @@ import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
-import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

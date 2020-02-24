@@ -2,7 +2,7 @@ package com.changhong.sei.core.error;
 
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
-import com.chonghong.sei.exception.ServiceException;
+import com.changhong.sei.exception.ServiceException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;

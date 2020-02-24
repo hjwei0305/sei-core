@@ -2,7 +2,7 @@ package com.changhong.sei.core.context.mock;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
-import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import com.changhong.sei.util.thread.ThreadLocalUtil;
 
 /**
  * 实现功能：

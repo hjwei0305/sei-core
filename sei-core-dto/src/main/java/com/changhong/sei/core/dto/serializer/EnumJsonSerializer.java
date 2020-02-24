@@ -1,6 +1,6 @@
 package com.changhong.sei.core.dto.serializer;
 
-import com.chonghong.sei.util.EnumUtils;
+import com.changhong.sei.util.EnumUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

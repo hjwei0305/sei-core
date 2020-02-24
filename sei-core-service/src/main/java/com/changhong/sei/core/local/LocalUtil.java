@@ -4,7 +4,7 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.util.JsonUtils;
-import com.chonghong.sei.util.ReflectionUtils;
+import com.changhong.sei.util.ReflectionUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;

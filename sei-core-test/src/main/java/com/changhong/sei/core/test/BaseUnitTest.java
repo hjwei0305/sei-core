@@ -3,7 +3,7 @@ package com.changhong.sei.core.test;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.log.LogUtil;
-import com.chonghong.sei.util.thread.ThreadLocalHolder;
+import com.changhong.sei.util.thread.ThreadLocalHolder;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

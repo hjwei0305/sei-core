@@ -1,11 +1,11 @@
 package com.changhong.sei.core.context;
 
 import com.changhong.sei.core.util.JwtTokenUtil;
-import com.chonghong.sei.enums.UserAuthorityPolicy;
-import com.chonghong.sei.enums.UserType;
-import com.chonghong.sei.util.EnumUtils;
-import com.chonghong.sei.util.IdGenerator;
-import com.chonghong.sei.util.thread.ThreadLocalUtil;
+import com.changhong.sei.enums.UserAuthorityPolicy;
+import com.changhong.sei.enums.UserType;
+import com.changhong.sei.util.EnumUtils;
+import com.changhong.sei.util.IdGenerator;
+import com.changhong.sei.util.thread.ThreadLocalUtil;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;

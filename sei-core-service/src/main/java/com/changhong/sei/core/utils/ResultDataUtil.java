@@ -6,7 +6,7 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.service.bo.ResponseData;
-import com.chonghong.sei.util.EnumUtils;
+import com.changhong.sei.util.EnumUtils;
 
 import java.util.ArrayList;
 import java.util.List;

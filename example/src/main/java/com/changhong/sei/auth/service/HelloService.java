@@ -4,7 +4,7 @@ import com.changhong.sei.auth.dto.UserResponse;
 import com.changhong.sei.core.annotation.MonitorLogger;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
-import com.chonghong.sei.util.IdGenerator;
+import com.changhong.sei.util.IdGenerator;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 

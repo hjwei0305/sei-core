@@ -1,7 +1,7 @@
 package com.changhong.sei.core.config.properties.mock;
 
-import com.chonghong.sei.enums.UserAuthorityPolicy;
-import com.chonghong.sei.enums.UserType;
+import com.changhong.sei.enums.UserAuthorityPolicy;
+import com.changhong.sei.enums.UserType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**

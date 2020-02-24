@@ -1,7 +1,7 @@
 package com.changhong.sei.core.context;
 
-import com.chonghong.sei.enums.UserAuthorityPolicy;
-import com.chonghong.sei.enums.UserType;
+import com.changhong.sei.enums.UserAuthorityPolicy;
+import com.changhong.sei.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 

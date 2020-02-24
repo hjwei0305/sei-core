@@ -1,7 +1,7 @@
 package com.changhong.sei.core.filter;
 
 import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
-import com.chonghong.sei.util.thread.ThreadLocalHolder;
+import com.changhong.sei.util.thread.ThreadLocalHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;

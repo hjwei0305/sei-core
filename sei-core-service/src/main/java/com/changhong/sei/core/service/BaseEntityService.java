@@ -9,8 +9,8 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
-import com.chonghong.sei.enums.UserAuthorityPolicy;
-import com.chonghong.sei.util.IdGenerator;
+import com.changhong.sei.enums.UserAuthorityPolicy;
+import com.changhong.sei.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.Collections;

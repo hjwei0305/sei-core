@@ -1,8 +1,8 @@
 package com.changhong.sei.core.service.bo;
 
 import com.changhong.sei.core.context.ContextUtil;
-import com.chonghong.sei.annotation.Remark;
-import com.chonghong.sei.util.EnumUtils;
+import com.changhong.sei.annotation.Remark;
+import com.changhong.sei.util.EnumUtils;
 
 import java.io.Serializable;
 import java.util.Objects;

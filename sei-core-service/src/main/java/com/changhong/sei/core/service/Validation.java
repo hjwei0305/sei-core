@@ -1,6 +1,6 @@
 package com.changhong.sei.core.service;
 
-import com.chonghong.sei.exception.ValidationException;
+import com.changhong.sei.exception.ValidationException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
