@@ -8,6 +8,7 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
+import com.changhong.sei.core.utils.ResultDataUtil;
 
 /**
  * <strong>实现功能:</strong>
@@ -59,7 +60,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
     default ResultData delete(String id){
         try {
             OperateResult result = getService().delete(id);
-            return ResultData.success(result.getMessage(), null);
+            return ResultDataUtil.convertFromOperateResult(result);
         } catch (Exception e) {
             e.printStackTrace();
             LogUtil.error("删除业务实体异常！", e);
