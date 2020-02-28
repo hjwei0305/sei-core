@@ -649,9 +649,25 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         Predicate predicate = null;
         Expression expression = buildExpression(root, builder, propertyName, null);
         // 如果对字段属性为枚举类型，并且比较值为字符串，处理枚举值
-        if (matchValue instanceof String && expression.getJavaType().isEnum()) {
-            // 将查询字符串转换为枚举值
-            matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
+        if (expression.getJavaType().isEnum()) {
+            if (matchValue instanceof String) {
+                // 将查询字符串转换为枚举值
+                matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
+            }
+            // 如果是LIST，则循环处理
+            if (matchValue instanceof Collection) {
+                List enumValues = new ArrayList();
+                ((List)matchValue).forEach(m-> {
+                    if (m instanceof String) {
+                        // 将查询字符串转换为枚举值
+                        Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
+                        enumValues.add(enumValue);
+                    }
+                });
+                if (CollectionUtils.isNotEmpty(enumValues)) {
+                    matchValue = enumValues;
+                }
+            }
         }
         if (SearchFilter.NULL_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
             predicate = expression.isNull();
