@@ -242,14 +242,11 @@ public class SearchFilter implements Serializable {
             return false;
         }
         SearchFilter that = (SearchFilter) o;
-        return Objects.equals(fieldName, that.fieldName) &&
-                Objects.equals(value, that.value) &&
-                operator == that.operator &&
-                Objects.equals(fieldType, that.fieldType);
+        return Objects.equals(fieldName, that.fieldName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fieldName, value, operator, fieldType);
+        return Objects.hash(fieldName);
     }
 }

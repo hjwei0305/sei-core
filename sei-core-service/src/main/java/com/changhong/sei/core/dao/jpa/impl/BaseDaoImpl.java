@@ -7,6 +7,7 @@ import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;
 import com.changhong.sei.exception.DataOperationDeniedException;
+import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -647,6 +648,11 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
         Predicate predicate = null;
         Expression expression = buildExpression(root, builder, propertyName, null);
+        // 如果对字段属性为枚举类型，并且比较值为字符串，处理枚举值
+        if (matchValue instanceof String && expression.getJavaType().isEnum()) {
+            // 将查询字符串转换为枚举值
+            matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
+        }
         if (SearchFilter.NULL_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
             predicate = expression.isNull();
         } else if (SearchFilter.EMPTY_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
