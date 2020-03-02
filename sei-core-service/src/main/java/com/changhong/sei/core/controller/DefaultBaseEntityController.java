@@ -17,7 +17,8 @@ import com.changhong.sei.core.utils.ResultDataUtil;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-07 9:47
  */
-public interface DefaultBaseEntityController<T extends BaseEntity, D extends BaseEntityDto> extends DefaultBaseController<T, D>, BaseEntityApi<D> {
+public interface DefaultBaseEntityController<T extends BaseEntity, D extends BaseEntityDto> extends DefaultBaseController<T, D>,
+        BaseEntityApi<D> {
     /**
      * 保存业务实体
      *

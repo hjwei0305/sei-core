@@ -6,8 +6,6 @@ import java.util.List;
 /**
  * 实现功能: 移除和添加关系的输入参数
  *
- * @author 王锦光 wangj
- * @version 1.0.1 2019-03-07 10:36
  */
 public class RelationParam implements Serializable {
     /**

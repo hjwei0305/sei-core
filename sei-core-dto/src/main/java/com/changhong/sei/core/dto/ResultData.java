@@ -6,11 +6,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * <strong>实现功能:</strong>
- * <p>通用服务处理结果</p>
- *
- * @author 王锦光 wangj
- * @version 1.0.1 2019-12-19 15:42
+ * 所有API公开接口的返回数据类型
+ * @param <T> 返回数据对象的类型
  */
 public class ResultData<T> implements Serializable {
     private static final long serialVersionUID = 5247687420568803130L;
