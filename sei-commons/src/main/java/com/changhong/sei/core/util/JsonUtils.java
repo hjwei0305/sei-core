@@ -65,7 +65,7 @@ import java.util.Objects;
 public final class JsonUtils {
 
     /**
-     * 将json通过类型转换成对象
+         * 将json通过类型转换成对象
      * <pre>
      *     {@link JsonUtils JsonUtil}.fromJson("{\"username\":\"username\", \"password\":\"password\"}", User.class);
      * </pre>
