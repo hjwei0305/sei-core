@@ -1,9 +1,12 @@
 package com.changhong.sei.core.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -11,11 +14,11 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * <strong>实现功能:</strong>.
@@ -76,7 +79,7 @@ public final class JsonUtils {
      * @return 返回对象
      */
     public static <T> T fromJson(String json, Class<T> clazz) {
-        if (null == json || json.equals("")) {
+        if (null == json || "".equals(json)) {
             return null;
         } else {
             try {
@@ -97,7 +100,7 @@ public final class JsonUtils {
      * @return 返回集合对象
      */
     public static <T> List<T> fromJson2List(String json, Class<T> clazz) {
-        if (null == json || json.equals("")) {
+        if (null == json || "".equals(json)) {
             return null;
         } else {
             try {
@@ -256,10 +259,10 @@ public final class JsonUtils {
      */
     public String getNodeString(String json, String path) {
         String nodeStr;
-        if (json == null || json.trim().equals("")) {
+        if (json == null || "".equals(json.trim())) {
             return null;
         }
-        if (path == null || path.trim().equals("")) {
+        if (path == null || "".equals(path.trim())) {
             return json;
         }
 
@@ -272,6 +275,37 @@ public final class JsonUtils {
         }
 
         return nodeStr;
+    }
+
+
+    /**
+     * 通过JSON序列化克隆
+     *
+     * @param fromObj 源对象
+     * @param <T>     可序列化类
+     * @return 克隆的对象
+     */
+    public static <T extends Serializable> T cloneByJson(T fromObj) {
+        if (Objects.isNull(fromObj)) {
+            return null;
+        }
+        String json = toJson(fromObj);
+        return (T) fromJson(json, fromObj.getClass());
+    }
+
+    /**
+     * 通过JSON序列化克隆
+     *
+     * @param fromObj 源对象
+     * @param <T>     可序列化类
+     * @return 克隆的对象
+     */
+    public static <T extends Serializable> List<T> cloneByJson(List<T> fromObj) {
+        if (CollectionUtils.isEmpty(fromObj)) {
+            return new ArrayList<>();
+        }
+        String json = JsonUtils.toJson(fromObj);
+        return (List<T>) JsonUtils.fromJson2List(json, fromObj.get(0).getClass());
     }
 
     /**
@@ -299,6 +333,9 @@ public final class JsonUtils {
      */
     private static ObjectMapper generateMapper(JsonInclude.Include include) {
         ObjectMapper objectMapper = new ObjectMapper();
+
+        // 为mapper注册一个带有SerializerModifier的Factory
+        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new CustomBeanSerializerModifier()));
 
         // 设置输出时包含属性的风格
         objectMapper.setSerializationInclusion(include);
@@ -339,33 +376,111 @@ public final class JsonUtils {
         return objectMapper;
     }
 
+    ////////////////////////
     /**
-     * 通过JSON序列化克隆
-     *
-     * @param fromObj 源对象
-     * @param <T>     可序列化类
-     * @return 克隆的对象
+     * 当序列化类型为array，list、set时，当值为空时，序列化成[]
+     * 为数值类型时，当值为空时，序列化成0
+     * 为字符类型时，当值为空时，序列化成“”
      */
-    public static <T extends Serializable> T cloneByJson(T fromObj) {
-        if (Objects.isNull(fromObj)) {
-            return null;
+    private static class CustomBeanSerializerModifier extends BeanSerializerModifier {
+        private JsonSerializer<Object> arrayJsonSerializer = new ArrayJsonSerializer();
+        private JsonSerializer<Object> strJsonSerializer = new StrJsonSerializer();
+        private JsonSerializer<Object> numberJsonSerializer = new NumJsonSerializer();
+
+        @Override
+        public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc,
+                                                         List<BeanPropertyWriter> beanProperties) {
+            // 循环所有的beanPropertyWriter
+            for (BeanPropertyWriter writer : beanProperties) {
+                // 判断字段的类型，如果是array，list，set则注册nullSerializer
+                if (isArrayType(writer)) {
+                    //给writer注册一个自己的nullSerializer
+                    writer.assignNullSerializer(arrayJsonSerializer);
+                } else if (isNumber(writer)) {
+                    writer.assignNullSerializer(numberJsonSerializer);
+                } else if (isStr(writer)) {
+                    writer.assignNullSerializer(strJsonSerializer);
+                }
+            }
+            return beanProperties;
         }
-        String json = toJson(fromObj);
-        return (T) fromJson(json, fromObj.getClass());
+
+        /**
+         * 判断数组类型
+         */
+        boolean isArrayType(BeanPropertyWriter writer) {
+            Class<?> clazz = writer.getType().getRawClass();
+            return clazz.isArray() || clazz.equals(List.class) || clazz.equals(Set.class);
+        }
+
+        /**
+         * 判断日期类型
+         */
+        boolean isDate(BeanPropertyWriter writer) {
+            Class<?> clazz = writer.getType().getRawClass();
+            return clazz.equals(Date.class) || clazz.equals(LocalDateTime.class) || clazz.equals(LocalDate.class);
+        }
+
+        /**
+         * 判断数字类型
+         */
+        boolean isNumber(BeanPropertyWriter writer) {
+            Class<?> clazz = writer.getType().getRawClass();
+            return clazz.equals(Short.class) || clazz.equals(Integer.class)
+                    || clazz.equals(Long.class) || clazz.equals(BigDecimal.class)
+                    || clazz.equals(Double.class) || clazz.equals(Float.class);
+        }
+
+        /**
+         * 判断字符类型
+         */
+        boolean isStr(BeanPropertyWriter writer) {
+            Class<?> clazz = writer.getType().getRawClass();
+            return clazz.equals(String.class) || clazz.equals(Character.class)
+                    || clazz.equals(StringBuilder.class) || clazz.equals(StringBuffer.class);
+        }
     }
 
     /**
-     * 通过JSON序列化克隆
-     *
-     * @param fromObj 源对象
-     * @param <T>     可序列化类
-     * @return 克隆的对象
+     * 数组以及集合序列化实现类
      */
-    public static <T extends Serializable> List<T> cloneByJson(List<T> fromObj) {
-        if (CollectionUtils.isEmpty(fromObj)) {
-            return new ArrayList<>();
+    private static class ArrayJsonSerializer extends JsonSerializer<Object> {
+        @Override
+        public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            if (value == null) {
+                jgen.writeStartArray();
+                jgen.writeEndArray();
+            } else {
+                jgen.writeObject(value);
+            }
         }
-        String json = JsonUtils.toJson(fromObj);
-        return (List<T>) JsonUtils.fromJson2List(json, fromObj.get(0).getClass());
+    }
+
+    /**
+     * 字符串序列化实现类
+     */
+    private static class StrJsonSerializer extends JsonSerializer<Object> {
+        @Override
+        public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            if (value == null) {
+                jgen.writeString("");
+            } else {
+                jgen.writeObject(value);
+            }
+        }
+    }
+
+    /**
+     * 数字序列化实现类
+     */
+    private static class NumJsonSerializer extends JsonSerializer<Object> {
+        @Override
+        public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            if (value == null) {
+                jgen.writeNumber(0);
+            } else {
+                jgen.writeObject(value);
+            }
+        }
     }
 }

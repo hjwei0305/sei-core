@@ -6,7 +6,9 @@ import com.changhong.sei.core.config.properties.log.LogProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.mock.LocalMockUser;
 import com.changhong.sei.core.context.mock.MockUser;
+import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.core.util.JwtTokenUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -72,14 +75,14 @@ public class DefaultAutoConfiguration {
         return validatorFactory.getValidator();
     }
 
-//    /**
-//     * jsonutil 初始化处理
-//     * jsonutil 初始化处理
-//     *
-//     * @param mapper
-//     */
-//    @Autowired
-//    public void setObjectMapper(@SuppressWarnings("SpringJavaAutowiringInspection") @Autowired ObjectMapper mapper) {
-//        JsonUtils.setMapper(mapper);
-//    }
+    @Bean
+    @Primary
+    public ObjectMapper jacksonObjectMapper() {
+        /*
+          long类型前端精度丢失问题（超过53位二进制数），
+          建议在需要转换的字段上加注解 @JsonFormat(shape = JsonFormat.Shape.STRING)
+          不做整体数值转换，防止无需转换的long类型也转为string
+         */
+        return JsonUtils.mapper();
+    }
 }
