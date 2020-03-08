@@ -29,7 +29,7 @@ public final class ContextUtil {
     /**
      * 当前链路信息获取
      */
-    public final static String TRACE_ID = "trace_id";
+    public final static String TRACE_ID = "traceId";
     public final static String TRACE_FROM_SERVER = "from_server";
     public final static String TRACE_CURRENT_SERVER = "current_server";
 

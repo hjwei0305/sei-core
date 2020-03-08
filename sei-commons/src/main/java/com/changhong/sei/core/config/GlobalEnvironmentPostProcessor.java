@@ -29,7 +29,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (executed.compareAndSet(false, true)) {
+//        if (executed.compareAndSet(false, true)) {
             Properties properties = new Properties();
             //会检查终端是否支持ANSI，是的话就采用彩色输出。设置彩色输出会让日志更具可读性
             //properties.setProperty("spring.output.ansi.enabled", "DETECT");
@@ -38,17 +38,17 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             //版本
             System.setProperty("sei-version", Version.getCurrentVersion());
 
-            //日志采集器
-            if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
-//            if (environment.containsProperty("sei.log.remote.host")) {
-//                System.setProperty("appCode", environment.getProperty("spring.cloud.config.name", "example"));
-//                System.setProperty("envCode", environment.getProperty("spring.cloud.config.profile", "example"));
-//                System.setProperty("FlentdHost", environment.getProperty("sei.global.fluentd.host", "10.4.208.131"));
-//                System.setProperty("FlentdPort", environment.getProperty("sei.global.fluentd.port", "24224"));
-                //指定配置efk文件
-//                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
-                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
-            }
+//            //日志采集器
+//            if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
+////            if (environment.containsProperty("sei.log.remote.host")) {
+////                System.setProperty("appCode", environment.getProperty("spring.cloud.config.name", "example"));
+////                System.setProperty("envCode", environment.getProperty("spring.cloud.config.profile", "example"));
+////                System.setProperty("FlentdHost", environment.getProperty("sei.global.fluentd.host", "10.4.208.131"));
+////                System.setProperty("FlentdPort", environment.getProperty("sei.global.fluentd.port", "24224"));
+//                //指定配置efk文件
+////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
+//                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
+//            }
 
 
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);
@@ -56,6 +56,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             //environment.getPropertySources().addLast(source);
             // 配置中心配置文件优先，即当配置中心和本地配置文件存在相同key时，使用配置中心该key的配置值
             environment.getPropertySources().addFirst(source);
-        }
+//        }
     }
 }
