@@ -23,12 +23,10 @@ public class HelloService {
         response.setTenantCode(tenant);
         response.setAccount(account);
         response.setUserName("你好");
-        MDC.put("trace_id", IdGenerator.uuid());
+        MDC.put("traceId", IdGenerator.uuid());
         LogUtil.debug("debug测试");
         LogUtil.info("info测试");
         LogUtil.warn("warn测试");
-
-
 
         return ResultData.success(response);
     }

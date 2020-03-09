@@ -2,10 +2,6 @@ spring:
   application:
     name: sei-auth
   cloud:
-    bus:
-      trace:
-        enabled: false
-      enabled: false
     config:
       profile: DEV
       name: ${spring.application.name}

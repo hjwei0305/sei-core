@@ -38,7 +38,12 @@ public class ContextUtilTest extends BaseUnitTest {
 
     @Test
     public void testLog() {
-        MDC.put("trace_id", IdGenerator.uuid());
+        MDC.put("traceId", IdGenerator.uuid());
+        MDC.put("userId", IdGenerator.uuid());
+        MDC.put("account", "admin");
+        MDC.put("userName", "测试");
+        MDC.put("tenantCode", "10044");
+        MDC.put("args", "10044");
         LogUtil.debug("debug测试");
         LogUtil.info("info测试");
         LogUtil.warn("warn测试");

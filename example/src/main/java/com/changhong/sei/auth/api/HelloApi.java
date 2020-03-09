@@ -25,7 +25,7 @@ public interface HelloApi {
      * 登录
      */
     @PostMapping(path = "hello")
-    @ApiOperation("demo")
+    @ApiOperation("hello")
     ResultData<UserResponse> hello(HelloRequest request);
 
     /**

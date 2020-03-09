@@ -1,5 +1,6 @@
 package com.changhong.sei.core.context;
 
+import com.changhong.sei.core.constant.Constants;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import com.changhong.sei.enums.UserAuthorityPolicy;
 import com.changhong.sei.enums.UserType;
@@ -7,7 +8,6 @@ import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
 import io.jsonwebtoken.Claims;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -20,18 +20,18 @@ import java.util.Map;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-25 14:39
  */
-public final class ContextUtil {
+public final class ContextUtil implements Constants {
     /**
      * 请求头token key
      */
-    public static final String HEADER_TOKEN_KEY = "x-authorization";
+    public static final String HEADER_TOKEN_KEY = Constants.HEADER_TOKEN_KEY;
 
     /**
      * 当前链路信息获取
      */
-    public final static String TRACE_ID = "traceId";
-    public final static String TRACE_FROM_SERVER = "from_server";
-    public final static String TRACE_CURRENT_SERVER = "current_server";
+    public final static String TRACE_ID = Constants.TRACE_ID;
+    public final static String TRACE_FROM_SERVER = Constants.TRACE_FROM_SERVER;
+    public final static String TRACE_CURRENT_SERVER = Constants.TRACE_CURRENT_SERVER;
 
     /**
      * 获取当前用户的Id
@@ -312,7 +312,7 @@ public final class ContextUtil {
      * @return 返回当前应用代码。
      */
     public static String getAppCode() {
-        String appCode = getProperty("spring.application.name", "sei-basic");
+        String appCode = getProperty("spring.application.name", "sei");
         return appCode;
     }
 
