@@ -69,6 +69,14 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String path = request.getServletPath();
+
+        // 静态资源
+        if (StringUtils.endsWithAny(path, ".js",".css",".ico",".jpg",".png")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // swagger
         if (StringUtils.startsWithAny(path,
                 "/favicon.ico", "/swagger-ui.html", "/swagger-resources", "/v2/api-docs", "/webjars/", "/actuator", "/instances")) {
 
