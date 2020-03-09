@@ -18,7 +18,7 @@
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
 <!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/> -->
 <!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/> -->
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(${APP_NAME}@${APP_PORT}){blue} %clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%thread]){faint} %clr(%logger#%line){cyan} traceId:[%X{traceId:- }] %clr(user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }]){yellow} args:[%X{args:- }] : %clr(%m%n){magenta}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${APP_NAME}){blue} %clr(%5p) %clr(${PID:- }){magenta} %clr([%thread]){faint} %clr(%logger#%line){cyan} traceId:[%X{traceId:- }] %clr(user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }]){yellow} args:[%X{args:- }] : %clr(%m%n){magenta}"/>
 
     <!-- 读取系统环境属性 -->
 <!--    <property name="OS_NAME" value="${os.name}"/>-->
@@ -42,7 +42,8 @@
 
     <!-- 按照每天生成日志文件 -->
     <appender name="FILE" class="com.changhong.sei.core.log.SeiRollingFileAppender">
-        <file>logs/${LOG_FILE}.log</file>
+<!--        <file>logs/${LOG_FILE}.log</file>-->
+        <file>logs/${APP_NAME:-sei}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
             <fileNamePattern>logs/${LOG_FILE}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
@@ -56,7 +57,7 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
 <!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
-            <pattern>${APP_NAME}@${APP_PORT} %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } [%thread] %logger#%line traceId:[%X{traceId:- }] user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }] args:[%X{args:- }] : %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%thread] %logger#%line traceId:[%X{traceId:- }] user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }] args:[%X{args:- }] : %m%n</pattern>
 <!--            <charset>UTF-8</charset>-->
         </encoder>
     </appender>
@@ -64,7 +65,7 @@
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
 
-        <appender-ref ref="FILE"/>
+<!--        <appender-ref ref="FILE"/>-->
     </root>
 
     <!-- additivity="true" 是否重复记录 -->

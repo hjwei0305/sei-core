@@ -29,12 +29,12 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-//        if (executed.compareAndSet(false, true)) {
+        if (executed.compareAndSet(false, true)) {
             Properties properties = new Properties();
             //会检查终端是否支持ANSI，是的话就采用彩色输出。设置彩色输出会让日志更具可读性
             //properties.setProperty("spring.output.ansi.enabled", "DETECT");
             //始终采用彩色输出
-            properties.setProperty("spring.output.ansi.enabled", "ALWAYS");
+//            properties.setProperty("spring.output.ansi.enabled", "ALWAYS");
             //版本
             System.setProperty("sei-version", Version.getCurrentVersion());
 
@@ -56,6 +56,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             //environment.getPropertySources().addLast(source);
             // 配置中心配置文件优先，即当配置中心和本地配置文件存在相同key时，使用配置中心该key的配置值
             environment.getPropertySources().addFirst(source);
-//        }
+        }
     }
 }
