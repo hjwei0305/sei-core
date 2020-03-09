@@ -624,6 +624,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         return sort;
     }
 
+    @SuppressWarnings({"rawtypes", "ConstantConditions"})
     private <X> Predicate buildPredicate(String propertyName, SearchFilter filter, Root<X> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder, Boolean having) {
         Object matchValue = filter.getValue();
@@ -655,17 +656,37 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
             }
             // 如果是LIST，则循环处理
-            if (matchValue instanceof Collection) {
-                List enumValues = new ArrayList();
-                ((List)matchValue).forEach(m-> {
+            else if (matchValue instanceof Collection) {
+                Set enumValues = new HashSet();
+                ((Collection) matchValue).forEach(m -> {
                     if (m instanceof String) {
                         // 将查询字符串转换为枚举值
                         Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
-                        enumValues.add(enumValue);
+                        if (Objects.nonNull(enumValue)) {
+                            enumValues.add(enumValue);
+                        }
                     }
                 });
                 if (CollectionUtils.isNotEmpty(enumValues)) {
                     matchValue = enumValues;
+                }
+            }
+            // 如果是数据
+            else if (matchValue.getClass().isArray()) {
+                Object[] matchValueArr = (Object[]) matchValue;
+                Set enumValues = new HashSet();
+                for (Object m : matchValueArr) {
+                    if (m instanceof String) {
+                        // 将查询字符串转换为枚举值
+                        Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
+                        if (Objects.nonNull(enumValue)) {
+                            enumValues.add(enumValue);
+                        }
+                    }
+                };
+                if (CollectionUtils.isNotEmpty(enumValues)) {
+                    //noinspection ToArrayCallWithZeroLengthArrayArgument
+                    matchValue = enumValues.toArray(new Object[enumValues.size()]);
                 }
             }
         }
