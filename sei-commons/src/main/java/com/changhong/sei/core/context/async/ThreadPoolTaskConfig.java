@@ -1,11 +1,16 @@
 package com.changhong.sei.core.context.async;
 
 import com.changhong.sei.core.constant.Constants;
+import com.changhong.sei.core.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -19,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @EnableAsync
-public class ThreadPoolTaskConfig {
+public class ThreadPoolTaskConfig  implements AsyncConfigurer {
 
     /**
      * 核心线程数（默认线程数）
@@ -43,10 +48,11 @@ public class ThreadPoolTaskConfig {
     private static final String threadNamePrefix = "SEI-Async-Service-";
 
     /**
-     * bean的名称，默认为首字母小写的方法名
+     * The {@link Executor} instance to be used when processing async
+     * method invocations.
      */
-    @Bean(Constants.TASK_EXECUTOR)
-    public ThreadPoolTaskExecutor taskExecutor() {
+    @Override
+    public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);

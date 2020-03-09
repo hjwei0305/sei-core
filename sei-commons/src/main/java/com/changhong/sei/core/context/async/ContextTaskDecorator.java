@@ -1,10 +1,14 @@
 package com.changhong.sei.core.context.async;
 
+import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.util.thread.ThreadLocalHolder;
+import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.slf4j.MDC;
 import org.springframework.core.task.TaskDecorator;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 实现功能：主要用于任务的调用时设置一些执行上下文
@@ -19,6 +23,7 @@ public class ContextTaskDecorator implements TaskDecorator {
     public Runnable decorate(Runnable runnable) {
         // 通过本地线程变量传递需要远程服务接收的参数, 已包含token信息 ContextUtil.HEADER_TOKEN_KEY
         final Map<String, Object> transMap = ThreadLocalHolder.getTranVars();
+        final SessionUser user = ContextUtil.getSessionUser();
 
         Map<String, String> contextMap = MDC.getCopyOfContextMap();
 
@@ -26,7 +31,11 @@ public class ContextTaskDecorator implements TaskDecorator {
             try {
                 // 初始化线程变量
                 ThreadLocalHolder.begin(transMap);
-                MDC.setContextMap(contextMap);
+                ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
+
+                if (Objects.nonNull(contextMap)) {
+                    MDC.setContextMap(contextMap);
+                }
 
                 runnable.run();
             } finally {
