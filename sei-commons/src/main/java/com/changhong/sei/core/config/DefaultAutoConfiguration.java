@@ -75,14 +75,14 @@ public class DefaultAutoConfiguration {
         return validatorFactory.getValidator();
     }
 
-    @Bean
-    @Primary
-    public ObjectMapper jacksonObjectMapper() {
-        /*
-          long类型前端精度丢失问题（超过53位二进制数），
-          建议在需要转换的字段上加注解 @JsonFormat(shape = JsonFormat.Shape.STRING)
-          不做整体数值转换，防止无需转换的long类型也转为string
-         */
-        return JsonUtils.mapper();
-    }
+//    @Bean
+//    @Primary
+//    public ObjectMapper jacksonObjectMapper() {
+//        /*
+//          long类型前端精度丢失问题（超过53位二进制数），
+//          建议在需要转换的字段上加注解 @JsonFormat(shape = JsonFormat.Shape.STRING)
+//          不做整体数值转换，防止无需转换的long类型也转为string
+//         */
+//        return JsonUtils.mapper();
+//    }
 }

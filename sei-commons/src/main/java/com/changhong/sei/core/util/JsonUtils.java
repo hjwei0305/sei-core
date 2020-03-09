@@ -398,8 +398,8 @@ public final class JsonUtils {
                     writer.assignNullSerializer(arrayJsonSerializer);
                 } else if (isNumber(writer)) {
                     writer.assignNullSerializer(numberJsonSerializer);
-                } else if (isStr(writer)) {
-                    writer.assignNullSerializer(strJsonSerializer);
+//                } else if (isStr(writer)) {
+//                    writer.assignNullSerializer(strJsonSerializer);
                 }
             }
             return beanProperties;
