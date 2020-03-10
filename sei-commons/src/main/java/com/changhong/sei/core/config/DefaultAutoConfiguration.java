@@ -1,14 +1,10 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.aop.SysLogAspect;
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
-import com.changhong.sei.core.config.properties.log.LogProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.mock.LocalMockUser;
 import com.changhong.sei.core.context.mock.MockUser;
-import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.core.util.JwtTokenUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -16,7 +12,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -35,14 +30,8 @@ import javax.validation.ValidatorFactory;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableAspectJAutoProxy
-@EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class, LogProperties.class})
+@EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SysLogAspect sysLogAspect() {
-        return new SysLogAspect();
-    }
 
     @Bean
     @ConditionalOnMissingBean

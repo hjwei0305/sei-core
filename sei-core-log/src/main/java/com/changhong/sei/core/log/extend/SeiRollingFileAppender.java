@@ -1,10 +1,11 @@
-package com.changhong.sei.core.log;
+package com.changhong.sei.core.log.extend;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.filter.LevelFilter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.spi.FilterReply;
+import com.changhong.sei.core.log.LogUtil;
 
 /**
  * 实现功能：

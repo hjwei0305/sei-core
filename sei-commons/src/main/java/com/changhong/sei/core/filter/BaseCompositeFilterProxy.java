@@ -1,6 +1,7 @@
 package com.changhong.sei.core.filter;
 
-import com.changhong.sei.core.log.LogUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -20,6 +21,7 @@ import java.util.List;
  * @version 1.0.00  2020-01-07 11:40
  */
 public abstract class BaseCompositeFilterProxy extends OncePerRequestFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(BaseCompositeFilterProxy.class);
 
     /**
      * 过滤器定义
@@ -76,7 +78,7 @@ public abstract class BaseCompositeFilterProxy extends OncePerRequestFilter {
                     try {
                         ((InitializingBean) filter).afterPropertiesSet();
                     } catch (Exception e) {
-                        LogUtil.warn(filter.getClass().getName() + "初始化错误", e);
+                        LOG.warn(filter.getClass().getName() + "初始化错误", e);
                     }
                 }
             });

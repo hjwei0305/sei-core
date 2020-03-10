@@ -1,9 +1,9 @@
 package com.changhong.sei.auth.service;
 
 import com.changhong.sei.auth.dto.UserResponse;
-import com.changhong.sei.core.annotation.MonitorLogger;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
+import com.changhong.sei.core.log.annotation.Log;
 import com.changhong.sei.util.IdGenerator;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class HelloService {
 
-    @MonitorLogger(remark = "测试业务监控")
+    @Log("测试业务监控")
     public ResultData<UserResponse> hello(String tenant, String account) {
         UserResponse response = UserResponse.build();
         response.setTenantCode(tenant);
@@ -27,6 +27,9 @@ public class HelloService {
         LogUtil.debug("debug测试");
         LogUtil.info("info测试");
         LogUtil.warn("warn测试");
+        int i = 0, j = 0;
+        long m = i/j;
+
 
         return ResultData.success(response);
     }

@@ -1,4 +1,4 @@
-package com.changhong.sei.core.log;
+package com.changhong.sei.core.log.extend;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;

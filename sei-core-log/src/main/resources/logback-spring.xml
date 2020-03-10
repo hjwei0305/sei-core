@@ -22,9 +22,9 @@
 
     <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} traceId:[%X{traceId:- }] %clr(:){faint} %m%n"/>
 <!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/> -->
-<!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/> -->
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${APP_NAME}){blue} %clr(%5p) %clr(${PID:- }){magenta} %clr([%thread]){faint} %clr(%logger#%line){cyan} traceId:[%X{traceId:- }] %clr(user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }]){yellow} args:[%X{args:- }] : %clr(%m%n){magenta}"/>
+<!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${APP_NAME}){blue} %clr(%5p) %clr(${PID:- }){magenta} %clr([%thread]){faint} %clr(%logger#%line){cyan} traceId:[%X{traceId:- }] %clr(user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }]){yellow} args:[%X{args:- }] : %clr(%m%n){magenta}"/>-->
 
     <!-- 读取系统环境属性 -->
 <!--    <property name="OS_NAME" value="${os.name}"/>-->
@@ -47,7 +47,7 @@
     </appender>
 
     <!-- 按照每天生成日志文件 -->
-    <appender name="FILE" class="com.changhong.sei.core.log.SeiRollingFileAppender">
+    <appender name="FILE" class="com.changhong.sei.core.log.extend.SeiRollingFileAppender">
 <!--        <file>logs/${LOG_FILE}.log</file>-->
         <file>logs/${APP_NAME:-sei}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -63,8 +63,9 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
 <!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%thread] %logger#%line traceId:[%X{traceId:- }] user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }] args:[%X{args:- }] : %m%n</pattern>
-<!--            <charset>UTF-8</charset>-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%thread] %logger#%line traceId:[%X{traceId:- }] : %m%n</pattern>
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%thread] %logger#%line traceId:[%X{traceId:- }] user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }] args:[%X{args:- }] : %m%n</pattern>-->
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
 

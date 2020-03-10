@@ -1,7 +1,8 @@
 package com.changhong.sei.core.encryption.provider;
 
-import com.changhong.sei.core.log.LogUtil;
 import org.apache.tomcat.util.buf.HexUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -21,6 +22,7 @@ import java.util.Base64;
  * @version 1.0.00  2020-01-07 16:30
  */
 public class DesEncryptProvider extends AbstractEncryptProvider {
+    private static final Logger LOG = LoggerFactory.getLogger(DesEncryptProvider.class);
     /**
      * md5加密标示
      */
@@ -64,13 +66,13 @@ public class DesEncryptProvider extends AbstractEncryptProvider {
                     ENCRYPT_DES);
             this.secretKey = keyFactory.generateSecret(dks);
         } catch (NoSuchAlgorithmException e) {
-            LogUtil.error("Not a valid encryption algorithm", e);
+            LOG.error("Not a valid encryption algorithm", e);
             throw new IllegalArgumentException("Not a valid encryption algorithm", e);
         } catch (NoSuchPaddingException e) {
-            LogUtil.error("Not a valid encryption algorithm", e);
+            LOG.error("Not a valid encryption algorithm", e);
             throw new IllegalStateException("Should not happen", e);
         } catch (InvalidKeyException | InvalidKeySpecException e) {
-            LogUtil.error("无效的密钥", e);
+            LOG.error("无效的密钥", e);
             throw new IllegalArgumentException("Not a valid encryption key", e);
         }
     }
@@ -86,7 +88,7 @@ public class DesEncryptProvider extends AbstractEncryptProvider {
                 byte[] encodes = Base64.getEncoder().encode(encryptor.doFinal(encryptStr.getBytes(CHARSET_DEFAULT)));
                 return HexUtils.toHexString(encodes);
             } catch (Exception e) {
-                LogUtil.error(ENCRYPT_DES + "加密出错", e);
+                LOG.error(ENCRYPT_DES + "加密出错", e);
             }
         }
         return null;
@@ -102,7 +104,7 @@ public class DesEncryptProvider extends AbstractEncryptProvider {
                 decryptor.init(Cipher.DECRYPT_MODE, secretKey);
                 return new String(decryptor.doFinal(Base64.getDecoder().decode(HexUtils.fromHexString(decryptStr))), CHARSET_DEFAULT);
             } catch (Exception e) {
-                LogUtil.error(ENCRYPT_DES + "解密出错", e);
+                LOG.error(ENCRYPT_DES + "解密出错", e);
             }
         }
         return null;

@@ -1,9 +1,10 @@
 package com.changhong.sei.core.filter;
 
 import com.changhong.sei.core.context.HeaderHelper;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,6 +22,8 @@ import java.util.Objects;
  * @see HeaderHelper#getRequestHeaderInfo()
  */
 public class ThreadLocalTranVarFilter extends BaseWebFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadLocalTranVarFilter.class);
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -30,7 +33,7 @@ public class ThreadLocalTranVarFilter extends BaseWebFilter {
             while (headers.hasMoreElements()) {
                 String key = headers.nextElement();
                 if (StringUtils.isNotBlank(key) && key.startsWith(ThreadLocalUtil.TRAN_PREFIX)) {
-                    LogUtil.info("从请求头设置可传播的线程变量: {}", key);
+                    LOG.info("从请求头设置可传播的线程变量: {}", key);
                     ThreadLocalUtil.setTranVar(key.substring(length), request.getHeader(key));
                 }
             }

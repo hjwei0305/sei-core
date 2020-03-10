@@ -27,7 +27,6 @@
     <!--    </springProfile>-->
 
     <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-<!--    <appender name="LOG_STASH" class="com.changhong.sei.core.log.LogstashAppender">-->
         <!-- logstash服务器地址 端口-->
 <!--        <destination>${sei.log.remote.host}</destination>-->
         <destination>10.4.208.132:5044</destination>

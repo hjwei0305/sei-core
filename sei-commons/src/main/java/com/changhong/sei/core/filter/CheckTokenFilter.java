@@ -3,10 +3,11 @@ package com.changhong.sei.core.filter;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -26,12 +27,13 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0.00  2020-01-07 15:58
  */
 public class CheckTokenFilter extends BaseWebFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(CheckTokenFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
         if (StringUtils.endsWithAny(path,
-                "/", "/csrf", "/auth/check", "/auth/getAnonymousToken")) {
+                "/", "/csrf", "/auth/check", "/auth/getAnonymousToken", "/websocket/log", "/websocket/logging")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -53,7 +55,7 @@ public class CheckTokenFilter extends BaseWebFilter {
             }
         }
 
-        LogUtil.debug("请求token: {}", token);
+        LOG.debug("请求token: {}", token);
         if (token.startsWith("Bearer ")) {
             // 截取token
             token = token.substring("Bearer ".length());
@@ -64,12 +66,12 @@ public class CheckTokenFilter extends BaseWebFilter {
         try {
             user = ContextUtil.getSessionUser(token);
         } catch (Exception e) {
-            LogUtil.error("token不合法,认证失败. token: {}", token);
+            LOG.error("token不合法,认证失败. token: {}", token);
             // 认证失败
             unauthorized("token不合法,认证失败!", response);
             return;
         }
-        LogUtil.info("当前用户: {}", user);
+        LOG.info("当前用户: {}", user);
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
@@ -91,7 +93,7 @@ public class CheckTokenFilter extends BaseWebFilter {
      * 认证失败
      */
     private void unauthorized(String msg, HttpServletResponse response) throws IOException {
-        LogUtil.warn("认证失败: {}", msg);
+        LOG.warn("认证失败: {}", msg);
         //认证错误处理
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");

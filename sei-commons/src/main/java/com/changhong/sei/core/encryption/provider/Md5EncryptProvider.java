@@ -1,7 +1,8 @@
 package com.changhong.sei.core.encryption.provider;
 
-import com.changhong.sei.core.log.LogUtil;
 import org.apache.tomcat.util.buf.HexUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
@@ -14,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
  * @version 1.0.00  2020-01-07 16:30
  */
 public class Md5EncryptProvider extends AbstractEncryptProvider {
+    private static final Logger LOG = LoggerFactory.getLogger(Md5EncryptProvider.class);
     /**
      * md5加密标示
      */
@@ -35,7 +37,7 @@ public class Md5EncryptProvider extends AbstractEncryptProvider {
             }
             return String.valueOf(HexUtils.toHexString(messageDigest.digest()));
         } catch (NoSuchAlgorithmException e) {
-            LogUtil.error("Not a valid encryption algorithm", e);
+            LOG.error("Not a valid encryption algorithm", e);
             throw new IllegalArgumentException("Not a valid encryption algorithm", e);
         }
     }

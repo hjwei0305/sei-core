@@ -1,9 +1,10 @@
 package com.changhong.sei.core.error;
 
 import com.changhong.sei.core.dto.ResultData;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.exception.ServiceException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -29,13 +30,14 @@ import java.util.Set;
  */
 @RestControllerAdvice
 public class GlobalExceptionTranslator {
+    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionTranslator.class);
 
     /**
      * 缺少请求参数
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResultData<String> handleError(MissingServletRequestParameterException e) {
-        LogUtil.warn("Missing Request Parameter", e);
+        LOG.warn("Missing Request Parameter", e);
         String message = String.format("Missing Request Parameter: %s", e.getParameterName());
         return ResultData.fail(message);
     }
@@ -45,7 +47,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResultData<String> handleError(MethodArgumentTypeMismatchException e) {
-        LogUtil.warn("Method Argument Type Mismatch", e);
+        LOG.warn("Method Argument Type Mismatch", e);
         String message = String.format("Method Argument Type Mismatch: %s", e.getName());
         return ResultData.fail(message);
     }
@@ -55,7 +57,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultData<String> handleError(MethodArgumentNotValidException e) {
-        LogUtil.warn("Method Argument Not Valid", e);
+        LOG.warn("Method Argument Not Valid", e);
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         assert error != null;
@@ -68,7 +70,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(BindException.class)
     public ResultData<String> handleError(BindException e) {
-        LogUtil.warn("Bind Exception", e);
+        LOG.warn("Bind Exception", e);
         FieldError error = e.getFieldError();
         String message = String.format("%s:%s", error.getField(), error.getDefaultMessage());
         return ResultData.fail(message);
@@ -79,7 +81,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResultData<String> handleError(ConstraintViolationException e) {
-        LogUtil.warn("Constraint Violation", e);
+        LOG.warn("Constraint Violation", e);
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         ConstraintViolation<?> violation = violations.iterator().next();
         String path = ((PathImpl) violation.getPropertyPath()).getLeafNode().getName();
@@ -89,7 +91,7 @@ public class GlobalExceptionTranslator {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResultData<String> handleError(NoHandlerFoundException e) {
-        LogUtil.error("404 Not Found", e);
+        LOG.error("404 Not Found", e);
         return ResultData.fail(e.getMessage());
     }
 
@@ -98,7 +100,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResultData<String> handleError(HttpMessageNotReadableException e) {
-        LogUtil.error("Message Not Readable", e);
+        LOG.error("Message Not Readable", e);
         return ResultData.fail(e.getMessage());
     }
 
@@ -107,7 +109,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData<String> handleError(HttpRequestMethodNotSupportedException e) {
-        LogUtil.error("Request Method Not Supported", e);
+        LOG.error("Request Method Not Supported", e);
         return ResultData.fail(e.getMessage());
     }
 
@@ -116,7 +118,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResultData<String> handleError(HttpMediaTypeNotSupportedException e) {
-        LogUtil.error("Media Type Not Supported", e);
+        LOG.error("Media Type Not Supported", e);
         return ResultData.fail(e.getMessage());
     }
 
@@ -125,7 +127,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(ServiceException.class)
     public ResultData<String> handleError(ServiceException e) {
-        LogUtil.error("Service Exception", e);
+        LOG.error("Service Exception", e);
         return ResultData.fail(e.getMessage());
     }
 
@@ -134,7 +136,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(Throwable.class)
     public ResultData<String> handleError(Throwable e) {
-        LogUtil.error("Internal Server Error", e);
+        LOG.error("Internal Server Error", e);
         return ResultData.fail(e.getMessage());
     }
 }

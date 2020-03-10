@@ -1,35 +1,31 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
 dependencies {
-    // 内部模块依赖
-    compile project(':sei-core-api')
+
     compile project(':sei-commons')
-    compile project(':sei-core-log')
 
     // 第三方的依赖
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compile(
-            "org.springframework.boot:spring-boot-starter-data-jpa",
-            "org.springframework.boot:spring-boot-starter-data-redis",
-            "org.springframework.boot:spring-boot-starter-actuator",
-            "org.modelmapper:modelmapper:$modelmapperVersion",
-            "io.springfox:springfox-swagger-ui:$foxSwaggerVersion",
-            "joda-time:joda-time:$jodaTimeVersion"
+            "org.springframework.boot:spring-boot-starter-aop"
     )
+    compile("org.javassist:javassist:3.26.0-GA")
 
-    // logback <if>标签
-    // compile("org.codehaus.janino:janino:3.1.0")
+    // logstash logback
+//    compile(
+//            "net.logstash.logback:logstash-logback-encoder:6.3"
+//    )
 
-    testCompile(
-            "org.springframework.boot:spring-boot-starter-test"
-    )
+//    // fluentd logback
+//    compile(
+//            "org.fluentd:fluent-logger:0.3.3",
+//            //"ch.qos.logback:logback-classic:1.2.3",
+//            "com.sndyuk:logback-more-appenders:1.4.3"
+//    )
 }
+
+//compileJava.dependsOn(processResources)
 
 //打jar包
 bootJar { enabled = false }
