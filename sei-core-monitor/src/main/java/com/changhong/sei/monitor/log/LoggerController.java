@@ -16,6 +16,7 @@ public class LoggerController {
     @RequestMapping("/websocket/log")
     public String log(Model model) {
 //        model.addAttribute("appName", ContextUtil.getAppCode() + " - 实时日志");
+        model.addAttribute("appName", "实时日志");
         return "logging";
     }
 }
