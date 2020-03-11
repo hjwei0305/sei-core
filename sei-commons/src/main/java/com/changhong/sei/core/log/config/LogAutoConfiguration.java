@@ -1,7 +1,7 @@
 package com.changhong.sei.core.log.config;
 
-import com.changhong.sei.core.log.support.LogProcessor;
 import com.changhong.sei.core.log.support.LogContext;
+import com.changhong.sei.core.log.support.LogProcessor;
 import org.slf4j.Logger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;

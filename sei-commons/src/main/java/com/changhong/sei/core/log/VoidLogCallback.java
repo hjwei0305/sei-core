@@ -1,6 +1,5 @@
 package com.changhong.sei.core.log;
 
-import com.changhong.sei.core.log.LogCallback;
 import com.changhong.sei.core.log.support.MethodInfo;
 
 import java.lang.annotation.Annotation;

@@ -34,7 +34,7 @@ public class SeiRollingFileAppender extends RollingFileAppender<ILoggingEvent> {
 
         LevelFilter levelFilter = new LevelFilter();
         //非ERROR级别的日志，被过滤掉
-        levelFilter.setLevel(Level.ERROR);
+        levelFilter.setLevel(Level.WARN);
         levelFilter.setOnMatch(FilterReply.ACCEPT);
         levelFilter.setOnMismatch(FilterReply.DENY);
         levelFilter.start();

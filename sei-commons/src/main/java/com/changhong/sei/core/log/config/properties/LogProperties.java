@@ -1,7 +1,5 @@
 package com.changhong.sei.core.log.config.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
 /**
  * 实现功能：
  * 日志配置

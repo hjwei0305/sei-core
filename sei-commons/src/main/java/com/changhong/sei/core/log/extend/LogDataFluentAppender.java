@@ -1,4 +1,4 @@
-//package com.changhong.sei.core.log;
+package com.changhong.sei.core.log.extend;//package com.changhong.sei.core.log;
 //
 //import ch.qos.logback.classic.Level;
 //import ch.qos.logback.classic.filter.LevelFilter;

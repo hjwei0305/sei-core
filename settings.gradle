@@ -8,5 +8,5 @@ include 'sei-core-test'
 include 'example'
 include 'sei-core-entity3'
 include 'sei-core-api3'
-include 'sei-core-log'
+//include 'sei-core-log'
 

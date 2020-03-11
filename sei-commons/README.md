@@ -1,63 +1,4 @@
-# slf4j-spring-boot-starter
-
-<p align="center">
-    <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" />
-    <img src="https://img.shields.io/badge/Current%20Version-v1.2.0-brightgreen" />
-    <img src="https://img.shields.io/:License-apache-yellowgreen.svg" />
-    <a href='https://gitee.com/xsxgit/slf4j-spring-boot-starter/stargazers'>
-        <img src='https://gitee.com/xsxgit/slf4j-spring-boot-starter/badge/star.svg?theme=dark' alt='star' />
-    </a>
-</p>
-
-### 介绍
-一个注解搞定日志的组件，减少到处编写日志的烦恼，还可定位代码哟
-
-### 软件架构
-依赖spring-boot-starter-aop
-
-### 原理说明
-AOP + Reflect
-
-### 作用范围
-任意由**spring**调用的方法
-
-### 当前版本
-*1.2.0* (已提交中央仓库)
-
-### 安装教程
-
-```
-mvn clean install
-```
-
-### 使用说明
-
-#### 一、准备工作
-1. 添加依赖：
-
-```
-<dependency>
-    <groupId>wiki.xsx</groupId>
-    <artifactId>slf4j-spring-boot-starter</artifactId>
-    <version>1.2.0</version>
-</dependency>
-```
-2. 开启日志：
-
-yml方式：
-
-```yaml
-logging:
-  level:
-    wiki.xsx.core: 对应级别
-```
-properties方式：
-
-```properties
-logging.level.wiki.xsx.core=对应级别
-```
-
-#### 二、开始使用（使用DEBUG模式）
+#### 日志使用（使用DEBUG模式）
 ##### @ParamLog注解示例：
 
 1. 日志注解标记：
@@ -96,7 +37,7 @@ public class TestParamLogController {
     }
 }
 ```
-2. 日志回调声明（实现wiki.xsx.core.log.LogCallback接口）：
+2. 日志回调声明（实现com.changhong.sei.core.log.LogCallback接口）：
 ```java
 // 加入IOC容器，否则调用失败
 @Component
@@ -136,10 +77,9 @@ public class TestParamLogControllerTest {
 ```
 4. 日志打印效果：
 ```
-2020-01-16 21:51:11.932 DEBUG 27340 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestParamLogController.logTest1(TestParamLogController.java:23)】，业务名称：【ParamLog-test1】，接收参数：【{request=null, param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
-2020-01-16 21:51:11.939 DEBUG 27340 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestParamLogController.logTest2(TestParamLogController.java:33)】，业务名称：【ParamLog-test2】，接收参数：【{param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
-2020-01-16 21:51:11.940 DEBUG 27340 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestParamLogController.logTest3(TestParamLogController.java:43)】，业务名称：【ParamLog-test3】，接收参数：【{param=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}]}】
-2020-01-16 21:51:11.941  INFO 27340 --- [           main] wiki.xsx.log.controller.LogTestCallback  : wiki.xsx.log.controller.TestParamLogController.logTest3方法的回调函数执行成功
+2020-01-16 21:51:11.932 DEBUG 27340 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestParamLogController.logTest1(TestParamLogController.java:23)】，业务名称：【ParamLog-test1】，接收参数：【{request=null, param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
+2020-01-16 21:51:11.939 DEBUG 27340 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestParamLogController.logTest2(TestParamLogController.java:33)】，业务名称：【ParamLog-test2】，接收参数：【{param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
+2020-01-16 21:51:11.940 DEBUG 27340 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestParamLogController.logTest3(TestParamLogController.java:43)】，业务名称：【ParamLog-test3】，接收参数：【{param=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}]}】
 ```
 
 ##### @ResultLog注解示例：
@@ -170,7 +110,7 @@ public class TestResultLogController {
     }
 }
 ```
-2. 日志回调声明（实现wiki.xsx.core.log.LogCallback接口）：
+2. 日志回调声明（实现com.changhong.sei.core.log.LogCallback接口）：
 ```java
 // 加入IOC容器，否则调用失败
 @Component
@@ -209,9 +149,8 @@ public class TestResultLogControllerTest {
 ```
 4. 日志打印效果：
 ```
-2020-01-16 22:09:15.873 DEBUG 9280 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestResultLogController.logTest1(TestResultLogController.java:23)】，业务名称：【ResultLog-test1】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
-2020-01-16 22:09:15.874 DEBUG 9280 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestResultLogController.logTest2(TestResultLogController.java:33)】，业务名称：【ResultLog-test2】，返回结果：【{msg=success, data=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}], code=200}】
-2020-01-16 22:09:15.874  INFO 9280 --- [           main] wiki.xsx.log.controller.LogTestCallback  : wiki.xsx.log.controller.TestResultLogController.logTest2方法的回调函数执行成功
+2020-01-16 22:09:15.873 DEBUG 9280 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestResultLogController.logTest1(TestResultLogController.java:23)】，业务名称：【ResultLog-test1】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
+2020-01-16 22:09:15.874 DEBUG 9280 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestResultLogController.logTest2(TestResultLogController.java:33)】，业务名称：【ResultLog-test2】，返回结果：【{msg=success, data=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}], code=200}】
 ```
 
 ##### @ThrowingLog注解示例：
@@ -242,7 +181,7 @@ public class TestThrowingLogController {
     }
 }
 ```
-2. 日志回调声明（实现wiki.xsx.core.log.LogCallback接口）：
+2. 日志回调声明（实现com.changhong.sei.core.log.LogCallback接口）：
 ```java
 // 加入IOC容器，否则调用失败
 @Component
@@ -289,15 +228,15 @@ public class TestThrowingLogControllerTest {
 ```
 4. 日志打印效果：
 ```
-2020-01-16 22:13:58.226 ERROR 22184 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestThrowingLogController.logTest1】，业务名称：【ThrowingLog-test1】，异常信息：
+2020-01-16 22:13:58.226 ERROR 22184 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestThrowingLogController.logTest1】，业务名称：【ThrowingLog-test1】，异常信息：
 
 java.lang.ArithmeticException: / by zero
 ...
-2020-01-16 22:13:58.227 ERROR 22184 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestThrowingLogController.logTest2】，业务名称：【ThrowingLog-test2】，异常信息：
+2020-01-16 22:13:58.227 ERROR 22184 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestThrowingLogController.logTest2】，业务名称：【ThrowingLog-test2】，异常信息：
 
 java.lang.ArithmeticException: / by zero
 ...
-2020-01-16 22:13:58.228  INFO 22184 --- [           main] wiki.xsx.log.controller.LogTestCallback  : wiki.xsx.log.controller.TestThrowingLogController.logTest2方法的回调函数执行成功
+2020-01-16 22:13:58.228  INFO 22184 --- [           main] com.changhong.sei.core.log.LogTestCallback  : com.changhong.sei.core.log.TestThrowingLogController.logTest2方法的回调函数执行成功
 ```
 
 ##### @Log注解示例：
@@ -337,7 +276,7 @@ public class TestLogController {
     }
 }
 ```
-2. 日志回调声明（实现wiki.xsx.core.log.LogCallback接口）：
+2. 日志回调声明（实现com.changhong.sei.core.log.LogCallback接口）：
 ```java
 // 加入IOC容器，否则调用失败
 @Component
@@ -377,13 +316,12 @@ public class TestLogControllerTest {
 ```
 4. 日志打印效果：
 ```
-2020-01-16 22:16:25.736 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest1(TestLogController.java:23)】，业务名称：【Log-test1】，接收参数：【{request=null, param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
-2020-01-16 22:16:25.743 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest1(TestLogController.java:23)】，业务名称：【Log-test1】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
-2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest2(TestLogController.java:33)】，业务名称：【Log-test2】，接收参数：【{param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
-2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest2(TestLogController.java:33)】，业务名称：【Log-test2】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
-2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest3(TestLogController.java:43)】，业务名称：【Log-test3】，接收参数：【{param=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}]}】
-2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] wiki.xsx.core.log.LogProcessor           : 调用方法：【wiki.xsx.log.controller.TestLogController.logTest3(TestLogController.java:43)】，业务名称：【Log-test3】，返回结果：【{msg=success, data=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}], code=200}】
-2020-01-16 22:16:25.744  INFO 8304 --- [           main] wiki.xsx.log.controller.LogTestCallback  : wiki.xsx.log.controller.TestLogController.logTest3方法的回调函数执行成功
+2020-01-16 22:16:25.736 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest1(TestLogController.java:23)】，业务名称：【Log-test1】，接收参数：【{request=null, param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
+2020-01-16 22:16:25.743 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest1(TestLogController.java:23)】，业务名称：【Log-test1】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
+2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest2(TestLogController.java:33)】，业务名称：【Log-test2】，接收参数：【{param={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}}】
+2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest2(TestLogController.java:33)】，业务名称：【Log-test2】，返回结果：【{msg=success, data={key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}, code=200}】
+2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest3(TestLogController.java:43)】，业务名称：【Log-test3】，接收参数：【{param=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}]}】
+2020-01-16 22:16:25.744 DEBUG 8304 --- [           main] com.changhong.sei.core.log.LogProcessor           : 调用方法：【com.changhong.sei.core.log.TestLogController.logTest3(TestLogController.java:43)】，业务名称：【Log-test3】，返回结果：【{msg=success, data=[test-list, {key1=hello-world, key2=11, key3=11.11, key4=[hello, world], key5=[111, 112, 113]}], code=200}】
 ```
 
 ### 其他说明
@@ -399,7 +337,7 @@ public class TestLogControllerTest {
 2. level：日志级别，默认DEBUG
 3. position：代码定位，默认DEFAULT
 4. paramFilter：参数名过滤，默认{}
-5. callback：日志回调，默认VoidLogCallback.class（实现wiki.xsx.core.log.LogCallback接口，且需放入IOC容器中）
+5. callback：日志回调，默认VoidLogCallback.class（实现com.changhong.sei.core.log.LogCallback接口，且需放入IOC容器中）
 
 #### 日志级别
 1. DEBUG(默认): 调试级别
@@ -426,35 +364,3 @@ public interface LogCallback {
     );
 }
 ```
-
-#### 特别说明
-1. 日志级别为DEBUG时，默认开启代码定位，方便调试
-2. 其他级别默认关闭代码定位，减少不必要的开支，如需要可手动开启(position=Position.ENABLED)
-
-### 性能测试(仅供参考)
-#### 电脑配置
-
-|  |  |
-| :------: | :------: |
-| CPU | AMD Athlon(tm) II X4 640 Processor(3000 Mhz) |
-| 内存 | 8.00 GB (1333 MHz) |
-| 硬盘 | Apacer A S510S 128GB SATA Disk Device |
-| 测试工具 | Apache JMeter 5.1.1 |
-| 测试方式 | http请求测试日志打印，循环5次取最后1次 |
-
-#### 测试结果
-加入代码定位功能：
-
-| 日志类型 | 并发数 | 单次平均耗时(毫秒) | 吞吐量(请求次数/每秒)
-| :------: | :------: | :------: | :------: |
-| @ParamLog | 1000 | 136 | 484 |
-| @ResultLog | 1000 | 86 | 417 |
-| @Log | 1000 | 29 | 425 |
-
-取消代码定位功能：
-
-| 日志类型 | 并发数 | 单次平均耗时(毫秒) | 吞吐量(请求次数/每秒)
-| :------: | :------: | :------: | :------: |
-| @ParamLog | 1000 | 274 | 491 |
-| @ResultLog | 1000 | 66 | 519 |
-| @Log | 1000 | 108 | 483 |

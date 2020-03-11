@@ -84,7 +84,7 @@ public class LogProcessor {
      * @param joinPoint 切入点
      * @param throwable 异常
      */
-    @AfterThrowing(value = "@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)", throwing = "throwable")
+    @AfterThrowing(value = "@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)||@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)", throwing = "throwable")
     public void throwingPrint(JoinPoint joinPoint, Throwable throwable) {
         if (this.isEnable()) {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
