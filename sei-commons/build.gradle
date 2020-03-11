@@ -20,6 +20,8 @@ dependencies {
     //jwt
     compile("io.jsonwebtoken:jjwt:0.9.0")
 
+    compile("org.javassist:javassist:3.26.0-GA")
+
     // logstash logback
     compile(
             "net.logstash.logback:logstash-logback-encoder:6.3"

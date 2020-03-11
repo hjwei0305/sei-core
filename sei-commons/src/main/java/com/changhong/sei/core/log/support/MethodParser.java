@@ -1,6 +1,6 @@
 package com.changhong.sei.core.log.support;
 
-import javassist.NotFoundException;
+import javassist.*;
 import javassist.bytecode.LocalVariableAttribute;
 import org.aspectj.lang.reflect.MethodSignature;
 
