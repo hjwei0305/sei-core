@@ -20,10 +20,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-03-08 17:18
  */
-//@Component
 @ServerEndpoint(value = "/websocket/logging", configurator = MyEndpointConfigure.class)
 public class LoggingWSServer {
     private final static Logger log = LoggerFactory.getLogger(LoggingWSServer.class);
+
     @Value("${spring.application.name}")
     private String applicationName;
 
@@ -42,24 +42,26 @@ public class LoggingWSServer {
         sessionMap.put(session.getId(), session);
         lengthMap.put(session.getId(), 1);//默认从第一行开始
 
+        //日志文件路径，获取最新的
+        String filePath = System.getProperty("user.dir") + "/logs/" + applicationName + ".txt";
+
         //获取日志信息
         new Thread(() -> {
             log.info("LoggingWebSocketServer 任务开始");
             boolean first = true;
+            BufferedReader reader = null;
+            int lastLength;
+
             while (sessionMap.get(session.getId()) != null) {
-                BufferedReader reader = null;
                 try {
-                    //日志文件路径，获取最新的
-//                    String filePath = System.getProperty("user.home") + "/log/" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "/"+applicationName+".log";
-                    String filePath = "/usr/app/logs/"+applicationName+".log";
-//                    String filePath = "/Users/chaoma/work_space/sei6.0/sei-auth/sei-auth-service/logs/"+applicationName+".log";
+                    lastLength = lengthMap.get(session.getId());
 
                     //字符流
                     reader = new BufferedReader(new FileReader(filePath));
                     Object[] lines = reader.lines().toArray();
-                    if (lines.length > 0) {
+                    if (lines.length > lastLength) {
                         //只取从上次之后产生的日志
-                        Object[] copyOfRange = Arrays.copyOfRange(lines, lengthMap.get(session.getId()), lines.length);
+                        Object[] copyOfRange = Arrays.copyOfRange(lines, lastLength, lines.length);
 
                         //对日志进行着色，更加美观  PS：注意，这里要根据日志生成规则来操作
                         for (int i = 0; i < copyOfRange.length; i++) {
@@ -98,6 +100,9 @@ public class LoggingWSServer {
                         }
 
                         String result = StringUtils.join(copyOfRange, "<br/>");
+                        if (!StringUtils.endsWith(result, "<br/>")) {
+                            result += "<br/>";
+                        }
 
                         //发送
                         send(session, result);

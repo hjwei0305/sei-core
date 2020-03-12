@@ -1,5 +1,7 @@
-package com.changhong.sei.monitor.log;
+package com.changhong.sei.monitor.config;
 
+import com.changhong.sei.monitor.log.LoggingWSServer;
+import com.changhong.sei.monitor.log.MyEndpointConfigure;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +15,9 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-03-08 17:21
  */
-@ComponentScan("com.changhong.sei.monitor.log")
+@ComponentScan("com.changhong.sei.monitor")
 @Configuration
-public class WebSocketConfig implements WebMvcConfigurer {
+public class MonitorAutoConfig implements WebMvcConfigurer {
     /**
      * 添加静态资源文件，外部可以直接访问地址
      */
