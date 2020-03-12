@@ -2,6 +2,7 @@ package com.changhong.sei.monitor.config;
 
 import com.changhong.sei.monitor.log.LoggingWSServer;
 import com.changhong.sei.monitor.log.MyEndpointConfigure;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  */
 @ComponentScan("com.changhong.sei.monitor")
 @Configuration
+// 单元测试排除
+@ConditionalOnProperty(value = "org.springframework.boot.test.context.SpringBootTestContextBootstrapper", havingValue = "false", matchIfMissing = true)
 public class MonitorAutoConfig implements WebMvcConfigurer {
     /**
      * 添加静态资源文件，外部可以直接访问地址
