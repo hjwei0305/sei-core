@@ -37,6 +37,8 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 //            properties.setProperty("spring.output.ansi.enabled", "ALWAYS");
             //版本
             System.setProperty("sei-version", Version.getCurrentVersion());
+            // 支持服务名相同的Feign Client API接口
+            application.setAllowBeanDefinitionOverriding(true);
 
 //            //日志采集器
 //            if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
@@ -49,7 +51,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 ////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
 //                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
 //            }
-
 
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);
             // 本地配置文件优先，即当配置中心和本地配置文件存在相同key时，使用本地该key的配置值
