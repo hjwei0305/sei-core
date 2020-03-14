@@ -38,7 +38,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             //版本
             System.setProperty("sei-version", Version.getCurrentVersion());
             // 支持服务名相同的Feign Client API接口
-            application.setAllowBeanDefinitionOverriding(true);
+            System.setProperty("spring.main.allow-bean-definition-overriding", "true");
 
 //            //日志采集器
 //            if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
