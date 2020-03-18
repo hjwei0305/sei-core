@@ -8,12 +8,28 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-07 12:06
  */
-@ConfigurationProperties("sei.global")
+@ConfigurationProperties("sei.application")
 public class GlobalProperties {
     /**
      * 是否启用调试模式
      */
     private boolean debugger = false;
+    /**
+     * 应用代码
+     */
+    private String code;
+    /**
+     * 应用名称
+     */
+    private String name;
+    /**
+     * 应用版本
+     */
+    private String version;
+    /**
+     * 当前运行环境
+     */
+    private String env;
 
     public boolean isDebugger() {
         return debugger;
@@ -23,4 +39,35 @@ public class GlobalProperties {
         this.debugger = debugger;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getEnv() {
+        return env;
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
+    }
 }

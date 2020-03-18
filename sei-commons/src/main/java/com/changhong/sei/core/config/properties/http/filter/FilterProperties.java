@@ -25,6 +25,10 @@ public class FilterProperties implements CorsConfigurationSource {
      */
     private boolean enable = false;
     /**
+     * 忽略认证的url
+     */
+    private String[] ignoreAuthUrl = new String[]{};;
+    /**
      *
      */
     @NestedConfigurationProperty
@@ -36,6 +40,14 @@ public class FilterProperties implements CorsConfigurationSource {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public String[] getIgnoreAuthUrl() {
+        return ignoreAuthUrl;
+    }
+
+    public void setIgnoreAuthUrl(String[] ignoreAuthUrl) {
+        this.ignoreAuthUrl = ignoreAuthUrl;
     }
 
     public CorsProperties getCors() {

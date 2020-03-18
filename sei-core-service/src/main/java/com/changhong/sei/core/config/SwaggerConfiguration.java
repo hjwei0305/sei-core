@@ -1,10 +1,18 @@
 package com.changhong.sei.core.config;
 
+import com.changhong.sei.core.config.properties.SwaggerProperties;
+import com.changhong.sei.core.config.properties.global.GlobalProperties;
+import com.changhong.sei.core.context.ContextUtil;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -20,32 +28,30 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-06 11:05
  */
-@EnableSwagger2
 @Configuration
-@ConditionalOnProperty(name = "enable", prefix = "swagger",havingValue = "true",matchIfMissing = true)
+@EnableKnife4j
+@EnableSwagger2
+@Import(BeanValidatorPluginsConfiguration.class)
+@EnableConfigurationProperties({SwaggerProperties.class})
+@ConditionalOnProperty(name = "enable", prefix = "sei.swagger", havingValue = "true", matchIfMissing = true)
 public class SwaggerConfiguration {
-    @Value("${application.name}")
-    private String name;
-    @Value("${application.version}")
-    private String version;
-    @Value("${spring.cloud.config.profile}")
-    private String profile;
-    private ApiInfo apiInfo() {
+
+    private ApiInfo apiInfo(SwaggerProperties swagger) {
         return new ApiInfoBuilder()
-                .title(name + " API")
-                .description(name + "的API文档" + "，运行环境：" + profile)
-                .termsOfServiceUrl("")
-                .version(version)
+                .title(StringUtils.isBlank(swagger.getTitle()) ? ContextUtil.getProperty("application.name") + " API" : swagger.getTitle())
+                .description(StringUtils.isBlank(swagger.getDescription()) ?
+                        ContextUtil.getProperty("application.name") + "的API文档" + "，运行环境：" + ContextUtil.getProperty("spring.cloud.config.profile") : swagger.getDescription())
+                .version(StringUtils.isBlank(swagger.getVersion()) ? ContextUtil.getProperty("application.version") : swagger.getVersion())
                 .build();
     }
 
     @Bean
-    public Docket api() {
+    public Docket api(SwaggerProperties swaggerProperties) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo(swaggerProperties));
     }
 }

@@ -1,0 +1,44 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "name": "sei.swagger",
+      "type": "com.changhong.sei.core.config.properties.SwaggerProperties",
+      "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties"
+    }
+
+
+  ],
+  "properties": [
+    {
+      "name": "sei.swagger.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用",
+      "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "sei.swagger.title",
+      "type": "java.lang.String",
+      "description": "标题",
+      "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties",
+      "defaultValue": "${sei.application.name} API"
+    },
+    {
+      "name": "sei.swagger.description",
+      "type": "java.lang.String",
+      "description": "描述",
+      "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties",
+      "defaultValue": "${sei.application.name} 的API文档，运行环境: ${sei.application.name}"
+    },
+    {
+      "name": "sei.swagger.version",
+      "type": "java.lang.String",
+      "description": "版本",
+      "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties",
+      "defaultValue": "${sei.application.version}"
+    }
+
+
+  ]
+}

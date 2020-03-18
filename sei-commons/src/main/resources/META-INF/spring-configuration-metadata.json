@@ -39,11 +39,39 @@
   ],
   "properties": [
     {
-      "name": "sei.global.debugger",
+      "name": "sei.application.debugger",
       "type": "java.lang.Boolean",
       "description": "本地调试模式",
       "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
       "defaultValue": false
+    },
+    {
+      "name": "sei.application.code",
+      "type": "java.lang.String",
+      "description": "应用代码",
+      "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
+      "defaultValue": "SEI"
+    },
+    {
+      "name": "sei.application.name",
+      "type": "java.lang.String",
+      "description": "应用名称",
+      "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
+      "defaultValue": "SEI"
+    },
+    {
+      "name": "sei.application.version",
+      "type": "java.lang.String",
+      "description": "应用版本",
+      "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
+      "defaultValue": "6.0"
+    },
+    {
+      "name": "sei.application.env",
+      "type": "java.lang.String",
+      "description": "当前运行环境",
+      "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
+      "defaultValue": "DEV"
     },
 
 
@@ -100,6 +128,12 @@
       "description": "是否开启sei平台定义的http filter",
       "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
       "defaultValue": true
+    },
+    {
+      "name": "sei.http.filter.ignore-auth-url",
+      "type": "java.lang.String[]",
+      "description": "忽略认证的url",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties"
     },
     {
       "name": "sei.http.filter.cors.allowedOrigins",

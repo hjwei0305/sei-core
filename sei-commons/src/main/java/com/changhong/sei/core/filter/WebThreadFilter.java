@@ -13,7 +13,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 实现功能：
@@ -35,11 +37,29 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
      */
     private FilterProperties filterConfig;
 
+    private List<Pattern> urlFilters = new ArrayList<>();
+
     /**
      * 带参数构造器
      */
     public WebThreadFilter(List<WebFilter> filterDefs) {
         super(filterDefs);
+
+        // swagger 文档
+        urlFilters.add(Pattern.compile(".*?/doc\\.html.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/v2/api-docs.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/v2/api-docs-ext.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/swagger-resources.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/swagger-ui\\.html.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/swagger-resources/configuration/ui.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/swagger-resources/configuration/security.*", Pattern.CASE_INSENSITIVE));
+
+        // spring boot actuator
+        urlFilters.add(Pattern.compile(".*?/actuator.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/instances.*", Pattern.CASE_INSENSITIVE));
+
+        // webjars
+        urlFilters.add(Pattern.compile(".*?/webjars/.*", Pattern.CASE_INSENSITIVE));
     }
 
     @Override
@@ -58,8 +78,10 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         innerFilters.add(1, new ThreadLocalTranVarFilter());
         // 调用链拦截器
         innerFilters.add(2, new TraceFilter());
+
+        List<Pattern> urlFilters = new ArrayList<>();
         // 检查token
-        innerFilters.add(3, new CheckTokenFilter());
+        innerFilters.add(3, new CheckTokenFilter(filterConfig.getIgnoreAuthUrl()));
         // 防止XSS攻击
         innerFilters.add(4, new XssFilter());
     }
@@ -71,17 +93,16 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         String path = request.getServletPath();
 
         // 静态资源
-        if (StringUtils.endsWithAny(path, ".js",".css",".ico",".jpg",".png")) {
+        if (StringUtils.endsWithAny(path.toLowerCase(), ".js", ".css", ".ico", ".jpg", ".png")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // swagger
-        if (StringUtils.startsWithAny(path,
-                "/favicon.ico", "/swagger-ui.html", "/swagger-resources", "/v2/api-docs", "/webjars/", "/actuator", "/instances")) {
-
-            chain.doFilter(request, response);
-            return;
+        for (Pattern pattern : urlFilters) {
+            if (pattern.matcher(path).matches()) {
+                chain.doFilter(request, response);
+                return;
+            }
         }
 
         // 初始化

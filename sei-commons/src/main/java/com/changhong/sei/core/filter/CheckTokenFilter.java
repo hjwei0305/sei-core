@@ -19,6 +19,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * 实现功能：检查token
@@ -29,12 +33,29 @@ import java.nio.charset.StandardCharsets;
 public class CheckTokenFilter extends BaseWebFilter {
     private static final Logger LOG = LoggerFactory.getLogger(CheckTokenFilter.class);
 
+    /**
+     * 忽略token认证的url
+     */
+    private final Set<Pattern> ignoreAuthURLSet = new HashSet<>();
+
+    public CheckTokenFilter(final String[] ignoreAuthUrls) {
+        if (Objects.nonNull(ignoreAuthUrls)) {
+            for (String url : ignoreAuthUrls) {
+                this.ignoreAuthURLSet.add(Pattern.compile(".*?" + url + ".*", Pattern.CASE_INSENSITIVE));
+            }
+        }
+
+        ignoreAuthURLSet.add(Pattern.compile(".*?/csrf.*", Pattern.CASE_INSENSITIVE));
+        // 实时日志监控 忽略会话检查
+        ignoreAuthURLSet.add(Pattern.compile(".*?/websocket/log.*", Pattern.CASE_INSENSITIVE));
+        ignoreAuthURLSet.add(Pattern.compile(".*?/websocket/logging.*", Pattern.CASE_INSENSITIVE));
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
-        if (StringUtils.endsWithAny(path,
-                "/", "/csrf", "/auth/check", "/auth/getAnonymousToken", "/websocket/log", "/websocket/logging")) {
-
+        // 忽略会话检查
+        if (match(path)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -101,5 +122,18 @@ public class CheckTokenFilter extends BaseWebFilter {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8));
         writer.write(JsonUtils.toJson(ResultData.fail(msg)));
         writer.close();
+    }
+
+    protected boolean match(String uri) {
+        boolean match = false;
+        if (uri != null) {
+            for (Pattern pattern : this.ignoreAuthURLSet) {
+                if (pattern.matcher(uri).matches()) {
+                    match = true;
+                    break;
+                }
+            }
+        }
+        return match;
     }
 }
