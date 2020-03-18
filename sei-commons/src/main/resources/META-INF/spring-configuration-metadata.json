@@ -73,6 +73,13 @@
       "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
       "defaultValue": "DEV"
     },
+    {
+      "name": "sei.application.standard",
+      "type": "java.lang.Boolean",
+      "description": "是否是SEI6.0标准版",
+      "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
+      "defaultValue": true
+    },
 
 
     {

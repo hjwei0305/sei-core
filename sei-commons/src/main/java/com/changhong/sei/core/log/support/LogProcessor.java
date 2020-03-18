@@ -10,6 +10,7 @@ import com.changhong.sei.core.log.annotation.Log;
 import com.changhong.sei.core.log.annotation.ParamLog;
 import com.changhong.sei.core.log.annotation.ResultLog;
 import com.changhong.sei.core.log.annotation.ThrowingLog;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -84,7 +85,7 @@ public class LogProcessor {
      * @param joinPoint 切入点
      * @param throwable 异常
      */
-    @AfterThrowing(value = "@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)||@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)", throwing = "throwable")
+    @AfterThrowing(value = "@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)", throwing = "throwable")
     public void throwingPrint(JoinPoint joinPoint, Throwable throwable) {
         if (this.isEnable()) {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -114,6 +115,13 @@ public class LogProcessor {
                 log.error(e.getMessage(), e);
             }
         }
+    }
+
+    @AfterThrowing(value = "@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)", throwing = "throwable")
+    public void throwingPrint1(JoinPoint joinPoint, Throwable throwable) {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        MethodInfo methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
+        log.error(this.getThrowingInfo(StringUtils.EMPTY, methodInfo), throwable);
     }
 
     /**
@@ -324,7 +332,11 @@ public class LogProcessor {
         } else {
             builder.append(this.createMethodStack(methodInfo));
         }
-        return builder.append("】，").append("业务名称：【").append(busName).append("】，");
+        builder.append("】，");
+        if (StringUtils.isNotBlank(busName)) {
+            builder.append("业务名称：【").append(busName).append("】，");
+        }
+        return builder;
     }
 
     /**

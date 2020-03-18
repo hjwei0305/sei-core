@@ -30,6 +30,10 @@ public class GlobalProperties {
      * 当前运行环境
      */
     private String env;
+    /**
+     * 是否是标准版
+     */
+    private boolean standard = true;
 
     public boolean isDebugger() {
         return debugger;
@@ -69,5 +73,13 @@ public class GlobalProperties {
 
     public void setEnv(String env) {
         this.env = env;
+    }
+
+    public boolean isStandard() {
+        return standard;
+    }
+
+    public void setStandard(boolean standard) {
+        this.standard = standard;
     }
 }
