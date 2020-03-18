@@ -38,10 +38,10 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo(SwaggerProperties swagger) {
         return new ApiInfoBuilder()
-                .title(StringUtils.isBlank(swagger.getTitle()) ? ContextUtil.getProperty("application.name") + " API" : swagger.getTitle())
+                .title(StringUtils.isBlank(swagger.getTitle()) ? ContextUtil.getProperty("sei.application.name") + " API" : swagger.getTitle())
                 .description(StringUtils.isBlank(swagger.getDescription()) ?
-                        ContextUtil.getProperty("application.name") + "的API文档" + "，运行环境：" + ContextUtil.getProperty("spring.cloud.config.profile") : swagger.getDescription())
-                .version(StringUtils.isBlank(swagger.getVersion()) ? ContextUtil.getProperty("application.version") : swagger.getVersion())
+                        ContextUtil.getProperty("sei.application.name") + "的API文档" + "，运行环境：" + ContextUtil.getProperty("spring.cloud.config.profile") : swagger.getDescription())
+                .version(StringUtils.isBlank(swagger.getVersion()) ? ContextUtil.getProperty("sei.application.version") : swagger.getVersion())
                 .build();
     }
 
