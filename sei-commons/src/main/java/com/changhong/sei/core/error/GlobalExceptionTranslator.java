@@ -147,7 +147,8 @@ public class GlobalExceptionTranslator {
     }
 
     private ResultData<String> result(String message, Throwable e) {
-        if (!global.isStandard()) {
+        // 因sei3.0返回格式不统一,无法按标准6.0版本样返回统一的结构,故直接按异常抛出
+        if (!global.isCompatible()) {
             throw new WebException(message, e);
         }
         return ResultData.fail(message);

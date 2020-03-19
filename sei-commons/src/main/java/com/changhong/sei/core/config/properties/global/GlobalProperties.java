@@ -31,9 +31,9 @@ public class GlobalProperties {
      */
     private String env;
     /**
-     * 是否是标准版
+     * 是否是sei6.0兼容模式
      */
-    private boolean standard = true;
+    private boolean compatible = false;
 
     public boolean isDebugger() {
         return debugger;
@@ -75,11 +75,11 @@ public class GlobalProperties {
         this.env = env;
     }
 
-    public boolean isStandard() {
-        return standard;
+    public boolean isCompatible() {
+        return compatible;
     }
 
-    public void setStandard(boolean standard) {
-        this.standard = standard;
+    public void setCompatible(boolean compatible) {
+        this.compatible = compatible;
     }
 }

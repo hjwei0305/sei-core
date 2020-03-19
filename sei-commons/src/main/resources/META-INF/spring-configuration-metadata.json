@@ -74,11 +74,11 @@
       "defaultValue": "DEV"
     },
     {
-      "name": "sei.application.standard",
+      "name": "sei.application.compatible",
       "type": "java.lang.Boolean",
-      "description": "是否是SEI6.0标准版",
+      "description": "是否是SEI6.0兼容模式",
       "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
-      "defaultValue": true
+      "defaultValue": false
     },
 
 
