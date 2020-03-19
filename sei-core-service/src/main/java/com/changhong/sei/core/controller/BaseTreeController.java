@@ -1,19 +1,20 @@
 package com.changhong.sei.core.controller;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
+import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.service.BaseEntityService;
+import com.changhong.sei.core.service.BaseTreeService;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * 实现功能: 一般业务实体服务控制抽象基类
+ * 实现功能: 树形业务实体的服务控制抽象基类
  *
  * @author 王锦光 wangjg
- * @version 2020-03-18 16:46
+ * @version 2020-03-19 8:55
  */
-public abstract class BaseEntityController<T extends BaseEntity, D extends BaseEntityDto> implements DefaultBaseEntityController<T, D>{
+public abstract class BaseTreeController<T extends BaseEntity & TreeEntity<T>, D extends BaseEntityDto> implements DefaultTreeController<T, D> {
     // 数据实体类型
     private final Class<T> clazzT;
     // DTO实体类型
@@ -21,7 +22,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
 
     // 构造函数
     @SuppressWarnings("unchecked")
-    protected BaseEntityController(){
+    protected BaseTreeController(){
         ParameterizedType parameterizedType = (ParameterizedType)getClass().getGenericSuperclass();
         Type[] genericTypes = parameterizedType.getActualTypeArguments();
         this.clazzT = (Class<T>) genericTypes[0];
@@ -29,7 +30,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     }
 
     @Override
-    public abstract BaseEntityService<T> getService();
+    public abstract BaseTreeService<T> getService();
 
     /**
      * 获取数据实体的类型

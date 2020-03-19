@@ -10,7 +10,7 @@ import com.changhong.sei.core.dto.flow.annotaion.BusinessEntityAnnotaion;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.utils.ExpressionUtil;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 

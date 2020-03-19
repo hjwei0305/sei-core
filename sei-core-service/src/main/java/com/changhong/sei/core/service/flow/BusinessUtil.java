@@ -3,7 +3,7 @@ package com.changhong.sei.core.service.flow;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.flow.BusinessFormValue;
 import com.changhong.sei.annotation.Remark;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
