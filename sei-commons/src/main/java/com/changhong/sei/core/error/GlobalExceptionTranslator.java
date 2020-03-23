@@ -78,6 +78,7 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(BindException e) {
         LOG.warn("Bind Exception", e);
         FieldError error = e.getFieldError();
+        assert error != null;
         String message = String.format("%s:%s", error.getField(), error.getDefaultMessage());
         return result(message, e);
     }
@@ -97,8 +98,10 @@ public class GlobalExceptionTranslator {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResultData<String> handleError(NoHandlerFoundException e) {
-        LOG.error("404 Not Found", e);
-        return result("404 Not Found", e);
+        // "404 Not Found"
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     /**
@@ -106,8 +109,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResultData<String> handleError(HttpMessageNotReadableException e) {
-        LOG.error("Message Not Readable", e);
-        return result("Message Not Readable", e);
+        // Message Not Readable
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     /**
@@ -115,8 +120,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData<String> handleError(HttpRequestMethodNotSupportedException e) {
-        LOG.error("Request Method Not Supported", e);
-        return result("Request Method Not Supported", e);
+        // Request Method Not Supported
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     /**
@@ -124,8 +131,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResultData<String> handleError(HttpMediaTypeNotSupportedException e) {
-        LOG.error("Media Type Not Supported", e);
-        return result("Media Type Not Supported", e);
+        // Media Type Not Supported
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     /**
@@ -133,8 +142,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(ServiceException.class)
     public ResultData<String> handleError(ServiceException e) {
-        LOG.error("Service Exception", e);
-        return result("Service Exception", e);
+        // Service Exception
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     /**
@@ -142,8 +153,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(Throwable.class)
     public ResultData<String> handleError(Throwable e) {
-        LOG.error("Internal Server Error", e);
-        return result("Internal Server Error", e);
+        // Internal Server Error
+        String message = e.getMessage();
+        LOG.error(message, e);
+        return result(message, e);
     }
 
     private ResultData<String> result(String message, Throwable e) {
