@@ -1,8 +1,10 @@
 package com.changhong.sei.core.context.mock;
 
+import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 实现功能：
@@ -20,6 +22,14 @@ public interface MockUser {
      * @return 返回模拟用户
      */
     SessionUser mockUser(String tenant, String account);
+
+    /**
+     * 模拟用户
+     *
+     * @param mockUser 模拟用户
+     * @return 返回模拟用户
+     */
+    SessionUser mockUser(MockUserProperties mockUser);
 
     /**
      * 模拟用户

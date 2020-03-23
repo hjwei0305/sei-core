@@ -38,7 +38,8 @@ public class BaseUnitTest {
 
     @Before
     public void mock() {
-        LOG.debug("当前模拟用户: {}", mockUser.mockUser(properties.getTenantCode(), properties.getAccount()));
+//        LOG.debug("当前模拟用户: {}", mockUser.mockUser(properties.getTenantCode(), properties.getAccount()));
+        LOG.debug("当前模拟用户: {}", mockUser.mockUser(properties));
     }
 
 

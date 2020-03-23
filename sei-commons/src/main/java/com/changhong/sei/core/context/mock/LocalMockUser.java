@@ -32,4 +32,20 @@ public class LocalMockUser implements MockUser {
         }
         return mock(sessionUser);
     }
+
+    /**
+     * 模拟用户
+     *
+     * @param mockUser 模拟用户
+     * @return 返回模拟用户
+     */
+    @Override
+    public SessionUser mockUser(MockUserProperties mockUser) {
+        SessionUser sessionUser = new SessionUser();
+        try {
+            BeanUtils.copyProperties(sessionUser, mockUser);
+        } catch (Exception ignored) {
+        }
+        return mock(sessionUser);
+    }
 }
