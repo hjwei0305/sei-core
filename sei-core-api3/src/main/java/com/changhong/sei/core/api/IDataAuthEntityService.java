@@ -29,7 +29,7 @@ public interface IDataAuthEntityService<T extends BaseEntity> {
      */
     @PostMapping(path = "getAuthEntityDataByIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取数据权限实体清单", notes = "通过业务实体Id清单获取数据权限实体清单")
-    ResultData<List<AuthEntityData>> getAuthEntityDataByIds(@RequestBody List<String> ids);
+    ResultData<List<AuthEntityData>> getAuthEntityDataByIdsMethod(@RequestBody List<String> ids);
 
     /**
      * 获取所有数据权限实体清单
@@ -38,7 +38,7 @@ public interface IDataAuthEntityService<T extends BaseEntity> {
      */
     @GetMapping(path = "findAllAuthEntityData")
     @ApiOperation(value = "获取所有数据权限实体清单", notes = "获取当前租户所有数据权限实体清单")
-    ResultData<List<AuthEntityData>> findAllAuthEntityData();
+    ResultData<List<AuthEntityData>> findAllAuthEntityDataMethod();
 
     /**
      * 获取当前用户有权限的业务实体清单
@@ -48,5 +48,5 @@ public interface IDataAuthEntityService<T extends BaseEntity> {
      */
     @GetMapping(path = "getUserAuthorizedEntities")
     @ApiOperation(value = "获取当前用户有权限的业务实体清单", notes = "获取当前用户有权限的业务实体清单")
-    ResultData<List<T>> getUserAuthorizedEntities(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
+    ResultData<List<T>> getUserAuthorizedEntitiesMethod(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }
