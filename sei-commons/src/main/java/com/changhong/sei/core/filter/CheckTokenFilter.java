@@ -53,7 +53,7 @@ public class CheckTokenFilter extends BaseWebFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
         // 忽略会话检查
         if (match(path)) {
             filterChain.doFilter(request, response);

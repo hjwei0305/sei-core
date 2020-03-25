@@ -90,7 +90,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
 
         // 静态资源
         if (StringUtils.endsWithAny(path.toLowerCase(), ".js", ".css", ".ico", ".jpg", ".png")) {
