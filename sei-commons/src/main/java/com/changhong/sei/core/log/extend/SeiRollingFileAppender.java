@@ -32,9 +32,22 @@ public class SeiRollingFileAppender extends RollingFileAppender<ILoggingEvent> {
         markerFilter.start();
         super.addFilter(markerFilter);
 
+        /*
+            如果返回值是neutral，就会有下一个filter进行判断
+            如果已经没有后续filter，那么会对这个日志事件进行处理
+            如果判断是accept，那么就会立即对该日志事件进行处理，不再进行后续判断
+         */
         LevelFilter levelFilter = new LevelFilter();
-        //非ERROR级别的日志，被过滤掉
+        //非WARN级别的日志，被过滤掉
         levelFilter.setLevel(Level.WARN);
+        levelFilter.setOnMatch(FilterReply.ACCEPT);
+        levelFilter.setOnMismatch(FilterReply.NEUTRAL);
+        levelFilter.start();
+        super.addFilter(levelFilter);
+
+        levelFilter = new LevelFilter();
+        //非ERROR级别的日志，被过滤掉
+        levelFilter.setLevel(Level.ERROR);
         levelFilter.setOnMatch(FilterReply.ACCEPT);
         levelFilter.setOnMismatch(FilterReply.DENY);
         levelFilter.start();
