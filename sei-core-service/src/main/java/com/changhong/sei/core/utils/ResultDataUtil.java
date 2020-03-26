@@ -25,9 +25,9 @@ public class ResultDataUtil {
      * @param operateResult 操作处理结果
      * @return 返回结果
      */
-    public static ResultData convertFromOperateResult(OperateResult operateResult){
+    public static <T> ResultData<T> convertFromOperateResult(OperateResult operateResult){
         if (operateResult.successful()){
-            return ResultData.success(operateResult.getMessage(), operateResult.getData());
+            return ResultData.success(operateResult.getMessage(), null);
         } else {
             return ResultData.fail(operateResult.getMessage());
         }
@@ -38,7 +38,7 @@ public class ResultDataUtil {
      * @param response 操作处理结果
      * @return 返回结果
      */
-    public static <T> ResultData<T> convertFromResponseData(ResponseData response, T data){
+    public static <T> ResultData<T> convertFromResponseData(ResponseData<?> response, T data){
         if (response.successful()){
             return ResultData.success(response.getMessage(), data);
         } else {
@@ -51,7 +51,7 @@ public class ResultDataUtil {
      * @param operateResult 操作处理结果
      * @return 返回结果
      */
-    public static <T> ResultData<T> convertFromOperateResult(OperateResultWithData operateResult, T data){
+    public static <T> ResultData<T> convertFromOperateResult(OperateResultWithData<?> operateResult, T data){
         if (operateResult.successful()){
             return ResultData.success(operateResult.getMessage(), data);
         } else {
@@ -61,32 +61,32 @@ public class ResultDataUtil {
 
     /**
      * 通过多语言消息KEY返回处理成功
-     * @param messagekey 多语言消息KEY
+     * @param messageKey 多语言消息KEY
      * @param args 消息参数
      * @return 处理成功
      */
-    public static ResultData success(String messagekey, Object... args){
-        return ResultData.success(ContextUtil.getMessage(messagekey, args), null);
+    public static <T> ResultData<T> success(String messageKey, Object... args){
+        return ResultData.success(ContextUtil.getMessage(messageKey, args), null);
     }
 
     /**
      * 通过多语言消息KEY返回处理成功(带数据)
-     * @param messagekey 多语言消息KEY
+     * @param messageKey 多语言消息KEY
      * @param args 消息参数
      * @return 处理成功
      */
-    public static <T> ResultData<T> success(T data, String messagekey, Object... args){
-        return ResultData.success(ContextUtil.getMessage(messagekey, args), data);
+    public static <T> ResultData<T> success(T data, String messageKey, Object... args){
+        return ResultData.success(ContextUtil.getMessage(messageKey, args), data);
     }
 
     /**
      * 通过多语言消息KEY返回处理失败
-     * @param messagekey 多语言消息KEY
+     * @param messageKey 多语言消息KEY
      * @param args 消息参数
      * @return 处理失败
      */
-    public static ResultData fail(String messagekey, Object... args){
-        return ResultData.fail(ContextUtil.getMessage(messagekey, args));
+    public static <T> ResultData<T> fail(String messageKey, Object... args){
+        return ResultData.fail(ContextUtil.getMessage(messageKey, args));
     }
 
 
@@ -95,7 +95,7 @@ public class ResultDataUtil {
      * @param enumClass 枚举类
      * @return 枚举值的键值对
      */
-    public static <T extends Enum> ResultData<Map<String, String>> getEnumMap(Class<T> enumClass){
+    public static <T extends Enum<?>> ResultData<Map<String, String>> getEnumMap(Class<T> enumClass){
         Map<String, String> map;
         try {
             map = EnumUtils.getEnumMap(enumClass);
@@ -112,7 +112,7 @@ public class ResultDataUtil {
      * @param enumClass 枚举类
      * @return 枚举值的值
      */
-    public static <T extends Enum> ResultData<List<EnumUtils.EnumEntity>> getEnumEntities(Class<T> enumClass){
+    public static <T extends Enum<?>> ResultData<List<EnumUtils.EnumEntity>> getEnumEntities(Class<T> enumClass){
         List<EnumUtils.EnumEntity> enumEntities;
         try {
             enumEntities = EnumUtils.getEnumDataList(enumClass);
