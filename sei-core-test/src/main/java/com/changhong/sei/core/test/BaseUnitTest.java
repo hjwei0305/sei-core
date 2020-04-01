@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
- * 实现功能：
+ * 实现功能： 单元测试基类
  *
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-09 15:59
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BaseUnitTest {
-    private static final Logger LOG = LoggerFactory.getLogger(BaseUnitTest.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BaseUnitTest.class);
     @Autowired
     public MockUserProperties properties;
     @Autowired
