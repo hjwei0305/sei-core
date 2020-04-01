@@ -9,7 +9,6 @@ dependencyManagement {
 
 dependencies {
     compile project(':sei-core-service')
-    compile project(':sei-core-test')
 
     compile(
             "org.hibernate:hibernate-java8:5.3.7.Final",
