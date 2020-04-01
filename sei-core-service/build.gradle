@@ -11,6 +11,7 @@ dependencies {
     // 内部模块依赖
     compile project(':sei-core-api')
     compile project(':sei-commons')
+    compile project(':sei-core-entity3')
     compile project(':sei-core-monitor')
 
     // 第三方的依赖
