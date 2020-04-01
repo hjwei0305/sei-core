@@ -2,7 +2,6 @@ package com.changhong.sei.core.dao.jpa.impl;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
-import com.changhong.sei.core.dto.IAuditable;
 import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;

@@ -1,7 +1,5 @@
 package com.changhong.sei.core.dto.flow;
 
-import com.changhong.sei.core.dto.IAuditable;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -16,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  * <p/>
  * *************************************************************************************************
  */
-public interface IBusinessFlowEntity  extends IAuditable {
+public interface IBusinessFlowEntity {
 
     //当前流程状态
     FlowStatus getFlowStatus();
