@@ -1,6 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.changhong.sei.core.config.JpaAutoConfiguration,\
-com.changhong.sei.core.config.RedisAutoConfiguration,\
 com.changhong.sei.core.config.ServiceAutoConfiguration,\
 com.changhong.sei.core.config.SwaggerConfiguration

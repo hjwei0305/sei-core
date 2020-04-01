@@ -1,5 +1,6 @@
 package com.changhong.sei.auth.config;
 
+import com.changhong.sei.core.cache.CacheBuilder;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.context.ContextUtil;
@@ -9,6 +10,7 @@ import com.changhong.sei.util.IdGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <strong>实现功能:</strong>
@@ -18,6 +20,9 @@ import org.slf4j.MDC;
  * @version 1.0.1 2019-12-31 20:32
  */
 public class ContextUtilTest extends BaseUnitTest {
+
+    @Autowired
+    private CacheBuilder cacheBuilder;
 
     @Test
     public void getMessage() {
@@ -54,5 +59,13 @@ public class ContextUtilTest extends BaseUnitTest {
             LogUtil.error("error测试", e);
         }
         MDC.clear();
+    }
+
+    @Test
+    public void testCacheVerson() throws Exception {
+
+        String version = cacheBuilder.getCacheVersion();
+        System.out.println(String.format("当前缓存版本：%s", version));
+
     }
 }

@@ -1,37 +1,25 @@
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-    }
-}
-
 dependencies {
-    // 内部模块依赖
-    compile project(':sei-core-api')
     compile project(':sei-commons')
-    compile project(':sei-cache')
-    compile project(':sei-core-entity3')
-    compile project(':sei-core-monitor')
 
-    // 第三方的依赖
+    // SEI平台依赖
     compile(
-            "org.springframework.boot:spring-boot-starter-data-jpa",
-            "org.modelmapper:modelmapper:$modelmapperVersion",
-            "io.springfox:springfox-swagger2:$foxSwaggerVersion",
-//            "com.github.xiaoymin:swagger-bootstrap-ui:1.9.6",
-            "com.github.xiaoymin:knife4j-spring-boot-starter:2.0.2",
-            "joda-time:joda-time:$jodaTimeVersion"
+            "com.changhong.sei:sei-util:$util_version"
     )
 
-    // logback <if>标签
-    // compile("org.codehaus.janino:janino:3.1.0")
+    // 第三方的依赖
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
+    compile("com.google.guava:guava:20.0")
 
     testCompile(
             "org.springframework.boot:spring-boot-starter-test"
     )
 }
+
+//compileJava.dependsOn(processResources)
 
 //打jar包
 bootJar { enabled = false }

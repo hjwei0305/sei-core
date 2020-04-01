@@ -2,6 +2,7 @@ package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
+import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.context.mock.LocalMockUser;
 import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.util.JwtTokenUtil;
@@ -32,6 +33,11 @@ import javax.validation.ValidatorFactory;
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
+
+    @Bean
+    public ApplicationContextHolder seiContext() {
+        return new ApplicationContextHolder();
+    }
 
     @Bean
     @ConditionalOnMissingBean

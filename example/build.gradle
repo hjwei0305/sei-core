@@ -16,7 +16,8 @@ dependencies {
     )
 
     testCompile(
-            "org.springframework.boot:spring-boot-starter-test"
+            "com.changhong.sei:sei-test-starter:$sei_version"
+//            "org.springframework.boot:spring-boot-starter-test"
     )
 }
 

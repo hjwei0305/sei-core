@@ -1,7 +1,7 @@
-package com.changhong.sei.core.config;
+package com.changhong.sei.core.cache.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -25,7 +25,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 //开启注解
 @EnableCaching
-@AutoConfigureBefore(value = org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class)
+@ConditionalOnProperty(prefix = "sei.cache", name = "enable-redis", havingValue = "true", matchIfMissing = true)
+//@AutoConfigureBefore(value = org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class)
 public class RedisAutoConfiguration extends CachingConfigurerSupport {
 
     @Autowired
@@ -44,11 +45,11 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         //使用StringRedisSerializer来序列化和反序列化redis的key值
-        RedisSerializer keySerializer = new StringRedisSerializer();
+        RedisSerializer<String> keySerializer = new StringRedisSerializer();
         template.setKeySerializer(keySerializer);
         template.setHashKeySerializer(keySerializer);
 
-        RedisSerializer valueSerializer = new JdkSerializationRedisSerializer();
+        RedisSerializer<Object> valueSerializer = new JdkSerializationRedisSerializer();
         template.setValueSerializer(valueSerializer);
         template.setDefaultSerializer(valueSerializer);
 

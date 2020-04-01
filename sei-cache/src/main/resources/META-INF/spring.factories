@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.changhong.sei.core.cache.config.RedisAutoConfiguration,\
+com.changhong.sei.core.cache.config.CacheConfiguration
