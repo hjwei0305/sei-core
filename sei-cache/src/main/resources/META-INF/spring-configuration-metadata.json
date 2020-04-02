@@ -10,6 +10,13 @@
   ],
   "properties": [
     {
+      "name": "sei.cache.enable-local",
+      "type": "java.lang.Boolean",
+      "description": "是否使用本地缓存",
+      "sourceType": "com.changhong.sei.core.cache.config.properties.SeiCacheProperties",
+      "defaultValue": true
+    },
+    {
       "name": "sei.cache.enable-redis",
       "type": "java.lang.Boolean",
       "description": "是否使用redis缓存",

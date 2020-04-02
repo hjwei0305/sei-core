@@ -11,7 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sei.cache")
 public class SeiCacheProperties {
     /**
-     * 是否使用redis
+     * 是否使用本地缓存
+     */
+    private boolean enableLocal = Boolean.TRUE;
+    /**
+     * 是否使用redis缓存
      */
     private boolean enableRedis = Boolean.TRUE;
     /**
@@ -22,6 +26,14 @@ public class SeiCacheProperties {
      * 最大长度
      */
     private int maximumSize = 100;
+
+    public boolean isEnableLocal() {
+        return enableLocal;
+    }
+
+    public void setEnableLocal(boolean enableLocal) {
+        this.enableLocal = enableLocal;
+    }
 
     public boolean isEnableRedis() {
         return enableRedis;
