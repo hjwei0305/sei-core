@@ -1,7 +1,9 @@
 package com.changhong.sei.core.cache.config;
 
+import com.changhong.sei.core.cache.config.properties.SeiCacheProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -25,6 +27,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 //开启注解
 @EnableCaching
+@EnableConfigurationProperties({SeiCacheProperties.class})
 @ConditionalOnProperty(prefix = "sei.cache", name = "enable-redis", havingValue = "true", matchIfMissing = true)
 //@AutoConfigureBefore(value = org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class)
 public class RedisAutoConfiguration extends CachingConfigurerSupport {

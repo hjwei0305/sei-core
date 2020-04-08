@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -19,7 +20,7 @@ import java.util.function.Function;
 public class RedisCacheProviderImpl implements CacheProviderService {
 
     private SeiCacheProperties cacheProperties;
-    @Autowired
+    @Autowired(required = false)
     private RedisTemplate<String, Object> redisTemplate;
 
     public RedisCacheProviderImpl(SeiCacheProperties cacheProperties) {
@@ -94,6 +95,10 @@ public class RedisCacheProviderImpl implements CacheProviderService {
             return obj;
         }
 
+        if (Objects.isNull(redisTemplate)) {
+            return obj;
+        }
+
         expireTime = getExpireTime(expireTime);
 
         try {
@@ -141,6 +146,10 @@ public class RedisCacheProviderImpl implements CacheProviderService {
             return;
         }
 
+        if (Objects.isNull(redisTemplate)) {
+            return;
+        }
+
         expireTime = getExpireTime(expireTime);
 
         ValueOperations<String, Object> operations = redisTemplate.opsForValue();
@@ -158,6 +167,9 @@ public class RedisCacheProviderImpl implements CacheProviderService {
     @Override
     public void remove(String key) {
         if (StringUtils.isEmpty(key)) {
+            return;
+        }
+        if (Objects.isNull(redisTemplate)) {
             return;
         }
 

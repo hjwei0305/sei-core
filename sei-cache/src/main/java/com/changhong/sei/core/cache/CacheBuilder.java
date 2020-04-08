@@ -31,11 +31,11 @@ public class CacheBuilder {
     /**
      * 本地缓存
      */
-    private LocalCacheProviderImpl localCacheService;
+    private final LocalCacheProviderImpl localCacheService;
     /**
      * redis缓存
      */
-    private RedisCacheProviderImpl redisCacheService;
+    private final RedisCacheProviderImpl redisCacheService;
 
     public CacheBuilder(LocalCacheProviderImpl localCacheService, RedisCacheProviderImpl redisCacheService) {
         this.localCacheService = localCacheService;

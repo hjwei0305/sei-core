@@ -1,5 +1,6 @@
 package com.changhong.sei.core.local;
 
+import com.changhong.sei.core.cache.CacheBuilder;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
@@ -7,7 +8,6 @@ import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.util.ReflectionUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.*;
 
@@ -23,10 +23,10 @@ public final class LocalUtil {
     // cache key 分隔号
     private static final String DELIMITER = ":";
 
-    private static StringRedisTemplate redisTemplate;
+    private static CacheBuilder cacheBuilder;
 
     static {
-        redisTemplate = ContextUtil.getBean(StringRedisTemplate.class);
+        cacheBuilder = ContextUtil.getBean(CacheBuilder.class);
     }
 
     /**
@@ -169,7 +169,7 @@ public final class LocalUtil {
             return StringUtils.EMPTY;
         }
 
-        String val = redisTemplate.opsForValue().get(getRedisGeneralKey(local, appCode, localkey));
+        String val = cacheBuilder.get(getRedisGeneralKey(local, appCode, localkey));
         if (StringUtils.isBlank(val)) {
             val = getMessage(localkey);
         }
@@ -296,7 +296,7 @@ public final class LocalUtil {
 
         String key = getRedisMainDataKey(local, appCode, clazzName, object.getId());
         // 当前记录不存在多语言或多语言未加载redis直接返回
-        String json = redisTemplate.opsForValue().get(key);
+        String json = cacheBuilder.get(key);
         if (StringUtils.isNotBlank(json)) {
             List<LocalLang> localDataList = JsonUtils.fromJson2List(json, LocalLang.class);
             if (CollectionUtils.isNotEmpty(localDataList)) {
@@ -321,23 +321,13 @@ public final class LocalUtil {
             return collection;
         }
 
-        // 没有维护多语言直接返回
-        Set<String> keys = redisTemplate.keys(findRedisMainDataKey(local, appCode, clazzName));
-        if (CollectionUtils.isEmpty(keys)) {
-            return collection;
-        }
-
         String key;
         String json;
         List<LocalLang> localDataList;
         for (T obj : collection) {
             key = getRedisMainDataKey(local, appCode, clazzName, obj.getId());
             // 当前记录不存在多语言或多语言未加载redis直接返回
-            if (!keys.contains(key)) {
-                continue;
-            }
-            // 当前记录不存在多语言或多语言未加载redis直接返回
-            json = redisTemplate.opsForValue().get(key);
+            json = cacheBuilder.get(key);
             if (StringUtils.isBlank(json)) {
                 continue;
             }
@@ -352,7 +342,6 @@ public final class LocalUtil {
                 }
             }
         }
-        keys.clear();
         return collection;
     }
 

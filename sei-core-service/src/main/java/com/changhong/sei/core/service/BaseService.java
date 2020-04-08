@@ -1,5 +1,6 @@
 package com.changhong.sei.core.service;
 
+import com.changhong.sei.core.cache.CacheBuilder;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
 import com.changhong.sei.core.dto.auth.IDataAuthEntity;
@@ -9,20 +10,15 @@ import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
-import com.changhong.sei.core.service.bo.ResponseData;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <strong>实现功能:</strong>
@@ -47,8 +43,8 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
     protected abstract BaseDao<T, ID> getDao();
 
     // 注入缓存模板
-    @Autowired
-    protected RedisTemplate<String, Object> redisTemplate;
+    @Autowired(required = false)
+    protected CacheBuilder cacheBuilder;
 
     /**
      * 创建数据保存数据之前额外操作回调方法 默认为空逻辑，子类根据需要覆写添加逻辑即可
@@ -294,10 +290,10 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
             return Collections.emptyList();
         }
         List<String> entityIds = null;
-        if (Objects.nonNull(redisTemplate)) {
+        if (Objects.nonNull(cacheBuilder)) {
             //--先从缓存中读取
             String catchKey = entityClass.getName() + "_" + featureCode + "_" + userId;
-            Object catchResult = redisTemplate.opsForValue().get(catchKey);
+            Object catchResult = cacheBuilder.get(catchKey);
             if (catchResult instanceof List) {
                 List catchResultList = (List) catchResult;
                 entityIds = new ArrayList<>();
