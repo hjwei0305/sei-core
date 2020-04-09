@@ -230,12 +230,12 @@ public class LocalCacheProviderImpl implements CacheProviderService {
      * @param expireTime 传人的过期时间 单位毫秒 如小于1分钟，默认为10分钟
      **/
     private Long getExpireTime(Long expireTime) {
-        Long result = expireTime;
-        if (expireTime == null || expireTime < cacheProperties.getExpire() / 10) {
-            result = cacheProperties.getExpire();
-        }
-
-        return result;
+//        Long result = expireTime;
+//        if (expireTime == null || expireTime < cacheProperties.getExpire() / 10) {
+//            result = cacheProperties.getExpire();
+//        }
+//        return result;
+        return expireTime;
     }
 
     /**
