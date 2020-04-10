@@ -10,12 +10,12 @@ dependencyManagement {
 dependencies {
     compile project(':sei-core-service')
 
-    compile(
+    implementation(
             "org.hibernate:hibernate-java8:5.3.7.Final",
             "mysql:mysql-connector-java:$mysqlVersion"
     )
 
-    testCompile(
+    testImplementation(
             "com.changhong.sei:sei-test-starter:$sei_version"
 //            "org.springframework.boot:spring-boot-starter-test"
     )
