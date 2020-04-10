@@ -6,7 +6,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Base64;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 实现功能：
@@ -28,36 +29,6 @@ public final class HttpUtils {
     public static HttpServletResponse getResponse() throws NullPointerException {
         ServletRequestAttributes servletRequestAttributes = requestAttributes();
         return servletRequestAttributes.getResponse();
-    }
-
-    /**
-     * 获取客户端请求ip
-     *
-     * @param request 请求
-     * @return 返回请求ip
-     */
-    public static String getIpAddr(HttpServletRequest request) {
-        // 从nginx中获取ip
-        String ip = request.getHeader("X-Real-IP");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Forwarded-For");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
     }
 
 //    /**
@@ -124,5 +95,49 @@ public final class HttpUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取客户端请求ip
+     */
+    public static String getClientIP(HttpServletRequest request, String... otherHeaderNames) {
+        String[] headers = new String[]{"X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
+        if (Objects.nonNull(otherHeaderNames) && otherHeaderNames.length > 0) {
+            String[] result = Arrays.copyOf(headers, headers.length + otherHeaderNames.length);
+            System.arraycopy(otherHeaderNames, 0, result, headers.length, otherHeaderNames.length);
+            return getClientIPByHeader(request, result);
+        } else {
+            return getClientIPByHeader(request, headers);
+        }
+    }
+
+    private static String getClientIPByHeader(HttpServletRequest request, String... headerNames) {
+        String ip;
+        if (Objects.nonNull(headerNames) && headerNames.length > 0) {
+            for (String headerName : headerNames) {
+                ip = request.getHeader(headerName);
+                if (!(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip))) {
+                    return getMultistageReverseProxyIp(ip);
+                }
+            }
+        }
+
+        ip = request.getRemoteAddr();
+        return getMultistageReverseProxyIp(ip);
+    }
+
+    private static String getMultistageReverseProxyIp(String ip) {
+        if (ip != null && ip.indexOf(",") > 0) {
+            String[] ips = ip.trim().split(",");
+
+            for (String subIp : ips) {
+                if (!(subIp == null || subIp.length() == 0 || "unknown".equalsIgnoreCase(subIp))) {
+                    ip = subIp;
+                    break;
+                }
+            }
+        }
+
+        return ip;
     }
 }
