@@ -70,7 +70,7 @@ public class CheckTokenFilter extends BaseWebFilter {
                 token = request.getHeader("Authorization");
                 if (StringUtils.isBlank(token)) {
                     // 认证失败
-                    unauthorized("token为空,认证失败!", response);
+                    unauthorized("token为空,认证失败!", path, response);
                     return;
                 }
             }
@@ -89,7 +89,7 @@ public class CheckTokenFilter extends BaseWebFilter {
         } catch (Exception e) {
             LOG.error("token不合法,认证失败. token: {}", token);
             // 认证失败
-            unauthorized("token不合法,认证失败!", response);
+            unauthorized("token不合法,认证失败!", path, response);
             return;
         }
         LOG.info("当前用户: {}", user);
@@ -113,8 +113,8 @@ public class CheckTokenFilter extends BaseWebFilter {
     /**
      * 认证失败
      */
-    private void unauthorized(String msg, HttpServletResponse response) throws IOException {
-        LOG.warn("认证失败: {}", msg);
+    private void unauthorized(String msg, String url, HttpServletResponse response) throws IOException {
+        LOG.error("认证失败: {}, url: {}", msg, url);
         //认证错误处理
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setCharacterEncoding("UTF-8");
