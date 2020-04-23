@@ -13,6 +13,8 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("com.google.guava:guava:20.0")
+    // redis连接池配置需要
+    compile("org.apache.commons:commons-pool2")
 
     testCompile(
             "org.springframework.boot:spring-boot-starter-test"
