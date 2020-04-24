@@ -66,6 +66,64 @@ import java.util.*;
  */
 @SuppressWarnings("unchecked")
 public final class JsonUtils {
+    /**
+     * 通过Inclusion创建ObjectMapper对象
+     * <p/>
+     * {@link JsonInclude.Include 对象枚举}
+     * <ul>
+     * <li>{@link JsonInclude.Include ALWAYS 全部列入}</li>
+     * <li>{@link JsonInclude.Include NON_DEFAULT 字段和对象默认值相同的时候不会列入}</li>
+     * <li>{@link JsonInclude.Include NON_EMPTY 字段为NULL或者""的时候不会列入}</li>
+     * <li>{@link JsonInclude.Include NON_NULL 字段为NULL时候不会列入}</li>
+     * </ul>
+     *
+     * @param include 传入一个枚举值, 设置输出属性
+     * @return 返回ObjectMapper对象
+     */
+    private static ObjectMapper generateMapper(JsonInclude.Include include) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // 为mapper注册一个带有SerializerModifier的Factory
+        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new CustomBeanSerializerModifier()));
+
+        // 设置输出时包含属性的风格
+        objectMapper.setSerializationInclusion(include);
+
+        //设置为中国上海时区
+        //objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        //取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+        //空对象不要抛异常
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        //单引号处理
+        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+
+        //反序列化时，属性不存在的兼容处理
+        //objectMapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        //设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+
+        //解决 hibernate 懒加载序列化问题
+        //Hibernate5Module hibernate5Module = new Hibernate5Module();
+        //hibernate5Module.disable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
+        //objectMapper.registerModule(hibernate5Module);
+
+        /*objectMapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
+            @Override
+            public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
+                jsonGenerator.writeString("");
+            }
+        });*/
+
+        return objectMapper;
+    }
 
     /**
          * 将json通过类型转换成对象
@@ -315,65 +373,6 @@ public final class JsonUtils {
      */
     public static ObjectMapper mapper() {
         return generateMapper(JsonInclude.Include.NON_NULL);
-    }
-
-    /**
-     * 通过Inclusion创建ObjectMapper对象
-     * <p/>
-     * {@link JsonInclude.Include 对象枚举}
-     * <ul>
-     * <li>{@link JsonInclude.Include ALWAYS 全部列入}</li>
-     * <li>{@link JsonInclude.Include NON_DEFAULT 字段和对象默认值相同的时候不会列入}</li>
-     * <li>{@link JsonInclude.Include NON_EMPTY 字段为NULL或者""的时候不会列入}</li>
-     * <li>{@link JsonInclude.Include NON_NULL 字段为NULL时候不会列入}</li>
-     * </ul>
-     *
-     * @param include 传入一个枚举值, 设置输出属性
-     * @return 返回ObjectMapper对象
-     */
-    private static ObjectMapper generateMapper(JsonInclude.Include include) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // 为mapper注册一个带有SerializerModifier的Factory
-        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new CustomBeanSerializerModifier()));
-
-        // 设置输出时包含属性的风格
-        objectMapper.setSerializationInclusion(include);
-
-        //设置为中国上海时区
-        //objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        //取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
-        //空对象不要抛异常
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-
-        //单引号处理
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-
-        //反序列化时，属性不存在的兼容处理
-        //objectMapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        //设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-
-        //解决 hibernate 懒加载序列化问题
-        //Hibernate5Module hibernate5Module = new Hibernate5Module();
-        //hibernate5Module.disable(Hibernate5Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS);
-        //objectMapper.registerModule(hibernate5Module);
-
-        /*objectMapper.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
-            @Override
-            public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-                jsonGenerator.writeString("");
-            }
-        });*/
-
-        return objectMapper;
     }
 
     ////////////////////////
