@@ -253,6 +253,22 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         return domainClass;
     }
 
+    @Override
+    public void delete(T entity) {
+        //软删除
+        if (ISoftDelete.class.isAssignableFrom(domainClass)) {
+            if (Objects.nonNull(entity)) {
+                ISoftDelete softDelete = (ISoftDelete) entity;
+                //标记删除当前时间戳
+                softDelete.setDeleted(System.currentTimeMillis());
+                //持久化
+                save(entity);
+            }
+        } else {
+            super.delete(entity);
+        }
+    }
+
     /**
      * 通过Id清单删除业务实体
      *
