@@ -20,8 +20,6 @@ import java.util.Objects;
  * @version 1.0.1 2017-05-09 9:04      王锦光(wangj)
  */
 public class BaseEntityDaoImpl<T extends BaseEntity> extends BaseDaoImpl<T, String> {
-    @Autowired
-    private DataHistoryUtil<T> dataHistoryUtil;
     @Autowired(required = false)
     private DataChangeProducer producer;
     public BaseEntityDaoImpl(Class<T> domainClass, EntityManager entityManager) {
@@ -36,7 +34,7 @@ public class BaseEntityDaoImpl<T extends BaseEntity> extends BaseDaoImpl<T, Stri
     public void delete(T entity) {
         super.delete(entity);
         // 生成记录
-        DataHistoryRecord record = dataHistoryUtil.generateDeleteRecord(entity);
+        DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(entity);
         // 调用MQ生产者发送记录
         if (Objects.nonNull(record)) {
             producer.send(JsonUtils.toJson(record));
@@ -59,7 +57,7 @@ public class BaseEntityDaoImpl<T extends BaseEntity> extends BaseDaoImpl<T, Stri
         }
         S saveEntity = super.save(entity);
         // 生成记录
-        DataHistoryRecord record = dataHistoryUtil.generateSaveRecord(originalJson, saveEntity);
+        DataHistoryRecord record = DataHistoryUtil.generateSaveRecord(originalJson, saveEntity);
         // 调用MQ生产者发送记录
         if (Objects.nonNull(record)) {
             producer.send(JsonUtils.toJson(record));

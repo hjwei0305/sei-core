@@ -11,7 +11,6 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.util.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -24,15 +23,14 @@ import java.util.Objects;
  * @author 王锦光 wangjg
  * @version 2020-04-22 8:59
  */
-@Component
-public class DataHistoryUtil<T extends BaseEntity> {
+public class DataHistoryUtil {
     /**
      * 生成保存时的数据变更记录
      * @param originalJson 原始值的JSON序列化值
      * @param newEntity 新值
      * @return 数据变更记录
      */
-    public DataHistoryRecord generateSaveRecord(String originalJson, T newEntity) {
+    public static <T extends BaseEntity> DataHistoryRecord generateSaveRecord(String originalJson, T newEntity) {
         T originalEntity = (T) JsonUtils.fromJson(originalJson, newEntity.getClass());
         // 生成变更记录
         return constructRecord(originalEntity, newEntity);
@@ -43,7 +41,7 @@ public class DataHistoryUtil<T extends BaseEntity> {
      * @param originalEntity 原始值
      * @return 数据变更记录
      */
-    public DataHistoryRecord generateDeleteRecord(T originalEntity) {
+    public static <T extends BaseEntity> DataHistoryRecord generateDeleteRecord(T originalEntity) {
         // 生成变更记录
         return constructRecord(originalEntity, null);
     }
@@ -53,7 +51,7 @@ public class DataHistoryUtil<T extends BaseEntity> {
      * @param clazz 类型
      * @return 属性清单
      */
-    private List<Field> getDataHistoryFields(Class<?> clazz) {
+    private static List<Field> getDataHistoryFields(Class<?> clazz) {
         List<Field> fields = new LinkedList<>();
         // 获取对象中所有的Field
         Field[] allFields = clazz.getDeclaredFields();
@@ -65,7 +63,7 @@ public class DataHistoryUtil<T extends BaseEntity> {
         return fields;
     }
 
-    private DataHistoryRecord constructRecord(T originalEntity, T newEntity) {
+    private static <T extends BaseEntity> DataHistoryRecord constructRecord(T originalEntity, T newEntity) {
         if (Objects.isNull(originalEntity) && Objects.isNull(newEntity)) {
             return null;
         }
