@@ -11,6 +11,7 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.util.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -139,8 +140,14 @@ public class DataHistoryUtil {
                 String newValue = JsonUtils.toJson(newFieldValue);
                 item.setNewValue(newValue);
             }
-            items.add(item);
+            // 判断原值和新值是否有变化，有变化才记录
+            if (!StringUtils.equals(item.getOriginalValue(), item.getNewValue())) {
+                items.add(item);
+            }
         });
+        if (CollectionUtils.isEmpty(items)) {
+            return null;
+        }
         record.setItems(items);
         return record;
     }
