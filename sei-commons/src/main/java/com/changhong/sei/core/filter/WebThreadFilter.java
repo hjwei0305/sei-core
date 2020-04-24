@@ -93,7 +93,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         String path = request.getRequestURI();
 
         // 静态资源
-        if (StringUtils.endsWithAny(path.toLowerCase(), ".js", ".css", ".ico", ".jpg", ".png")) {
+        if (StringUtils.endsWithAny(path.toLowerCase(), ".js", ".css", ".ico", ".jpg", ".gif", ".svg", ".png")) {
             chain.doFilter(request, response);
             return;
         }
