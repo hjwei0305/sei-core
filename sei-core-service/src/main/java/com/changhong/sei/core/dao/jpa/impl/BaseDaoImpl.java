@@ -1,7 +1,9 @@
 package com.changhong.sei.core.dao.jpa.impl;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
+import com.changhong.sei.core.datachange.DataChangeProducer;
 import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
