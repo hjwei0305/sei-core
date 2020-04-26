@@ -48,6 +48,21 @@ public class DataHistoryUtil {
     }
 
     /**
+     * 判断实体类是否启用数据变更记录
+     * @param clazz 实体类
+     * @return 是否启用数据变更记录
+     */
+    public static boolean isEnableDataHistory(Class<?> clazz) {
+        // 获取实体上的启用数据变更注解
+        if (!clazz.isAnnotationPresent(EnableDataHistory.class)) {
+            return false;
+        }
+        // 获取业务实体名称
+        EnableDataHistory enableDataHistory = clazz.getAnnotation(EnableDataHistory.class);
+        return enableDataHistory.enable();
+    }
+
+    /**
      * 获取配置了数据变更历史注解的属性清单
      * @param clazz 类型
      * @return 属性清单

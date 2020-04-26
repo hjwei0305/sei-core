@@ -5,8 +5,10 @@ import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
 import com.changhong.sei.core.datachange.DataChangeProducer;
 import com.changhong.sei.core.dto.IRank;
+import com.changhong.sei.core.dto.datachange.DataHistoryRecord;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;
+import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.DataOperationDeniedException;
 import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
@@ -43,16 +45,11 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unchecked")
 public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseDao<T, ID> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseDaoImpl.class);
-
+    @Autowired(required = false)
+    private DataChangeProducer producer;
     protected final Class<T> domainClass;
     protected final EntityManager entityManager;
 
-    /**
-     * 正则表达式
-     * \\b  表示 限定单词边界  比如  select 不通过   1select则是可以的
-     **/
-//    private static String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
-//            + "(\\b(select|update|union|and|or|delete|insert|trancate|char|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
     private static String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)";
     private static Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 
@@ -70,44 +67,13 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         this.entityManager = entityManager;
     }
 
+    // region 保存实体的相关方法
+
     /**
-     * 持久化实体对象
-     *
-     * @param entity
-     * @param <S>
-     * @return
+     * 保存业务实体前的数据预处理
+     * @param entity 业务实体
+     * @return 是否为新建
      */
-    @Override
-    public <S extends T> S save(S entity) {
-        boolean isNew = preSave(entity);
-        if (isNew) {
-            entityManager.persist(entity);
-        } else {
-            entity = entityManager.merge(entity);
-        }
-        return entity;
-    }
-
-    @Override
-    public void save(Collection<T> entities) {
-        if (entities != null && entities.size() > 0) {
-            int i = 0;
-            for (T entity : entities) {
-                i++;
-                boolean isNew = preSave(entity);
-                if (isNew) {
-                    entityManager.persist(entity);
-                } else {
-                    entityManager.merge(entity);
-                }
-                if (i % 50 == 0) {
-                    entityManager.flush();
-                    entityManager.clear();
-                }
-            }
-        }
-    }
-
     protected boolean preSave(T entity) {
         Assert.notNull(entity, "持久化实体对象不能为空。");
 
@@ -120,8 +86,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 isNew = true;
                 baseEntity.setId(IdGenerator.uuid());
             } else {
-//                T origin = findOne(id);
-//                isNew = Objects.isNull(origin);
                 if (!existsById(id)) {
                     throw new DataOperationDeniedException("需要修改的数据不存在！id="+id);
                 } else {
@@ -158,103 +122,62 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         }
         return isNew;
     }
-
     /**
-     * 基于主键集合查询集合数据对象
-     */
-    @Override
-    public List<T> findAll() {
-        Sort sort = Sort.unsorted();
-        if (IRank.class.isAssignableFrom(domainClass)) {
-            sort = Sort.by(Sort.Direction.ASC, IRank.RANK);
-        }
-
-        Specification<T> spec = (root, query, builder) -> {
-            Predicate predicate = null;
-            //软删除
-            if (ISoftDelete.class.isAssignableFrom(domainClass)) {
-                predicate = builder.and(builder.equal(root.get(ISoftDelete.DELETED), 0));
-            }
-            //租户
-            if (ITenant.class.isAssignableFrom(domainClass)) {
-                if (Objects.isNull(predicate)) {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()));
-                } else {
-                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()), predicate);
-                }
-            }
-            return predicate;
-        };
-        return super.findAll(spec, sort);
-    }
-
-    /**
-     * 基于主键查询单一数据对象
-     */
-    @Override
-    public T findOne(ID id) {
-        return findById(id).orElse(null);
-    }
-
-    /**
-     * Retrieves an entity by its id.
+     * 持久化实体对象
      *
-     * @param id must not be {@literal null}.
-     * @return the entity with the given id or {@literal Optional#empty()} if none found
-     * @throws IllegalArgumentException if {@code id} is {@literal null}.
-     */
-//    @Override
-//    public Optional<T> findById(ID id) {
-//        T entity = null;
-//        if (Objects.nonNull(id)) {
-//            entity = super.findById(id).orElse(null);
-//            if (Objects.nonNull(entity) && ITenant.class.isAssignableFrom(domainClass)) {
-//                ITenant tenantEntity = (ITenant) entity;
-//                if (!StringUtils.equals(ContextUtil.getTenantCode(), tenantEntity.getTenantCode())) {
-//                    return Optional.empty();
-//                }
-//            }
-//        }
-//        return Optional.ofNullable(entity);
-//    }
-
-    /**
-     * {@inheritDoc}
+     * @param entity
+     * @param <S>
+     * @return
      */
     @Override
-    public void evict() {
-        entityManager.getEntityManagerFactory().getCache().evict(domainClass);
+    public <S extends T> S save(S entity) {
+        boolean isNew = preSave(entity);
+        T original;
+        String originalJson = null;
+        boolean isEnableDataHistory = DataHistoryUtil.isEnableDataHistory(domainClass);
+        if (isNew) {
+            entityManager.persist(entity);
+        } else {
+            // 判断是否启用数据变更
+            if (isEnableDataHistory) {
+                original = findOne((ID)entity.getId());
+                originalJson = JsonUtils.toJson(original);
+            }
+            entity = entityManager.merge(entity);
+        }
+        // 生成数据变更记录
+        if (isEnableDataHistory && BaseEntity.class.isAssignableFrom(domainClass)) {
+            DataHistoryRecord record = DataHistoryUtil.generateSaveRecord(originalJson, (BaseEntity) entity);
+            // 调用MQ生产者发送记录
+            if (Objects.nonNull(record)) {
+                producer.send(JsonUtils.toJson(record));
+            }
+        }
+        return entity;
     }
-
     /**
-     * {@inheritDoc}
+     * 批量保存业务实体
+     * @param entities 业务实体清单
      */
     @Override
-    public void evict(ID id) {
-        if (Objects.nonNull(id)) {
-            entityManager.getEntityManagerFactory().getCache().evict(domainClass, id);
+    public void save(Collection<T> entities) {
+        if (CollectionUtils.isEmpty(entities)) {
+            return;
+        }
+        int i = 0;
+        for (T entity : entities) {
+            i++;
+            save(entity);
+            if (i % 50 == 0) {
+                entityManager.flush();
+                entityManager.clear();
+            }
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void evictAll() {
-        entityManager.getEntityManagerFactory().getCache().evictAll();
-    }
+    // endregion
 
-    /////////////////////////////////自定义方法/////////////////////////////////////
-
-    /**
-     * 获取业务实体类型
-     *
-     * @return 业务实体类型
-     */
-    @Override
-    public Class<T> getEntityClass() {
-        return domainClass;
-    }
+    // region 删除实体的相关方法
 
     @Override
     public void delete(T entity) {
@@ -269,9 +192,17 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             }
         } else {
             super.delete(entity);
+            // 生成数据变更记录
+            if (BaseEntity.class.isAssignableFrom(domainClass)) {
+                BaseEntity deleteEntity = (BaseEntity) entity;
+                DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(deleteEntity);
+                // 调用MQ生产者发送记录
+                if (Objects.nonNull(record)) {
+                    producer.send(JsonUtils.toJson(record));
+                }
+            }
         }
     }
-
     /**
      * 通过Id清单删除业务实体
      *
@@ -318,6 +249,83 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         } else {
             deleteInBatch(entities);
         }
+    }
+
+    // endregion
+
+    /**
+     * 基于主键集合查询集合数据对象
+     */
+    @Override
+    public List<T> findAll() {
+        Sort sort = Sort.unsorted();
+        if (IRank.class.isAssignableFrom(domainClass)) {
+            sort = Sort.by(Sort.Direction.ASC, IRank.RANK);
+        }
+
+        Specification<T> spec = (root, query, builder) -> {
+            Predicate predicate = null;
+            //软删除
+            if (ISoftDelete.class.isAssignableFrom(domainClass)) {
+                predicate = builder.and(builder.equal(root.get(ISoftDelete.DELETED), 0));
+            }
+            //租户
+            if (ITenant.class.isAssignableFrom(domainClass)) {
+                if (Objects.isNull(predicate)) {
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()));
+                } else {
+                    predicate = builder.and(builder.equal(root.get(ITenant.TENANT_CODE), ContextUtil.getTenantCode()), predicate);
+                }
+            }
+            return predicate;
+        };
+        return super.findAll(spec, sort);
+    }
+
+    /**
+     * 基于主键查询单一数据对象
+     */
+    @Override
+    public T findOne(ID id) {
+        return findById(id).orElse(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void evict() {
+        entityManager.getEntityManagerFactory().getCache().evict(domainClass);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void evict(ID id) {
+        if (Objects.nonNull(id)) {
+            entityManager.getEntityManagerFactory().getCache().evict(domainClass, id);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void evictAll() {
+        entityManager.getEntityManagerFactory().getCache().evictAll();
+    }
+
+    /////////////////////////////////自定义方法/////////////////////////////////////
+
+    /**
+     * 获取业务实体类型
+     *
+     * @return 业务实体类型
+     */
+    @Override
+    public Class<T> getEntityClass() {
+        return domainClass;
     }
 
     /**

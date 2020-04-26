@@ -1,14 +1,19 @@
 package com.changhong.sei.core.dao.impl;
 
 import com.changhong.sei.core.dao.BaseTreeDao;
+import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
+import com.changhong.sei.core.datachange.DataChangeProducer;
+import com.changhong.sei.core.dto.datachange.DataHistoryRecord;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.IFrozen;
 import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.dto.serach.SearchOrder;
+import com.changhong.sei.core.util.JsonUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.Assert;
 
@@ -26,13 +31,11 @@ import java.util.Objects;
  * @version 1.0.1 2017/5/9 1:38
  */
 public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoImpl<T, String> implements BaseTreeDao<T> {
-//    private static final Logger logger = LoggerFactory.getLogger(BaseTreeDaoImpl.class);
-
+    @Autowired(required = false)
+    private DataChangeProducer producer;
     public BaseTreeDaoImpl(Class<T> domainClass, EntityManager entityManager) {
         super(domainClass, entityManager);
     }
-
-    ////////////////////////////////////
 
     /**
      * 获取所有树根节点
