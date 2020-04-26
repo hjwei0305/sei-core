@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
 public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseDao<T, ID> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseDaoImpl.class);
     @Autowired(required = false)
-    private DataChangeProducer producer;
+    private DataChangeProducer dataChangeProducer;
     protected final Class<T> domainClass;
     protected final EntityManager entityManager;
 
@@ -149,8 +149,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         if (isEnableDataHistory && BaseEntity.class.isAssignableFrom(domainClass)) {
             DataHistoryRecord record = DataHistoryUtil.generateSaveRecord(originalJson, (BaseEntity) entity);
             // 调用MQ生产者发送记录
-            if (Objects.nonNull(record)) {
-                producer.send(JsonUtils.toJson(record));
+            if (Objects.nonNull(record) && Objects.nonNull(dataChangeProducer)) {
+                dataChangeProducer.send(JsonUtils.toJson(record));
             }
         }
         return entity;
@@ -197,8 +197,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 BaseEntity deleteEntity = (BaseEntity) entity;
                 DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(deleteEntity);
                 // 调用MQ生产者发送记录
-                if (Objects.nonNull(record)) {
-                    producer.send(JsonUtils.toJson(record));
+                if (Objects.nonNull(record) && Objects.nonNull(dataChangeProducer)) {
+                    dataChangeProducer.send(JsonUtils.toJson(record));
                 }
             }
         }

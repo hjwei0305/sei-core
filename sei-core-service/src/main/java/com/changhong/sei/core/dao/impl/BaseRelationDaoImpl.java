@@ -2,6 +2,7 @@ package com.changhong.sei.core.dao.impl;
 
 import com.changhong.sei.core.dao.BaseRelationDao;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
+import com.changhong.sei.core.datachange.DataChangeProducer;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.dto.IRank;
 import com.changhong.sei.core.entity.RelationEntity;
