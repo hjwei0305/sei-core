@@ -1,5 +1,6 @@
 package com.changhong.sei.core.dao.jpa.impl;
 
+import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
@@ -10,6 +11,7 @@ import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.core.entity.*;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.DataOperationDeniedException;
+import com.changhong.sei.exception.SeiException;
 import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
@@ -45,8 +47,6 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unchecked")
 public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements BaseDao<T, ID> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseDaoImpl.class);
-    @Autowired(required = false)
-    private DataChangeProducer dataChangeProducer;
     protected final Class<T> domainClass;
     protected final EntityManager entityManager;
 
@@ -65,6 +65,14 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         super(domainClass, entityManager);
         this.domainClass = domainClass;
         this.entityManager = entityManager;
+    }
+
+    private DataChangeProducer getDataChangeProducer() {
+        try {
+            return ContextUtil.getBean(DataChangeProducer.class);
+        } catch (Exception e) {
+            throw new SeiException("没有配置消息队列！", e);
+        }
     }
 
     // region 保存实体的相关方法
@@ -149,8 +157,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         if (isEnableDataHistory && BaseEntity.class.isAssignableFrom(domainClass)) {
             DataHistoryRecord record = DataHistoryUtil.generateSaveRecord(originalJson, (BaseEntity) entity);
             // 调用MQ生产者发送记录
-            if (Objects.nonNull(record) && Objects.nonNull(dataChangeProducer)) {
-                dataChangeProducer.send(JsonUtils.toJson(record));
+            if (Objects.nonNull(record)) {
+                getDataChangeProducer().send(JsonUtils.toJson(record));
             }
         }
         return entity;
@@ -197,8 +205,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 BaseEntity deleteEntity = (BaseEntity) entity;
                 DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(deleteEntity);
                 // 调用MQ生产者发送记录
-                if (Objects.nonNull(record) && Objects.nonNull(dataChangeProducer)) {
-                    dataChangeProducer.send(JsonUtils.toJson(record));
+                if (Objects.nonNull(record)) {
+                    getDataChangeProducer().send(JsonUtils.toJson(record));
                 }
             }
         }

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -20,7 +21,7 @@ import javax.sql.DataSource;
 @Configuration
 @ConditionalOnBean({DataSource.class})
 @ConditionalOnClass({BaseDaoFactoryBean.class, BaseEntityDaoImpl.class})
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureAfter({DataSourceAutoConfiguration.class, DefaultAutoConfiguration.class})
 @EnableJpaRepositories(basePackages = {"com.changhong.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EnableTransactionManagement
 public class JpaAutoConfiguration {
