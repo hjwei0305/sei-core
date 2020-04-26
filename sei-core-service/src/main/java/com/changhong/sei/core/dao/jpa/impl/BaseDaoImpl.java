@@ -201,16 +201,32 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         } else {
             super.delete(entity);
             // 生成数据变更记录
-            if (BaseEntity.class.isAssignableFrom(domainClass)) {
-                BaseEntity deleteEntity = (BaseEntity) entity;
-                DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(deleteEntity);
-                // 调用MQ生产者发送记录
-                if (Objects.nonNull(record)) {
-                    getDataChangeProducer().send(JsonUtils.toJson(record));
-                }
+            sendDeleteDataChange(entity);
+        }
+    }
+
+    /**
+     * 采集并发送数据变更记录
+     * @param entity 业务实体
+     */
+    private void sendDeleteDataChange(T entity) {
+        // 生成数据变更记录
+        if (BaseEntity.class.isAssignableFrom(domainClass)) {
+            BaseEntity deleteEntity = (BaseEntity) entity;
+            DataHistoryRecord record = DataHistoryUtil.generateDeleteRecord(deleteEntity);
+            // 调用MQ生产者发送记录
+            if (Objects.nonNull(record)) {
+                getDataChangeProducer().send(JsonUtils.toJson(record));
             }
         }
     }
+
+    @Override
+    public void deleteInBatch(Iterable<T> entities) {
+        super.deleteInBatch(entities);
+        entities.forEach(this::sendDeleteDataChange);
+    }
+
     /**
      * 通过Id清单删除业务实体
      *
@@ -218,18 +234,19 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      */
     @Override
     public void delete(ID id) {
+        T entity = findOne(id);
+        if (Objects.isNull(entity)) {
+            return;
+        }
         //软删除
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
-            T entity = findOne(id);
-            if (Objects.nonNull(entity)) {
-                ISoftDelete softDelete = (ISoftDelete) entity;
-                //标记删除当前时间戳
-                softDelete.setDeleted(System.currentTimeMillis());
-                //持久化
-                save(entity);
-            }
+            ISoftDelete softDelete = (ISoftDelete) entity;
+            //标记删除当前时间戳
+            softDelete.setDeleted(System.currentTimeMillis());
+            //持久化
+            save(entity);
         } else {
-            deleteById(id);
+            delete(entity);
         }
     }
 
