@@ -31,8 +31,6 @@ import java.util.Objects;
  * @version 1.0.1 2017/5/9 1:38
  */
 public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoImpl<T, String> implements BaseTreeDao<T> {
-    @Autowired(required = false)
-    private DataChangeProducer producer;
     public BaseTreeDaoImpl(Class<T> domainClass, EntityManager entityManager) {
         super(domainClass, entityManager);
     }
