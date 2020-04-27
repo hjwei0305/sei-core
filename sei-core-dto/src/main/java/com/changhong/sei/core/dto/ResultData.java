@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * 所有API公开接口的返回数据类型
@@ -113,5 +114,14 @@ public class ResultData<T> implements Serializable {
      */
     public static <T> ResultData<T> fail(String message) {
         return new ResultData<>(Boolean.FALSE, message, null);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ResultData.class.getSimpleName() + "[", "]")
+                .add("success=" + success)
+                .add("message='" + message + "'")
+                .add("data=" + data)
+                .toString();
     }
 }
