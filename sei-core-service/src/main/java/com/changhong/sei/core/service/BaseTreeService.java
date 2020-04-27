@@ -513,7 +513,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * @param featureCode 功能项代码
      * @return 有权限的树形业务实体清单
      */
-    public List<T> getUserAuthorizedTreeEntities(String featureCode) {
+    protected List<T> getUserAuthorizedTreeEntities(String featureCode, Boolean includeFrozen) {
         Class<T> entityClass = getDao().getEntityClass();
         //判断是否实现数据权限业务实体接口
         if (!IDataAuthTreeEntity.class.isAssignableFrom(entityClass)) {
@@ -535,8 +535,12 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 resultList = Collections.emptyList();
                 break;
             case TenantAdmin:
-                //如果是租户管理员，返回租户的所有数据(未冻结)
-                allEntities = getDao().findAllUnfrozen();
+                //如果是租户管理员，返回租户的所有数据(所有/未冻结)
+                if (includeFrozen) {
+                    allEntities = getDao().findAll();
+                } else {
+                    allEntities = getDao().findAllUnfrozen();
+                }
                 if (allEntities == null || allEntities.isEmpty()) {
                     resultList = Collections.emptyList();
                 } else {
@@ -551,7 +555,11 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     resultList = Collections.emptyList();
                 } else {
                     //先获取所有未冻结的业务实体
-                    allEntities = getDao().findAllUnfrozen();
+                    if (includeFrozen) {
+                        allEntities = getDao().findAll();
+                    } else {
+                        allEntities = getDao().findAllUnfrozen();
+                    }
                     if (allEntities == null || allEntities.isEmpty()) {
                         resultList = Collections.emptyList();
                     } else {
@@ -565,12 +573,22 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     }
 
     /**
+     * 获取当前用户有权限的树形业务实体清单
+     *
+     * @param featureCode 功能项代码
+     * @return 有权限的树形业务实体清单
+     */
+    public List<T> getUserAuthorizedTreeEntities(String featureCode) {
+        return getUserAuthorizedTreeEntities(featureCode, false);
+    }
+
+    /**
      * 获取当前用户有权限的树形节点代码清单
      * @param featureCode 功能项代码
      * @return 节点代码清单
      */
     public List<String> getUserAuthorizedTreeNodeCodes(String featureCode) {
-        List<T> entities = getUserAuthorizedTreeEntities(featureCode);
+        List<T> entities = getUserAuthorizedTreeEntities(featureCode, true);
         if (CollectionUtils.isEmpty(entities)) {
             return new LinkedList<>();
         }
