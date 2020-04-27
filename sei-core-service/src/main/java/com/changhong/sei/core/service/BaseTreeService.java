@@ -583,7 +583,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     }
 
     /**
-     * 获取当前用户有权限的树形节点代码清单
+     * 获取当前用户有权限的树形节点代码清单(包含冻结)
      * @param featureCode 功能项代码
      * @return 节点代码清单
      */
