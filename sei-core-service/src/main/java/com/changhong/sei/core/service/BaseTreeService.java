@@ -563,4 +563,39 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         }
         return resultList;
     }
+
+    /**
+     * 获取当前用户有权限的树形节点代码清单
+     * @param featureCode 功能项代码
+     * @return 节点代码清单
+     */
+    public List<String> getUserAuthorizedTreeNodeCodes(String featureCode) {
+        List<T> entities = getUserAuthorizedTreeEntities(featureCode);
+        if (CollectionUtils.isEmpty(entities)) {
+            return new LinkedList<>();
+        }
+        Set<String> codeSet = new LinkedHashSet<>();
+        entities.forEach(tree -> {
+            List<T> nodes = new LinkedList<>();
+            // 获取树的所有节点
+            fetchChildrenFromTree(tree, nodes);
+            // 追加节点代码
+            codeSet.addAll(nodes.stream().map(T::getCode).collect(Collectors.toList()));
+        });
+        return new LinkedList<>(codeSet);
+    }
+
+    /**
+     * 递归获取并设置一个树形结构的所有节点
+     * @param treeNode 树形结构节点
+     * @param nodes 所有节点
+     */
+    private void fetchChildrenFromTree(T treeNode, List<T> nodes) {
+        if (Objects.isNull(treeNode) || CollectionUtils.isEmpty(treeNode.getChildren())) {
+            return;
+        }
+        List<T> children = treeNode.getChildren();
+        nodes.addAll(children);
+        children.forEach(node-> fetchChildrenFromTree(node, nodes));
+    }
 }
