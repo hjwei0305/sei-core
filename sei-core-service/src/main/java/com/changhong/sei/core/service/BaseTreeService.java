@@ -575,13 +575,15 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
             return new LinkedList<>();
         }
         Set<String> codeSet = new LinkedHashSet<>();
+        List<T> nodes = new LinkedList<>();
         entities.forEach(tree -> {
-            List<T> nodes = new LinkedList<>();
+            // 先添加自己
+            nodes.add(tree);
             // 获取树的所有节点
             fetchChildrenFromTree(tree, nodes);
-            // 追加节点代码
-            codeSet.addAll(nodes.stream().map(T::getCode).collect(Collectors.toList()));
         });
+        // 追加节点代码
+        nodes.forEach(node -> codeSet.add(node.getCode()));
         return new LinkedList<>(codeSet);
     }
 
