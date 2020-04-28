@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -15,6 +14,7 @@ import javax.sql.DataSource;
 
 /**
  * JPA的配置类
+ *
  * @author 马超(Vision.Mac)
  * @version 1.0.1 2018/5/28 23:48
  */
@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @ConditionalOnBean({DataSource.class})
 @ConditionalOnClass({BaseDaoFactoryBean.class, BaseEntityDaoImpl.class})
 @AutoConfigureAfter({DataSourceAutoConfiguration.class, DefaultAutoConfiguration.class})
-@EnableJpaRepositories(basePackages = {"com.changhong.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
+@EnableJpaRepositories(basePackages = {"com.**.dao"}, repositoryFactoryBeanClass = BaseDaoFactoryBean.class)
 @EnableTransactionManagement
 public class JpaAutoConfiguration {
 }
