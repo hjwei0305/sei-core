@@ -26,9 +26,9 @@
     {
       "name": "sei.cache.expire",
       "type": "java.lang.Long",
-      "description": "过期时间(毫秒), 默认10分钟",
+      "description": "过期时间(毫秒), 默认60分钟",
       "sourceType": "com.changhong.sei.core.cache.config.properties.SeiCacheProperties",
-      "defaultValue": 600000
+      "defaultValue": 3600000
     },
     {
       "name": "sei.cache.maximum-size",
