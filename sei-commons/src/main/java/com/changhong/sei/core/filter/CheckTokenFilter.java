@@ -54,11 +54,6 @@ public class CheckTokenFilter extends BaseWebFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-        // 忽略会话检查
-        if (match(path)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         // 从可传播的线程全局变量中获取token
         String token = ThreadLocalUtil.getTranVar(ContextUtil.HEADER_TOKEN_KEY);
@@ -69,9 +64,15 @@ public class CheckTokenFilter extends BaseWebFilter {
                 // TODO 兼容SEI3.0验证
                 token = request.getHeader("Authorization");
                 if (StringUtils.isBlank(token)) {
-                    // 认证失败
-                    unauthorized("token为空,认证失败!", path, response);
-                    return;
+                    // 忽略会话检查
+                    if (match(path)) {
+                        filterChain.doFilter(request, response);
+                        return;
+                    } else {
+                        // 认证失败
+                        unauthorized("token为空,认证失败!", path, response);
+                        return;
+                    }
                 }
             }
         }
