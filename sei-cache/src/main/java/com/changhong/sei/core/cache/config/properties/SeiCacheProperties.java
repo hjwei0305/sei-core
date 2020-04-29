@@ -19,9 +19,9 @@ public class SeiCacheProperties {
      */
     private boolean enableRedis = Boolean.TRUE;
     /**
-     * 过期时间(毫秒), 默认10分钟
+     * 过期时间(毫秒), 默认60分钟
      */
-    private long expire = 600000;
+    private long expire = 3600000;
     /**
      * 最大长度
      */

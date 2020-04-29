@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class CacheBuilder {
         this.redisCacheService = redisCacheService;
     }
 
-    private static List<CacheProviderService> listCacheProvider = Lists.newArrayList();
+    private static List<CacheProviderService> listCacheProvider = Lists.newLinkedList();
 
     private static final Lock PROVIDER_LOCK = new ReentrantLock();
 
@@ -79,7 +80,7 @@ public class CacheBuilder {
 
             LOG.info("初始化缓存提供者成功，共有" + listCacheProvider.size() + "个");
         } catch (Exception e) {
-            listCacheProvider = Lists.newArrayList();
+            listCacheProvider = Lists.newLinkedList();
 
             LOG.error("初始化缓存提供者发生异常", e);
         } finally {
@@ -98,7 +99,7 @@ public class CacheBuilder {
         Set<String> keys;
         for (CacheProviderService provider : getCacheProviders()) {
             keys = provider.keys(key);
-            if (keys != null) {
+            if (!CollectionUtils.isEmpty(keys)) {
                 return keys;
             }
         }

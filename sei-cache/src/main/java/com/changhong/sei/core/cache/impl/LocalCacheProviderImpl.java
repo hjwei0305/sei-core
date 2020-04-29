@@ -49,11 +49,12 @@ public class LocalCacheProviderImpl implements CacheProviderService {
             for (Map.Entry<String, Cache<String, Object>> entry : _cacheMap.entrySet()) {
                 concurrentMap = entry.getValue().asMap();
                 if (Objects.nonNull(concurrentMap)) {
-
-                    Set<String> set = concurrentMap.keySet().parallelStream().filter(k -> k.contains(key)).collect(Collectors.toSet());
-                    if (CollectionUtils.isNotEmpty(set)) {
-                        keySet.addAll(set);
-                    }
+                    // 通常情况下调用keys是为了删除缓存,同时为了确保与分布式缓存的key一致性这里直接删除对应的key缓存
+                    concurrentMap.keySet().parallelStream().filter(k -> k.contains(key)).forEach(this::remove);
+//                    Set<String> set = concurrentMap.keySet().parallelStream().filter(k -> k.contains(key)).collect(Collectors.toSet());
+//                    if (CollectionUtils.isNotEmpty(set)) {
+//                        keySet.addAll(set);
+//                    }
                 }
             }
         }
@@ -225,7 +226,6 @@ public class LocalCacheProviderImpl implements CacheProviderService {
     private static Lock lock = new ReentrantLock();
 
     private Cache<String, Object> getCacheContainer(Long expireTime) {
-
         Cache<String, Object> cacheContainer = null;
         if (expireTime == null) {
             return cacheContainer;

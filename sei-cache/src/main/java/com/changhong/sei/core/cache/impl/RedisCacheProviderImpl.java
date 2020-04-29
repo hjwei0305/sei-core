@@ -20,7 +20,7 @@ import java.util.function.Function;
  */
 public class RedisCacheProviderImpl implements CacheProviderService {
 
-    private SeiCacheProperties cacheProperties;
+    private final SeiCacheProperties cacheProperties;
     @Autowired(required = false)
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -45,7 +45,7 @@ public class RedisCacheProviderImpl implements CacheProviderService {
      **/
     @Override
     public <T extends Object> T get(String key) {
-        T obj = get(key, null, null, cacheProperties.getExpire());
+        T obj = get(key, null, null, -1L);
 
         return obj;
     }
@@ -58,7 +58,7 @@ public class RedisCacheProviderImpl implements CacheProviderService {
      **/
     @Override
     public <T extends Object> T get(String key, Function<String, T> function) {
-        T obj = get(key, function, key, cacheProperties.getExpire());
+        T obj = get(key, function, key, -1L);
 
         return obj;
     }
@@ -72,7 +72,7 @@ public class RedisCacheProviderImpl implements CacheProviderService {
      **/
     @Override
     public <T extends Object, M extends Object> T get(String key, Function<M, T> function, M funcParm) {
-        T obj = get(key, function, funcParm, cacheProperties.getExpire());
+        T obj = get(key, function, funcParm, -1L);
 
         return obj;
     }
@@ -99,6 +99,7 @@ public class RedisCacheProviderImpl implements CacheProviderService {
      * @param funcParm   function函数的调用参数
      * @param expireTime 过期时间（单位：毫秒） 可为空
      **/
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends Object, M extends Object> T get(String key, Function<M, T> function, M funcParm, Long expireTime) {
         T obj = null;
@@ -110,14 +111,12 @@ public class RedisCacheProviderImpl implements CacheProviderService {
             return obj;
         }
 
-        expireTime = getExpireTime(expireTime);
-
         try {
             ValueOperations<String, Object> operations = redisTemplate.opsForValue();
             obj = (T) operations.get(key);
             if (function != null && obj == null) {
                 obj = function.apply(funcParm);
-                if (obj != null) {
+                if (obj != null && -1L != expireTime) {
                     //设置缓存信息
                     set(key, obj, expireTime);
                 }
@@ -137,7 +136,7 @@ public class RedisCacheProviderImpl implements CacheProviderService {
      **/
     @Override
     public <T extends Object> void set(String key, T obj) {
-        set(key, obj, cacheProperties.getExpire());
+        set(key, obj, -1L);
     }
 
     /**
@@ -160,8 +159,6 @@ public class RedisCacheProviderImpl implements CacheProviderService {
         if (Objects.isNull(redisTemplate)) {
             return;
         }
-
-        expireTime = getExpireTime(expireTime);
 
         ValueOperations<String, Object> operations = redisTemplate.opsForValue();
 
@@ -206,21 +203,5 @@ public class RedisCacheProviderImpl implements CacheProviderService {
         }
 
         return exists;
-    }
-
-    /**
-     * 获取过期时间 单位：毫秒
-     *
-     * @param expireTime 传人的过期时间 单位毫秒 如小于1分钟，默认为10分钟
-     **/
-    private Long getExpireTime(Long expireTime) {
-//        Long result = expireTime;
-//        if (expireTime == null || expireTime < cacheProperties.getExpire() / 10) {
-//            result = cacheProperties.getExpire();
-//        }
-//
-//        // 为保证性能redis的有效期长于本地
-//        return result * 10;
-        return expireTime;
     }
 }
