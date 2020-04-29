@@ -163,8 +163,9 @@ public class RedisCacheProviderImpl implements CacheProviderService {
         ValueOperations<String, Object> operations = redisTemplate.opsForValue();
 
         operations.set(key, obj);
-
-        redisTemplate.expire(key, expireTime, TimeUnit.MILLISECONDS);
+        if (-1L != expireTime) {
+            redisTemplate.expire(key, expireTime, TimeUnit.MILLISECONDS);
+        }
     }
 
     /**
