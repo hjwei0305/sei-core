@@ -1,6 +1,7 @@
 package com.changhong.sei.core.config;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -14,6 +15,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 public class ServiceAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames("classpath:/lang/sei-lang", "classpath:/lang/messages", "classpath:/lang/cust-messages");
