@@ -4,12 +4,14 @@ import com.changhong.sei.core.cache.config.properties.SeiCacheProperties;
 import com.changhong.sei.core.cache.impl.LocalCacheProviderImpl;
 import com.changhong.sei.core.cache.impl.RedisCacheProviderImpl;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -85,6 +87,22 @@ public class CacheBuilder {
         }
 
         return listCacheProvider;
+    }
+
+    /**
+     * 批量获取key
+     * @param key 以*号模糊获取
+     */
+    public Set<String> keys(String key) {
+        // 构造带版本的缓存键
+        Set<String> keys;
+        for (CacheProviderService provider : getCacheProviders()) {
+            keys = provider.keys(key);
+            if (keys != null) {
+                return keys;
+            }
+        }
+        return Sets.newHashSet();
     }
 
     /**

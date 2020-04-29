@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -25,6 +26,16 @@ public class RedisCacheProviderImpl implements CacheProviderService {
 
     public RedisCacheProviderImpl(SeiCacheProperties cacheProperties) {
         this.cacheProperties = cacheProperties;
+    }
+
+    /**
+     * 批量获取key
+     *
+     * @param keys 以*号模糊获取
+     */
+    @Override
+    public Set<String> keys(String keys) {
+        return redisTemplate.keys(keys);
     }
 
     /**

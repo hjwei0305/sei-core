@@ -1,5 +1,6 @@
 package com.changhong.sei.core.cache;
 
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -9,6 +10,13 @@ import java.util.function.Function;
  * @version 1.0.00  2020-04-01 09:57
  */
 public interface CacheProviderService {
+
+    /**
+     * 批量获取key
+     * @param keys 以*号模糊获取
+     */
+    Set<String> keys(String keys);
+
     /**
      * 查询缓存
      *

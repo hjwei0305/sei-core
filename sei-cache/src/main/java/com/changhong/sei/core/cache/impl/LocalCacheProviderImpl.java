@@ -5,13 +5,19 @@ import com.changhong.sei.core.cache.config.properties.SeiCacheProperties;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
-import org.springframework.util.StringUtils;
+import com.google.common.collect.Sets;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 实现功能：
@@ -32,6 +38,26 @@ public class LocalCacheProviderImpl implements CacheProviderService {
         Cache<String, Object> cacheContainer = buildCacheContainer(100, 600000);
 
         _cacheMap.put(String.valueOf(600000), cacheContainer);
+    }
+
+    @Override
+    public Set<String> keys(String keys) {
+        Set<String> keySet = Sets.newHashSet();
+        if (StringUtils.isNotBlank(keys)) {
+            String key = keys.replaceAll("[*]", "");
+            ConcurrentMap<String, Object> concurrentMap;
+            for (Map.Entry<String, Cache<String, Object>> entry : _cacheMap.entrySet()) {
+                concurrentMap = entry.getValue().asMap();
+                if (Objects.nonNull(concurrentMap)) {
+
+                    Set<String> set = concurrentMap.keySet().parallelStream().filter(k -> k.contains(key)).collect(Collectors.toSet());
+                    if (CollectionUtils.isNotEmpty(set)) {
+                        keySet.addAll(set);
+                    }
+                }
+            }
+        }
+        return keySet;
     }
 
     /**

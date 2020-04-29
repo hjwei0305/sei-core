@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 实现功能：
@@ -52,8 +53,10 @@ public class CacheBuilderTest {
         cacheBuilder.set(cacheKey, goodsVO);
 
         CacheVo goodsVO2 = cacheBuilder.get(cacheKey);
-
         Assert.assertNotNull(goodsVO2);
+
+        Set<String> keys = cacheBuilder.keys("test1*");
+        System.out.println(keys);
 
         Assert.assertTrue("两个缓存对象的主键相同", goodsVO1.getId().equals(goodsVO2.getId()));
     }
