@@ -53,6 +53,11 @@ public class DataHistoryUtil {
      * @return 是否启用数据变更记录
      */
     public static boolean isEnableDataHistory(Class<?> clazz) {
+        // 检查是否配置了记录数据变更的topic
+        String topic = ContextUtil.getProperty("sei.datachange.topic");
+        if (StringUtils.isBlank(topic)) {
+            return false;
+        }
         // 获取实体上的启用数据变更注解
         if (!clazz.isAnnotationPresent(EnableDataHistory.class)) {
             return false;

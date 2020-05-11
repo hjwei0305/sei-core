@@ -210,6 +210,11 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      * @param entity 业务实体
      */
     private void sendDeleteDataChange(T entity) {
+        // 判断是否需要记录变更日志
+        boolean isEnableDataHistory = DataHistoryUtil.isEnableDataHistory(domainClass);
+        if (!isEnableDataHistory) {
+            return;
+        }
         // 生成数据变更记录
         if (BaseEntity.class.isAssignableFrom(domainClass)) {
             BaseEntity deleteEntity = (BaseEntity) entity;

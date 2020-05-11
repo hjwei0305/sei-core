@@ -10,6 +10,8 @@ import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
+import com.changhong.sei.exception.ServiceException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,9 +118,15 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      */
     @Transactional
     public void save(Collection<T> entities) {
-        if (entities != null && entities.size() > 0) {
-            getDao().save(entities);
+        if (CollectionUtils.isEmpty(entities)) {
+            return;
         }
+        entities.forEach(entity-> {
+            OperateResultWithData<T> saveResult = save(entity);
+            if (saveResult.notSuccessful()) {
+                throw new ServiceException("批量保存业务实体失败！"+saveResult.getMessage());
+            }
+        });
     }
 
     /**
