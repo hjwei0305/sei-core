@@ -269,12 +269,12 @@ public class LocalCacheProviderImpl implements CacheProviderService {
      */
     private static Cache<String, Object> buildCacheContainer(long maxSize, long expire) {
         return CacheBuilder.newBuilder()
-                // 设置缓存最大容量为100，超过100之后就会按照LRU最近虽少使用算法来移除缓存项
+                // 设置缓存最大容量为100，超过100之后就会按照LRU最近最少使用算法来移除缓存项
                 .maximumSize(maxSize)
                 // 设置写缓存后8秒钟过期  最后一次写入后的一段时间移出
-                .expireAfterWrite(expire, TimeUnit.MILLISECONDS)
-                // //最后一次访问后的一段时间移出
-                //.expireAfterAccess(expire, TimeUnit.MILLISECONDS)
+                //.expireAfterWrite(expire, TimeUnit.MILLISECONDS)
+                // 最后一次访问后的一段时间移出
+                .expireAfterAccess(expire, TimeUnit.MILLISECONDS)
 
                 // 设置并发级别为8，并发级别是指可以同时写缓存的线程数
                 .concurrencyLevel(8)
