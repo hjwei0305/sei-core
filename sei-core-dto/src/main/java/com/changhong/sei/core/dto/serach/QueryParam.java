@@ -1,6 +1,7 @@
 package com.changhong.sei.core.dto.serach;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,14 @@ public class QueryParam implements Serializable {
      * 分页信息
      */
     private PageInfo pageInfo;
+
+    /**
+     * 默认构造函数
+     */
+    public QueryParam() {
+        sortOrders = new ArrayList<>();
+        pageInfo = new PageInfo();
+    }
 
     public List<SearchOrder> getSortOrders() {
         return sortOrders;
