@@ -121,4 +121,23 @@ public class AuthTreeEntityData extends AuthEntityData implements TreeEntity<Aut
     public void setChildren(List<AuthTreeEntityData> children) {
         this.children = children;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AuthTreeEntityData)) {
+            return false;
+        }
+
+        AuthTreeEntityData that = (AuthTreeEntityData) o;
+
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }
