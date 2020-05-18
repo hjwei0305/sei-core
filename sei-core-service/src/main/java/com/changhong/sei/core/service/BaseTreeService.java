@@ -470,6 +470,8 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         nodes.add(treeNode);
         if (CollectionUtils.isNotEmpty(treeNode.getChildren())) {
             List<Tree> children = treeNode.getChildren();
+            // 清除节点的子节点清单
+            treeNode.setChildren(null);
             nodes.addAll(children);
             children.forEach(c-> getAllChildren(c, nodes));
         }
