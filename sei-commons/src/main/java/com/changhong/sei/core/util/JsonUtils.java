@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
@@ -92,8 +93,11 @@ public final class JsonUtils {
         //设置为中国上海时区
         //objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         //取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
-        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+//        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        // 解决jackson2无法反序列化LocalDateTime的问题
+        objectMapper.registerModule(new JavaTimeModule());
 
         //空对象不要抛异常
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);

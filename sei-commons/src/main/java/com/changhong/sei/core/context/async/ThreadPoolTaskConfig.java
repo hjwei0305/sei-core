@@ -1,11 +1,6 @@
 package com.changhong.sei.core.context.async;
 
-import com.changhong.sei.core.constant.Constants;
-import com.changhong.sei.core.util.JsonUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
