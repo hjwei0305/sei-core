@@ -207,7 +207,11 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         if (StringUtils.isBlank(targetParentId)) {
             return OperateResult.operationFailure("core_service_00033", "目标父节点ID");
         }
-
+        // 检查不能是本节点
+        if (StringUtils.equals(nodeId, targetParentId)) {
+            // 移动时不能将父节点设置为本节点！
+            return OperateResult.operationFailure("core_service_00040");
+        }
         //获取当前节点
         T entity = findOne(nodeId);
         if (Objects.isNull(entity)) {
