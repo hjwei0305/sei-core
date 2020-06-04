@@ -261,9 +261,18 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
 
     /**
      * 基于动态组合条件对象查询数据
+     * 存在多条时抛出异常
      */
     public T findOneByFilters(Search searchConfig) {
         return getDao().findOneByFilters(searchConfig);
+    }
+
+    /**
+     * 基于动态组合条件对象查询数据
+     * 获取结果中的第一条,没有则返回null.不用于findOneByFilters
+     */
+    public T findFirstByFilters(Search searchConfig) {
+        return getDao().findFirstByFilters(searchConfig);
     }
 
     /**

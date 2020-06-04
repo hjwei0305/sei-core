@@ -180,8 +180,15 @@ public interface BaseDao<T extends Persistable & Serializable, ID extends Serial
 
     /**
      * 基于动态组合条件对象查询数据
+     * 存在多条时抛出异常
      */
     T findOneByFilters(Search searchConfig);
+
+    /**
+     * 基于动态组合条件对象查询数据
+     * 获取结果中的第一条,没有则返回null.不用于findOneByFilters
+     */
+    T findFirstByFilters(Search searchConfig);
 
     /**
      * 基于动态组合条件对象和排序定义查询数据集合

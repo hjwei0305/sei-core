@@ -1,6 +1,5 @@
 package com.changhong.sei.core.dao.jpa.impl;
 
-import com.changhong.sei.core.context.ApplicationContextHolder;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.BaseDao;
@@ -20,7 +19,6 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -55,12 +53,13 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     protected boolean isValid(String str) {
         if (sqlPattern.matcher(str).find()) {
-            LOGGER.error("未能通过防SQL注入过滤器：str=" + str);
+            LOGGER.error("未能通过防SQL注入拦截器：str=" + str);
             return false;
         }
         return true;
     }
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public BaseDaoImpl(Class<T> domainClass, EntityManager entityManager) {
         super(domainClass, entityManager);
         this.domainClass = domainClass;
@@ -552,6 +551,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     /**
      * 基于动态组合条件对象查询数据
+     * 存在多条时抛出异常
      */
     @Override
     public T findOneByFilters(Search searchConfig) {
@@ -561,6 +561,27 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         Specification<T> spec = buildSpecification(searchConfig);
         Optional<T> optional = findOne(spec);
         return optional.orElse(null);
+    }
+
+    /**
+     * 基于动态组合条件对象查询数据
+     * 获取结果中的第一条,没有则返回null.不用于findOneByFilters
+     */
+    @Override
+    public T findFirstByFilters(Search searchConfig) {
+        if (ISoftDelete.class.isAssignableFrom(domainClass)) {
+            searchConfig.addFilter(new SearchFilter(ISoftDelete.DELETED, 0));
+        }
+        Specification<T> spec = buildSpecification(searchConfig);
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<T> page = findAll(spec, pageable);
+        if (Objects.nonNull(page)) {
+            List<T> list = page.getContent();
+            if (CollectionUtils.isNotEmpty(list)) {
+                return list.get(0);
+            }
+        }
+        return null;
     }
 
     /**
@@ -968,7 +989,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         if (StringUtils.isNotBlank(quickSearchValue)) {
             //拦截特殊字符 ' " 换行符
             if (!isValid(quickSearchValue)) {
-                return null;
+                //return null;
+                throw new SeiException("未能通过防SQL注入拦截器:" + quickSearchValue);
             }
             Collection<String> quickSearchProperties = searchConfig.getQuickSearchProperties();
             if (CollectionUtils.isNotEmpty(quickSearchProperties)) {
