@@ -498,6 +498,37 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     }
 
     /**
+     * 将树反构建为节点Id清单
+     *
+     * @param trees 树
+     * @return 节点清单
+     */
+    public static <Tree extends TreeEntity<Tree>> List<String> unBuildTreeIds(List<Tree> trees) {
+        Set<String> nodeSet = new LinkedHashSet<>();
+        trees.forEach(tree -> {
+            List<String> childIds = new ArrayList<>();
+            getAllChildIds(tree, childIds);
+            nodeSet.addAll(childIds);
+        });
+        return new ArrayList<>(nodeSet);
+    }
+
+    /**
+     * 递归获取所有子节点Id清单(包含自己)
+     *
+     * @param treeNode 树形节点（顶级节点）
+     * @param childIds 子节点Id清单
+     */
+    public static <Tree extends TreeEntity<Tree>> void getAllChildIds(Tree treeNode, List<String> childIds) {
+        childIds.add(treeNode.getId());
+        if (CollectionUtils.isNotEmpty(treeNode.getChildren())) {
+            List<Tree> children = treeNode.getChildren();
+            childIds.addAll(children.stream().map(TreeEntity::getId).collect(Collectors.toList()));
+            children.forEach(c-> getAllChildIds(c, childIds));
+        }
+    }
+
+    /**
      * 通过业务实体Id清单获取数据权限树形实体清单
      *
      * @param ids 业务实体Id清单
