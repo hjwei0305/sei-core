@@ -681,10 +681,11 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     private Sort buildSort(Search searchConfig) {
         Sort sort = Sort.unsorted();
-        if (searchConfig != null) {
+        if (Objects.nonNull(searchConfig)) {
+            List<Sort.Order> orders = new LinkedList<>();
             List<SearchOrder> sortOrders = searchConfig.getSortOrders();
-            if (sortOrders != null) {
-                List<Sort.Order> orders = new LinkedList<>();
+            // 检查是否有指定的排序要求
+            if (CollectionUtils.isNotEmpty(sortOrders)) {
                 for (SearchOrder sortOrder : sortOrders) {
                     if (SearchOrder.Direction.DESC.equals(sortOrder.getDirection())) {
                         orders.add(new Sort.Order(Sort.Direction.DESC, sortOrder.getProperty()));
@@ -692,9 +693,30 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         orders.add(new Sort.Order(Sort.Direction.ASC, sortOrder.getProperty()));
                     }
                 }
+                // IRank排序实例
                 if (IRank.class.isAssignableFrom(domainClass)) {
                     orders.add(new Sort.Order(Sort.Direction.ASC, IRank.RANK));
                 }
+            } else {
+                // 无指定的排序要求,则按平台默认规则
+
+                // IRank排序实例
+                if (IRank.class.isAssignableFrom(domainClass)) {
+                    orders.add(new Sort.Order(Sort.Direction.ASC, IRank.RANK));
+                }
+
+                // 按创建时间倒序
+                if (BaseAuditableEntity.class.isAssignableFrom(domainClass)) {
+                    orders.add(new Sort.Order(Sort.Direction.DESC, BaseAuditableEntity.CREATED_DATE));
+                }
+
+                // 按id倒序
+                if (BaseEntity.class.isAssignableFrom(domainClass)) {
+                    orders.add(new Sort.Order(Sort.Direction.DESC, BaseEntity.ID));
+                }
+            }
+
+            if (CollectionUtils.isNotEmpty(orders)) {
                 sort = Sort.by(orders);
             }
         }
