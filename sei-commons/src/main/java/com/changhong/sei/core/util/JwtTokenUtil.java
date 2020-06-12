@@ -1,6 +1,5 @@
 package com.changhong.sei.core.util;
 
-import com.changhong.sei.util.IdGenerator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,10 +8,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Jwt Util
@@ -174,21 +170,21 @@ public final class JwtTokenUtil {
 
     public static void main(String[] args) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("appId", "appId");
-        claims.put("tenant", "tenant");
-        claims.put("account", "account");
-        claims.put("userId", "userId");
-        claims.put("userName", "userName");
-        claims.put("userType", "userType");
-        claims.put("email", "email");
-        claims.put("authorityPolicy", "authorityPolicy");
-        claims.put("ip", "ip");
+        String tenant = "租户代码";
+        String userId = "用户id";
+        String account = "用户账号";
+        String userName = "用户姓名";
+        claims.put("tenant", tenant);
+        claims.put("userId", userId);
+        claims.put("account", account);
+        claims.put("userName", userName);
 
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
         jwtTokenUtil.setJwtExpiration(2880000);
-        String t = jwtTokenUtil.generateToken("admin", IdGenerator.uuid(), claims);
+        String t = jwtTokenUtil.generateToken(account, UUID.randomUUID().toString(), claims);
+        // 将token放入header中  x-authorization
         System.out.println("Token: " + t);
-        String account = jwtTokenUtil.getSubjectFromToken(t);
+        account = jwtTokenUtil.getSubjectFromToken(t);
         System.out.println(account);
     }
 }

@@ -48,6 +48,7 @@ public class MonitorAutoConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "sei.monitor.websocket.enable", havingValue = "true")
     public LoggingWSServer loggingWSServer() {
         return new LoggingWSServer();
     }

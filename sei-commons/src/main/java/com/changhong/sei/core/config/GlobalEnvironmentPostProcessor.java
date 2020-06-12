@@ -51,6 +51,11 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 ////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
 //                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
 //            }
+            if (environment.getProperty("sei.monitor.websocket.enable", Boolean.class, true)) {
+                properties.setProperty("logging.config", "classpath:logback-file.xml");
+            } else {
+                properties.setProperty("logging.config", "classpath:logback-spring.xml");
+            }
 
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);
             // 本地配置文件优先，即当配置中心和本地配置文件存在相同key时，使用本地该key的配置值

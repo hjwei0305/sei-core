@@ -8,6 +8,8 @@ import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,7 @@ import java.util.Set;
  * @version 1.0.00  2020-01-16 12:41
  */
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionTranslator {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionTranslator.class);
 
