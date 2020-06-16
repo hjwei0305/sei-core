@@ -58,6 +58,7 @@ public class LoggingWSServer {
 
                     //字符流
                     reader = new BufferedReader(new FileReader(filePath));
+//                    reader = new BufferedReader(System.console().reader());
                     Object[] lines = reader.lines().toArray();
                     if (lines.length > lastLength) {
                         //只取从上次之后产生的日志
