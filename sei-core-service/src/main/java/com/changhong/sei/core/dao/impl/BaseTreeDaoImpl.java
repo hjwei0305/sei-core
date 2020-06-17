@@ -219,7 +219,8 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     /**
      * 递归构造树
      */
-    private T recursiveBuild(T parentNode, List<T> nodes) {
+    @Override
+    public T recursiveBuild(T parentNode, List<T> nodes) {
         List<T> children = parentNode.getChildren();
         if (Objects.isNull(children)) {
             children = new ArrayList<T>();
@@ -471,9 +472,10 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     }
 
     /**
-     * todo 递归构造树
+     * todo 递归构造树(排除冻结节点)
      */
-    private T recursiveBuild4Unfrozen(T parentNode, List<T> nodes) {
+    @Override
+    public T recursiveBuild4Unfrozen(T parentNode, List<T> nodes) {
         List<T> children = parentNode.getChildren();
         if (Objects.isNull(children)) {
             children = new ArrayList<T>();

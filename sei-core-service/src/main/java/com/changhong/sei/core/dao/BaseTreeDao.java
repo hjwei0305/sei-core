@@ -170,4 +170,14 @@ public interface BaseTreeDao<T extends BaseEntity & TreeEntity> extends BaseDao<
      * @return 返回含有指定节点名称的集合
      */
     List<T> findByNamePathLike4Unfrozen(String nodeName);
+
+    /**
+     * 递归构造树
+     */
+    T recursiveBuild(T parentNode, List<T> nodes);
+
+    /**
+     * 递归构造树(排除冻结节点)
+     */
+    T recursiveBuild4Unfrozen(T parentNode, List<T> nodes);
 }
