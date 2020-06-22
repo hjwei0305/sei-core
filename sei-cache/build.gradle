@@ -15,6 +15,12 @@ dependencies {
     compile("com.google.guava:guava:20.0")
     // redis连接池配置需要
     compile("org.apache.commons:commons-pool2")
+    // redisson
+    compile ("org.redisson:redisson-spring-boot-starter:$redissonVersion") {
+        exclude group: 'org.redisson', module: 'redisson-spring-data-22'
+    }
+    // for Spring Data Redis v.2.1.x
+    compile ("org.redisson:redisson-spring-data-21:$redissonVersion")
 
     testCompile(
             "org.springframework.boot:spring-boot-starter-test"

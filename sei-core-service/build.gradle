@@ -25,6 +25,9 @@ dependencies {
             "joda-time:joda-time:$jodaTimeVersion"
     )
 
+    // for Hibernate v5.3.3+ - v5.4.x
+    compile ("org.redisson:redisson-hibernate-53:$redissonVersion")
+
     // logback <if>标签
     // compile("org.codehaus.janino:janino:3.1.0")
 

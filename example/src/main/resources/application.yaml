@@ -14,8 +14,17 @@ spring:
     password: ZmkDbgaua3Rso33T
     database: 0
 
+#sei:
+#  log:
+#    remote:
+#      host: 10.4.208.132:5044
+
 sei:
-  log:
-    remote:
-      host: 10.4.208.132:5044
+  cache:
+    # 是否使用本地缓存, 默认开启
+    enable-local: true
+    # 是否使用redis缓存, 默认开启
+    enable-redis: true
+    # 默认过期时间(毫秒), 默认10分钟
+    expire: 600000
 

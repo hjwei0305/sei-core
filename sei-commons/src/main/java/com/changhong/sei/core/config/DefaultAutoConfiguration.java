@@ -8,6 +8,7 @@ import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +30,15 @@ import javax.validation.ValidatorFactory;
  * @version 1.0.00  2020-01-07 11:35
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
 
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @ConditionalOnMissingBean
     public ApplicationContextHolder seiContext() {
         return new ApplicationContextHolder();
     }
