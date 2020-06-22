@@ -35,8 +35,9 @@ import javax.validation.ValidatorFactory;
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties({GlobalProperties.class, MockUserProperties.class})
 public class DefaultAutoConfiguration {
+    public static final String SEI_CONTEXT_BEAN_NAME = "seiContext";
 
-    @Bean
+    @Bean(SEI_CONTEXT_BEAN_NAME)
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @ConditionalOnMissingBean
     public ApplicationContextHolder seiContext() {

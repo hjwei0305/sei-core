@@ -1,5 +1,7 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+    com.changhong.sei.core.config.JpaCacheEnvironmentPostProcessor
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.changhong.sei.core.config.JpaAutoConfiguration,\
-com.changhong.sei.core.config.ServiceAutoConfiguration,\
-com.changhong.sei.core.config.SwaggerConfiguration
+    com.changhong.sei.core.config.JpaAutoConfiguration,\
+    com.changhong.sei.core.config.ServiceAutoConfiguration,\
+    com.changhong.sei.core.config.SwaggerConfiguration

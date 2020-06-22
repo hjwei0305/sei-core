@@ -10,7 +10,6 @@ import org.redisson.config.Config;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.redisson.spring.starter.RedissonAutoConfiguration;
 import org.redisson.spring.starter.RedissonProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -23,11 +22,10 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
@@ -56,7 +54,7 @@ import java.util.List;
 @Configuration
 //开启注解
 @EnableCaching
-@Order(Ordered.HIGHEST_PRECEDENCE + 100)
+@DependsOn(DefaultAutoConfiguration.SEI_CONTEXT_BEAN_NAME)
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 100)
 @ConditionalOnProperty(prefix = "sei.cache", name = "enable-redis", havingValue = "true", matchIfMissing = true)
 @ConditionalOnClass({Redisson.class, RedisOperations.class})
@@ -89,13 +87,6 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
     @Resource
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private RedisConnectionFactory connectionFactory;
-
-    @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
-    @ConditionalOnMissingBean
-    public ApplicationContextHolder seiContext() {
-        return new ApplicationContextHolder();
-    }
 
     @Bean
     @ConditionalOnMissingBean(RedisConnectionFactory.class)
