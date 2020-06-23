@@ -1,7 +1,6 @@
 package com.changhong.sei.core.dto.serach;
 
-import jodd.datetime.JDateTime;
-import jodd.typeconverter.Convert;
+import com.changhong.sei.util.ConverterUtils;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -179,36 +178,7 @@ public class SearchFilter implements Serializable {
         Object val = value;
         String type = getFieldType();
         if (Objects.nonNull(val) && val.toString().length() > 0) {
-            try {
-                if ("java.lang.String".equals(type) || "string".equalsIgnoreCase(type) || "str".equalsIgnoreCase(type)) {
-                    val = Convert.toString(val);
-                } else if ("java.lang.Boolean".equals(type) || "boolean".equalsIgnoreCase(type) || "bool".equalsIgnoreCase(type)) {
-                    val = Convert.toBoolean(val);
-                } else if ("java.lang.Short".equals(type) || "short".equalsIgnoreCase(type)) {
-                    val = Convert.toShort(val);
-                } else if ("java.lang.Integer".equals(type) || "int".equalsIgnoreCase(type)) {
-                    val = Convert.toInteger(val);
-                } else if ("java.lang.Long".equals(type) || "long".equalsIgnoreCase(type)) {
-                    val = Convert.toLong(val);
-                } else if ("java.lang.Float".equals(type) || "float".equalsIgnoreCase(type)) {
-                    val = Convert.toFloat(val);
-                } else if ("java.lang.Double".equals(type) || "double".equalsIgnoreCase(type)) {
-                    val = Convert.toDouble(val);
-                } else if ("java.math.BigDecimal".equals(type)) {
-                    val = Convert.toBigDecimal(val);
-                } else if ("java.util.Date".equals(type) || "date".equalsIgnoreCase(type)) {
-                    val = Convert.toDate(val);
-                } else if ("java.sql.Date".equals(type)) {
-                    JDateTime jDateTime = new JDateTime(val.toString());
-                    val = jDateTime.convertToSqlDate();
-                } else if ("java.sql.Timestamp".equals(type)) {
-                    JDateTime jDateTime = new JDateTime(val.toString());
-                    val = jDateTime.convertToSqlTimestamp();
-                } else if ("java.lang.Byte".equals(type)) {
-                    val = Convert.toByte(val);
-                }
-            } catch (Exception ignored) {
-            }
+            val = ConverterUtils.convert(type, val);
         }
         return val;
     }
