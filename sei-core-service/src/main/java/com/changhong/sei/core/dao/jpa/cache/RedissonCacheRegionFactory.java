@@ -37,6 +37,7 @@ public class RedissonCacheRegionFactory extends RedissonRegionFactory {
     @Override
     protected RedissonClient createRedissonClient(Map properties) {
         Config customConfig = new Config(defaultConfig);
+        // 压缩型序列化对象编码
         customConfig.setCodec(new SnappyCodec());
         return Redisson.create(customConfig);
     }
