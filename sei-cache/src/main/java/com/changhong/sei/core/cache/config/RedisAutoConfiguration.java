@@ -192,7 +192,7 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
                     .setDatabase(redisProperties.getDatabase())
                     .setConnectTimeout(timeout)
                     //**此项务必设置为redisson解决之前bug的timeout问题关键*****
-                    .setPingConnectionInterval(1000)
+//                    .setPingConnectionInterval(1000)
                     .setPassword(redisProperties.getPassword());
         } else if (clusterMethod != null && ReflectionUtils.invokeMethod(clusterMethod, redisProperties) != null) {
             //集群
@@ -205,7 +205,7 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
                     .addNodeAddress(nodes)
                     .setConnectTimeout(timeout)
                     //**此项务必设置为redisson解决之前bug的timeout问题关键*****
-                    .setPingConnectionInterval(1000)
+//                    .setPingConnectionInterval(1000)
                     .setPassword(redisProperties.getPassword());
         } else {
             //单机
@@ -224,7 +224,7 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
                     .setAddress(url)
                     .setConnectTimeout(timeout)
                     // 此项务必设置为redisson解决之前bug的timeout问题关键
-                    .setPingConnectionInterval(1000)
+//                    .setPingConnectionInterval(1000)
                     .setDatabase(redisProperties.getDatabase())
                     .setPassword(redisProperties.getPassword());
         }
