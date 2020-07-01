@@ -951,6 +951,16 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     Expression expressionPLE = buildExpression(root, builder, (String) matchValue, null);
                     predicate = builder.lessThanOrEqualTo(expression, expressionPLE);
                     break;
+                case NOTIN:
+                    if (matchValue.getClass().isArray()) {
+                        predicate = expression.in((Object[]) matchValue);
+                    } else if (matchValue instanceof Collection) {
+                        predicate = expression.in((Collection) matchValue);
+                    } else {
+                        predicate = builder.equal(expression, matchValue);
+                    }
+                    predicate = builder.not(predicate);
+                    break;
                 default:
                     break;
             }
