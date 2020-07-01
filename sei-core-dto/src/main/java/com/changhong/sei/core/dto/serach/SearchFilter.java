@@ -127,7 +127,12 @@ public class SearchFilter implements Serializable {
         /**
          * 属性比较 属性1 <= 属性2
          */
-        PLE
+        PLE,
+
+        /**
+         * 不包含 NOT IN ()
+         */
+        NOTIN
     }
 
     /**
