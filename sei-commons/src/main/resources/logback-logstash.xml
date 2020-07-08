@@ -92,8 +92,6 @@
     <logger name="org.apache.cxf" level="ERROR"/>
     <!-- thymeleaf log configure -->
     <logger name="org.thymeleaf" level="WARN"/>
-    <!-- redisson log configure -->
-    <logger name="org.redisson" level="WARN"/>
     <!--<logger name="io.netty.util.internal" level="WARN"/>-->
     <logger name="io.netty" level="WARN"/>
     <logger name="druid" level="WARN"/>
