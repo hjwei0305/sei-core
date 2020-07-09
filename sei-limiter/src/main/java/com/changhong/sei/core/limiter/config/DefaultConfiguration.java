@@ -2,6 +2,7 @@ package com.changhong.sei.core.limiter.config;
 
 import com.changhong.sei.core.limiter.ErrorHandler;
 import com.changhong.sei.core.limiter.LimitedFallbackResolver;
+import com.changhong.sei.core.limiter.constant.Constants;
 import com.changhong.sei.core.limiter.support.lock.LockLimiter;
 import com.changhong.sei.core.limiter.support.lock.redis.RedisLock;
 import org.slf4j.Logger;
@@ -26,8 +27,8 @@ public class DefaultConfiguration {
         return new RedisLockRegistry(redisConnectionFactory, "sei-lock");
     }
 
-    @Bean
-    public LockLimiter redislock(RedisLockRegistry redisLockRegistry) {
+    @Bean(Constants.LIMITER_LOCK)
+    public LockLimiter redisLock(RedisLockRegistry redisLockRegistry) {
         return new RedisLock(redisLockRegistry, "redis");
     }
 

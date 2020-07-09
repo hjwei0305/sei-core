@@ -1,5 +1,7 @@
 package com.changhong.sei.core.limiter.support.lock;
 
+import com.changhong.sei.core.limiter.constant.Constants;
+
 import java.lang.annotation.*;
 
 /**
@@ -10,7 +12,7 @@ import java.lang.annotation.*;
 @Repeatable(SeiLocks.class)
 public @interface SeiLock {
 
-    String limiter() default "";
+    String limiter() default Constants.LIMITER_LOCK;
 
     /**
      * 资源限制键，为空时将使用类名+方法名作为key
