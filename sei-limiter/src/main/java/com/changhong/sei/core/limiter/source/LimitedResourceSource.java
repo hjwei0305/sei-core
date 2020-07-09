@@ -10,10 +10,5 @@ import java.util.Collection;
  */
 public interface LimitedResourceSource {
 
-    /**
-     * @param targetClass
-     * @param method
-     * @return
-     */
     Collection<LimitedResource> getLimitedResource(Class<?> targetClass, Method method);
 }

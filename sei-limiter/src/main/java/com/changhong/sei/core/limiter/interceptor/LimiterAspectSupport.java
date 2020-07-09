@@ -7,8 +7,6 @@ import com.changhong.sei.core.limiter.metadata.LimitedResourceMetadataCache;
 import com.changhong.sei.core.limiter.resource.LimitedResource;
 import com.changhong.sei.core.limiter.source.LimitedResourceSource;
 import org.aopalliance.intercept.MethodInvocation;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -21,14 +19,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 /**
  * 实际的advisor
  * 使用beanfactory的一些基础设施
  */
 public abstract class LimiterAspectSupport implements BeanFactoryAware, InitializingBean, SmartInitializingSingleton {
-
-    protected final Log logger = LogFactory.getLog(LimiterAspectSupport.class);
 
     private BeanFactory beanFactory;
 

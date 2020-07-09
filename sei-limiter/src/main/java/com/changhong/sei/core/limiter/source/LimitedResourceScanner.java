@@ -22,7 +22,6 @@ import java.util.*;
  */
 public class LimitedResourceScanner implements LimitedResourceSource {
 
-
     static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
     private String resourcePattern = DEFAULT_RESOURCE_PATTERN;
@@ -37,9 +36,7 @@ public class LimitedResourceScanner implements LimitedResourceSource {
 
     Map<String, LimitedResource> limitedResourceMap = new HashMap<>();
 
-
     Map<String, Collection<LimitedResource>> limitedResourceRegistry = new HashMap<>();
-
 
     public LimitedResourceScanner(String basePackage, Collection<LimiterAnnotationParser> limiterAnnotationParsers, ResourceLoader resourceLoader) {
         this.basePackage = basePackage;
@@ -48,9 +45,7 @@ public class LimitedResourceScanner implements LimitedResourceSource {
         this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
     }
 
-
     public void scanLimitedResource() {
-
         try {
             String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                     ClassUtils.convertClassNameToResourcePath(basePackage) + '/' + this.resourcePattern;
@@ -99,7 +94,6 @@ public class LimitedResourceScanner implements LimitedResourceSource {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public Collection<LimitedResource> getLimitedResource(Class<?> targetClass, Method method) {

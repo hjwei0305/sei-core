@@ -19,12 +19,9 @@ public class DefaultLimitedResourceSource implements LimitedResourceSource {
 
     private static final Collection<LimitedResource> NULL_CACHING_ATTRIBUTE = Collections.emptyList();
 
-
     private final Map<Object, Collection<LimitedResource>> cache = new ConcurrentHashMap(1024);
 
-
     private final Set<LimiterAnnotationParser> annotationParsers;
-
 
     public DefaultLimitedResourceSource(LimiterAnnotationParser... annotationParsers) {
         Set<LimiterAnnotationParser> parsers = new LinkedHashSet<>(annotationParsers.length);
@@ -49,7 +46,6 @@ public class DefaultLimitedResourceSource implements LimitedResourceSource {
         }
 
     }
-
 
     private Collection<LimitedResource> computeLimitedResource(Method method, Class<?> targetClass) {
         // 从代理前的方法上获取
@@ -79,7 +75,6 @@ public class DefaultLimitedResourceSource implements LimitedResourceSource {
         return null;
     }
 
-
     private Collection<LimitedResource> findLimitedResource(Method method) {
         return findLimitedResourceFromAnnotatedElement(method);
     }
@@ -87,7 +82,6 @@ public class DefaultLimitedResourceSource implements LimitedResourceSource {
     private Collection<LimitedResource> findLimitedResource(Class clazz) {
         return findLimitedResourceFromAnnotatedElement(clazz);
     }
-
 
     private Collection<LimitedResource> findLimitedResourceFromAnnotatedElement(AnnotatedElement ae) {
         Annotation[] annotations = ae.getAnnotations();
@@ -106,6 +100,5 @@ public class DefaultLimitedResourceSource implements LimitedResourceSource {
         }
         return retVal;
     }
-
 
 }

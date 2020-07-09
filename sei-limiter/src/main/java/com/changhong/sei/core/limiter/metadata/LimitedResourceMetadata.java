@@ -12,7 +12,6 @@ import java.util.Map;
 
 public interface LimitedResourceMetadata<T extends LimitedResource> {
 
-
     Class<?> getTargetClass();
 
     Method getTargetMethod();

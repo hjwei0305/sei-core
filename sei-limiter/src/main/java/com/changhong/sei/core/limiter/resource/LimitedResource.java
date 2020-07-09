@@ -9,7 +9,6 @@ import java.util.Collection;
 
 public interface LimitedResource<T extends Limiter> {
 
-
     String getKey();
 
     String getLimiter();

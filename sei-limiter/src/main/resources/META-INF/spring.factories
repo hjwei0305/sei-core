@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.changhong.sei.core.limiter.config.DefaultConfiguration,\
+com.changhong.sei.core.limiter.config.ProxyLimiterConfiguration

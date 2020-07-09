@@ -22,7 +22,6 @@ public class RedisLock extends LockLimiter {
 
     @Override
     public boolean lock(Object key) {
-        LogUtil.debug("线程:{} key: [{}] 尝试 获取锁", Thread.currentThread().getName(), key);
         //获取Redis分布式锁
         Lock lock = getLock(key);
 

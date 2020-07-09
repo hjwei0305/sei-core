@@ -7,11 +7,9 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Collection;
 
-
 public abstract class AbstractLimiterAnnotationParser<T extends Limiter<?>, V extends Annotation> implements LimiterAnnotationParser<T> {
 
     private Class<Annotation> supportAnnotation;
-
 
     // 不需要同步
     private synchronized Class<Annotation> computeSupportAnnotation() {
@@ -21,7 +19,6 @@ public abstract class AbstractLimiterAnnotationParser<T extends Limiter<?>, V ex
         supportAnnotation = (Class<Annotation>) ((ParameterizedType) (this.getClass().getGenericSuperclass())).getActualTypeArguments()[1];
         return supportAnnotation;
     }
-
 
     @Override
     public Class<Annotation> getSupportAnnotation() {
@@ -38,7 +35,6 @@ public abstract class AbstractLimiterAnnotationParser<T extends Limiter<?>, V ex
     public String getKey(AnnotationAttributes attributes) {
         return attributes.getString("key");
     }
-
 
     public String getFallback(AnnotationAttributes attributes) {
         return attributes.getString("fallback");

@@ -7,7 +7,6 @@ import java.util.Observable;
 
 public abstract class AbstractLimitedResource extends Observable implements LimitedResource {
 
-
     protected String key;
 
     protected Collection<String> argumentInjectors;
