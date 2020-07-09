@@ -4,7 +4,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import com.changhong.sei.core.limiter.AbstractLimiterAnnotationParser;
 import com.changhong.sei.core.limiter.resource.LimitedResource;
 
-public class PeakLimiterAnnotationParser extends AbstractLimiterAnnotationParser<PeakLimiter, SPeak> {
+public class PeakLimiterAnnotationParser extends AbstractLimiterAnnotationParser<PeakLimiter, SeiPeak> {
     @Override
     public LimitedResource<PeakLimiter> parseLimiterAnnotation(AnnotationAttributes attributes) {
 

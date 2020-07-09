@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SLocks {
+public @interface SeiLocks {
 
-    SLock[] value();
+    SeiLock[] value();
 }

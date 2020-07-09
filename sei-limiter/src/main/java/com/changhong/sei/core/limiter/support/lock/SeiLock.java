@@ -7,8 +7,8 @@ import java.lang.annotation.*;
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(SLocks.class)
-public @interface SLock {
+@Repeatable(SeiLocks.class)
+public @interface SeiLock {
 
     String limiter() default "";
 

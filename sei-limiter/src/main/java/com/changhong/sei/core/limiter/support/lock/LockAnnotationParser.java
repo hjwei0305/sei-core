@@ -4,7 +4,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import com.changhong.sei.core.limiter.AbstractLimiterAnnotationParser;
 import com.changhong.sei.core.limiter.resource.LimitedResource;
 
-public class LockAnnotationParser extends AbstractLimiterAnnotationParser<DistributedLock, SLock> {
+public class LockAnnotationParser extends AbstractLimiterAnnotationParser<LockLimiter, SeiLock> {
     @Override
     public LimitedResource parseLimiterAnnotation(AnnotationAttributes attributes) {
         return new LockResource(

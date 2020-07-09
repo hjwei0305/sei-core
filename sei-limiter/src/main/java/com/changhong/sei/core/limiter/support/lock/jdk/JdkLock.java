@@ -1,6 +1,6 @@
 package com.changhong.sei.core.limiter.support.lock.jdk;
 
-import com.changhong.sei.core.limiter.support.lock.DistributedLock;
+import com.changhong.sei.core.limiter.support.lock.LockLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 基于ConcurrentHashMap和ReentrantLock实现的一个简单的锁组件
  */
-public class JdkLock extends DistributedLock {
+public class JdkLock extends LockLimiter {
 
     private final Logger logger = LoggerFactory.getLogger(JdkLock.class);
 

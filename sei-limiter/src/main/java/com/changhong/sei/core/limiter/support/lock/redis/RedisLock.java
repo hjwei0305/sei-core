@@ -1,11 +1,12 @@
 package com.changhong.sei.core.limiter.support.lock.redis;
 
-import com.changhong.sei.core.limiter.support.lock.DistributedLock;
+import com.changhong.sei.core.limiter.support.lock.LockLimiter;
+import com.changhong.sei.core.log.LogUtil;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 
 import java.util.concurrent.locks.Lock;
 
-public class RedisLock extends DistributedLock {
+public class RedisLock extends LockLimiter {
 
     /**
      * 引入Redis分布式锁依赖组件
@@ -21,11 +22,14 @@ public class RedisLock extends DistributedLock {
 
     @Override
     public boolean lock(Object key) {
+        LogUtil.debug("线程:{} key: [{}] 尝试 获取锁", Thread.currentThread().getName(), key);
         //获取Redis分布式锁
         Lock lock = getLock(key);
 
         //尝试获取锁
-        return lock.tryLock();
+        boolean locked = lock.tryLock();
+        LogUtil.debug("线程:{} key: [{}] 获取锁 {}", Thread.currentThread().getName(), key, locked);
+        return locked;
     }
 
     @Override
@@ -34,6 +38,8 @@ public class RedisLock extends DistributedLock {
         Lock lock = getLock(key);
         //释放分布式锁
         lock.unlock();
+
+        LogUtil.debug("线程:{} key: [{}] 释放锁", Thread.currentThread().getName(), key);
     }
 
     @Override

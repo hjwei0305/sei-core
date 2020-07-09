@@ -7,7 +7,6 @@ import java.lang.annotation.Annotation;
 
 public interface LimiterAnnotationParser<T extends Limiter> {
 
-
     Class<Annotation> getSupportAnnotation();
 
     LimitedResource<T> parseLimiterAnnotation(AnnotationAttributes attributes);

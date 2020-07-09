@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 限制一个资源的并发数小于固定值
  */
-public abstract class PeakLimiter implements Limiter<SPeak> {
+public abstract class PeakLimiter implements Limiter<SeiPeak> {
 
     public abstract boolean acquire(Object key, int max);
 

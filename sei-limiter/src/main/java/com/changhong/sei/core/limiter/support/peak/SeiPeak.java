@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface SPeak {
+public @interface SeiPeak {
 
     String limiter() default "";
 

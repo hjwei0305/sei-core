@@ -16,10 +16,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-integration")
     compile("org.springframework.integration:spring-integration-redis")
     compile("com.google.guava:guava:20.0")
-
-    testCompile(
-            "org.springframework.boot:spring-boot-starter-test"
-    )
 }
 
 //compileJava.dependsOn(processResources)

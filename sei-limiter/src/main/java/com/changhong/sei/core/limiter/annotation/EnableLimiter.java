@@ -1,6 +1,7 @@
 package com.changhong.sei.core.limiter.annotation;
 
 import com.changhong.sei.core.limiter.config.LimiterConfigurationSelector;
+import com.changhong.sei.core.limiter.constant.Constants;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
@@ -22,10 +23,10 @@ public @interface EnableLimiter {
     /**
      * 默认有三种组件
      */
-    String[] annotationParser()
-            default {"com.changhong.sei.core.limiter.support.lock.LockAnnotationParser",
-            "com.changhong.sei.core.limiter.support.ratelimiter.RateLimiterAnnotationParser",
-            "com.changhong.sei.core.limiter.support.peak.PeakLimiterAnnotationParser"
+    String[] annotationParser() default {
+            Constants.LOCK_ANNOTATION_PARSER,
+            Constants.RATE_LIMITER_ANNOTATION_PARSER,
+            Constants.PEAK_LIMITER_ANNOTATION_PARSER
     };
 
     AdviceMode mode() default PROXY;

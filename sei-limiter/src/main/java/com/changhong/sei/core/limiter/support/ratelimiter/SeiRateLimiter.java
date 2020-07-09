@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface SRateLimiter {
+public @interface SeiRateLimiter {
 
     String limiter() default "";
 

@@ -4,7 +4,7 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import com.changhong.sei.core.limiter.AbstractLimiterAnnotationParser;
 import com.changhong.sei.core.limiter.resource.LimitedResource;
 
-public class RateLimiterAnnotationParser extends AbstractLimiterAnnotationParser<RateLimiter, SRateLimiter> {
+public class RateLimiterAnnotationParser extends AbstractLimiterAnnotationParser<RateLimiter, SeiRateLimiter> {
     @Override
     public LimitedResource<RateLimiter> parseLimiterAnnotation(AnnotationAttributes attributes) {
         return new RateLimiterResource(getKey(attributes),

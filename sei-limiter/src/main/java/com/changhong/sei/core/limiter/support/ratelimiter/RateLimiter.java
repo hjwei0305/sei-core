@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 频率限制器，用于限制某一资源的访问频率
  */
-public abstract class RateLimiter implements Limiter<SRateLimiter> {
+public abstract class RateLimiter implements Limiter<SeiRateLimiter> {
 
 
     public abstract boolean acquire(Object key, double rate, long capacity);

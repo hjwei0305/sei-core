@@ -27,4 +27,7 @@ sei:
     enable-redis: true
     # 默认过期时间(毫秒), 默认10分钟
     expire: 600000
+  http:
+    filter:
+      enable: false
 
