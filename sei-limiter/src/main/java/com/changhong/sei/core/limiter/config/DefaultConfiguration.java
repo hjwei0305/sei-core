@@ -24,7 +24,7 @@ public class DefaultConfiguration {
     @ConditionalOnMissingBean(RedisLockRegistry.class)
 //    @ConditionalOnProperty()
     public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory) {
-        return new RedisLockRegistry(redisConnectionFactory, "sei-lock");
+        return new RedisLockRegistry(redisConnectionFactory, "sei-lock", 180000L);
     }
 
     @Bean(Constants.LIMITER_LOCK)

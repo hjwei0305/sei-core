@@ -19,7 +19,7 @@ import java.util.Random;
 public class LockTestController implements LockTestApi {
 
     @Override
-    @SeiLock(key = "#key")
+    @SeiLock(key = "'TEST:key:' + #key")
     public String testLock(String key) throws Exception {
         Random random = new Random();
         int _int = random.nextInt(20000);
