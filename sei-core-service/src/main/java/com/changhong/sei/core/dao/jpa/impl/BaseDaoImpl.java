@@ -11,12 +11,12 @@ import com.changhong.sei.core.entity.*;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.DataOperationDeniedException;
 import com.changhong.sei.exception.SeiException;
+import com.changhong.sei.util.DateUtils;
 import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
@@ -29,6 +29,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -78,6 +80,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     /**
      * 保存业务实体前的数据预处理
+     *
      * @param entity 业务实体
      * @return 是否为新建
      */
@@ -94,7 +97,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 baseEntity.setId(IdGenerator.uuid());
             } else {
                 if (!existsById(id)) {
-                    throw new DataOperationDeniedException("需要修改的数据不存在！id="+id);
+                    throw new DataOperationDeniedException("需要修改的数据不存在！id=" + id);
                 } else {
                     isNew = false;
                 }
@@ -129,6 +132,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         }
         return isNew;
     }
+
     /**
      * 持久化实体对象
      *
@@ -147,7 +151,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         } else {
             // 判断是否启用数据变更
             if (isEnableDataHistory) {
-                original = findOne((ID)entity.getId());
+                original = findOne((ID) entity.getId());
                 originalJson = JsonUtils.toJson(original);
             }
             entity = entityManager.merge(entity);
@@ -162,8 +166,10 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         }
         return entity;
     }
+
     /**
      * 批量保存业务实体
+     *
      * @param entities 业务实体清单
      */
     @Override
@@ -206,6 +212,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
     /**
      * 采集并发送数据变更记录
+     *
      * @param entity 业务实体
      */
     private void sendDeleteDataChange(T entity) {
@@ -521,7 +528,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      */
     @Override
     public List<T> findByFilter(SearchFilter searchFilter) {
-        List<SearchFilter> searchFilters = new ArrayList<SearchFilter>();
+        List<SearchFilter> searchFilters = new ArrayList<>();
         searchFilters.add(searchFilter);
         if (ISoftDelete.class.isAssignableFrom(domainClass)) {
             searchFilters.add(new SearchFilter(ISoftDelete.DELETED, 0));
@@ -726,69 +733,13 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
     @SuppressWarnings({"rawtypes", "ConstantConditions"})
     private <X> Predicate buildPredicate(String propertyName, SearchFilter filter, Root<X> root, CriteriaQuery<?> query,
                                          CriteriaBuilder builder, Boolean having) {
-        Object matchValue = filter.getValue();
-        if ((matchValue == null)
-                || (having && !propertyName.contains("("))
-                || (!having && propertyName.contains("("))) {
+        if ((having && !propertyName.contains("(")) || (!having && propertyName.contains("("))) {
             return null;
-        }
-        if (matchValue instanceof String) {
-            if (StringUtils.isBlank(String.valueOf(matchValue))) {
-                return null;
-            }
-        } else if (matchValue.getClass().isArray()) {
-            if (((Object[]) matchValue).length == 0) {
-                return null;
-            }
-        } else if (matchValue instanceof Collection) {
-            if (((Collection) matchValue).size() == 0) {
-                return null;
-            }
         }
 
         Predicate predicate = null;
+        Object matchValue = filter.getValue();
         Expression expression = buildExpression(root, builder, propertyName, null);
-        // 如果对字段属性为枚举类型，并且比较值为字符串，处理枚举值
-        if (expression.getJavaType().isEnum()) {
-            if (matchValue instanceof String) {
-                // 将查询字符串转换为枚举值
-                matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
-            }
-            // 如果是LIST，则循环处理
-            else if (matchValue instanceof Collection) {
-                Set enumValues = new HashSet();
-                ((Collection) matchValue).forEach(m -> {
-                    if (m instanceof String) {
-                        // 将查询字符串转换为枚举值
-                        Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
-                        if (Objects.nonNull(enumValue)) {
-                            enumValues.add(enumValue);
-                        }
-                    }
-                });
-                if (CollectionUtils.isNotEmpty(enumValues)) {
-                    matchValue = enumValues;
-                }
-            }
-            // 如果是数据
-            else if (matchValue.getClass().isArray()) {
-                Object[] matchValueArr = (Object[]) matchValue;
-                Set enumValues = new HashSet();
-                for (Object m : matchValueArr) {
-                    if (m instanceof String) {
-                        // 将查询字符串转换为枚举值
-                        Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
-                        if (Objects.nonNull(enumValue)) {
-                            enumValues.add(enumValue);
-                        }
-                    }
-                };
-                if (CollectionUtils.isNotEmpty(enumValues)) {
-                    //noinspection ToArrayCallWithZeroLengthArrayArgument
-                    matchValue = enumValues.toArray(new Object[enumValues.size()]);
-                }
-            }
-        }
         if (SearchFilter.NULL_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
             predicate = expression.isNull();
         } else if (SearchFilter.EMPTY_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
@@ -798,16 +749,68 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         } else if (SearchFilter.NO_EMPTY_VALUE.equalsIgnoreCase(String.valueOf(matchValue))) {
             predicate = builder.and(builder.isNotNull(expression), builder.notEqual(expression, ""));
         } else {
+            // 如果对字段属性为枚举类型，并且比较值为字符串，处理枚举值
+            if (Objects.nonNull(matchValue) && expression.getJavaType().isEnum()) {
+                if (matchValue instanceof String) {
+                    // 将查询字符串转换为枚举值
+                    matchValue = EnumUtils.getEnum(expression.getJavaType(), (String) matchValue);
+                }
+                // 如果是LIST，则循环处理
+                else if (matchValue instanceof Collection) {
+                    Set<Object> enumValues = new HashSet<>();
+                    ((Collection) matchValue).forEach(m -> {
+                        if (m instanceof String) {
+                            // 将查询字符串转换为枚举值
+                            Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
+                            if (Objects.nonNull(enumValue)) {
+                                enumValues.add(enumValue);
+                            }
+                        }
+                    });
+                    if (CollectionUtils.isNotEmpty(enumValues)) {
+                        matchValue = enumValues;
+                    }
+                }
+                // 如果是数组
+                else if (matchValue.getClass().isArray()) {
+                    Object[] matchValueArr = (Object[]) matchValue;
+                    Set<Object> enumValues = new HashSet<>();
+                    for (Object m : matchValueArr) {
+                        if (m instanceof String) {
+                            // 将查询字符串转换为枚举值
+                            Object enumValue = EnumUtils.getEnum(expression.getJavaType(), (String) m);
+                            if (Objects.nonNull(enumValue)) {
+                                enumValues.add(enumValue);
+                            }
+                        }
+                    }
+                    if (CollectionUtils.isNotEmpty(enumValues)) {
+                        //noinspection ToArrayCallWithZeroLengthArrayArgument
+                        matchValue = enumValues.toArray(new Object[enumValues.size()]);
+                    }
+                }
+            }
+
             // logic operator
             switch (filter.getOperator()) {
                 case EQ:
+                    if (Objects.isNull(matchValue)) {
+                        predicate = expression.isNull();
+                    }
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
-                    if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(((Date) matchValue).getTime());
-                        if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfHour() == 0 && dateTime.getSecondOfMinute() == 0) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime.toDate()),
-                                    builder.lessThan(expression, dateTime.plusDays(1).toDate()));
+                    else if (matchValue instanceof Date) {
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime),
+                                    builder.lessThan(expression, dateTime.plusDays(1)));
+                        } else {
+                            if (dateTime.getHour() == 0 && dateTime.getMinute() == 0 && dateTime.getSecond() == 0) {
+                                predicate = builder.and(builder.greaterThanOrEqualTo(expression, DateUtils.localDateTime2Date(dateTime)),
+                                        builder.lessThan(expression, DateUtils.localDateTime2Date(dateTime.plusDays(1))));
+                            }
                         }
                     }
                     if (predicate == null) {
@@ -815,13 +818,23 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     }
                     break;
                 case NE:
+                    if (Objects.isNull(matchValue)) {
+                        predicate = expression.isNotNull();
+                    }
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
-                    if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(((Date) matchValue).getTime());
-                        if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfHour() == 0 && dateTime.getSecondOfMinute() == 0) {
-                            predicate = builder.or(builder.lessThan(expression, dateTime.toDate()),
-                                    builder.greaterThan(expression, dateTime.plusDays(1).toDate()));
+                    else if (matchValue instanceof Date) {
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            predicate = builder.or(builder.lessThan(expression, dateTime),
+                                    builder.greaterThan(expression, dateTime.plusDays(1)));
+                        } else {
+                            if (dateTime.getHour() == 0 && dateTime.getMinute() == 0 && dateTime.getSecond() == 0) {
+                                predicate = builder.or(builder.lessThan(expression, DateUtils.localDateTime2Date(dateTime)),
+                                        builder.greaterThan(expression, DateUtils.localDateTime2Date(dateTime.plusDays(1))));
+                            }
                         }
                     }
                     if (predicate == null) {
@@ -838,7 +851,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //IS NULL
                 case NU:
-                    if (matchValue instanceof Boolean && !((Boolean) matchValue)) {
+                    if (Objects.nonNull(matchValue) && matchValue instanceof Boolean && !((Boolean) matchValue)) {
                         predicate = builder.isNotNull(expression);
                     } else {
                         predicate = builder.isNull(expression);
@@ -846,7 +859,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //IS NOT NULL
                 case NN:
-                    if (matchValue instanceof Boolean && !((Boolean) matchValue)) {
+                    if (Objects.nonNull(matchValue) && matchValue instanceof Boolean && !((Boolean) matchValue)) {
                         predicate = builder.isNull(expression);
                     } else {
                         predicate = builder.isNotNull(expression);
@@ -878,19 +891,30 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //BETWEEN 1 AND 2
                 case BT:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     Assert.isTrue(matchValue.getClass().isArray(), "Match value must be array");
                     Object[] matchValues = (Object[]) matchValue;
                     Assert.isTrue(matchValues.length == 2, "Match value must have two value");
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValues[0] instanceof Date) {
-                        DateTime dateFrom = new DateTime(((Date) matchValues[0]).getTime());
-                        DateTime dateTo = new DateTime(((Date) matchValues[1]).getTime());
-                        if (dateFrom.getHourOfDay() == 0 && dateFrom.getMinuteOfHour() == 0 && dateFrom.getSecondOfMinute() == 0) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toDate()),
-                                    builder.lessThan(expression, dateTo.plusDays(1).toDate()));
+                        LocalDateTime dateFrom = DateUtils.date2LocalDateTime((Date) matchValues[0]);
+                        LocalDateTime dateTo = DateUtils.date2LocalDateTime((Date) matchValues[1]);
+
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toLocalDate()),
+                                    builder.lessThan(expression, dateTo.toLocalDate()));
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom),
+                                    builder.lessThan(expression, dateTo.plusDays(1)));
                         } else {
-                            predicate = builder.equal(expression, matchValue);
+                            if (dateFrom.getHour() == 0 && dateFrom.getMinute() == 0 && dateFrom.getSecond() == 0) {
+                                predicate = builder.and(builder.greaterThanOrEqualTo(expression, DateUtils.localDateTime2Date(dateFrom)),
+                                        builder.lessThan(expression,DateUtils.localDateTime2Date( dateTo.plusDays(1))));
+                            } else {
+                                predicate = builder.and(builder.greaterThanOrEqualTo(expression, DateUtils.localDateTime2Date(dateFrom)),
+                                        builder.lessThan(expression, DateUtils.localDateTime2Date(dateTo)));
+                            }
                         }
                     } else {
                         predicate = builder.between(expression, (Comparable) matchValues[0], (Comparable) matchValues[1]);
@@ -898,20 +922,41 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //>
                 case GT:
+                    Assert.notNull(matchValue, "Match value must be not null");
+                    if (matchValue instanceof Date) {
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            matchValue = dateTime;
+                        }
+                    }
                     predicate = builder.greaterThan(expression, (Comparable) matchValue);
                     break;
                 //>=
                 case GE:
+                    Assert.notNull(matchValue, "Match value must be not null");
+                    if (matchValue instanceof Date) {
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            matchValue = dateTime;
+                        }
+                    }
                     predicate = builder.greaterThanOrEqualTo(expression, (Comparable) matchValue);
                     break;
                 //<
                 case LT:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(((Date) matchValue).getTime());
-                        if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfHour() == 0 && dateTime.getSecondOfMinute() == 0) {
-                            predicate = builder.lessThan(expression, dateTime.toDate());
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            matchValue = dateTime;
                         }
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
@@ -920,12 +965,17 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //<=
                 case LE:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(((Date) matchValue).getTime());
-                        if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfHour() == 0 && dateTime.getSecondOfMinute() == 0) {
-                            predicate = builder.lessThan(expression, dateTime.plusDays(1).toDate());
+                        LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                        if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
+                            matchValue = dateTime.toLocalDate();
+                        } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
+                            matchValue = dateTime;
+                        } else if (dateTime.getHour() == 0 && dateTime.getMinute() == 0 && dateTime.getSecond() == 0) {
+                            matchValue = DateUtils.localDateTime2Date(dateTime.plusDays(1));
                         }
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
@@ -933,6 +983,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     }
                     break;
                 case IN:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue.getClass().isArray()) {
                         predicate = expression.in((Object[]) matchValue);
                     } else if (matchValue instanceof Collection) {
@@ -943,15 +994,18 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     break;
                 //Property Less Equal: <
                 case PLT:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     Expression expressionPLT = buildExpression(root, builder, (String) matchValue, null);
                     predicate = builder.lessThan(expression, expressionPLT);
                     break;
                 //Property Less Than: <=
                 case PLE:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     Expression expressionPLE = buildExpression(root, builder, (String) matchValue, null);
                     predicate = builder.lessThanOrEqualTo(expression, expressionPLE);
                     break;
                 case NOTIN:
+                    Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue.getClass().isArray()) {
                         predicate = expression.in((Object[]) matchValue);
                     } else if (matchValue instanceof Collection) {
