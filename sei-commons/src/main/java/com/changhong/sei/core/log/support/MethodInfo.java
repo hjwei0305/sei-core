@@ -1,12 +1,13 @@
 package com.changhong.sei.core.log.support;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 方法信息
  */
-public class MethodInfo {
-
+public class MethodInfo implements Serializable {
+    private static final long serialVersionUID = 1968651211575203564L;
     /**
      * 代表本地方法，不进行代码定位
      */

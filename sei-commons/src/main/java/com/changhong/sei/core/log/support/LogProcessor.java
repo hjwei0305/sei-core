@@ -1,7 +1,5 @@
 package com.changhong.sei.core.log.support;
 
-import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.log.Level;
 import com.changhong.sei.core.log.LogCallback;
 import com.changhong.sei.core.log.Position;
@@ -316,15 +314,15 @@ public class LogProcessor {
      */
     private StringBuilder createInfoBuilder(String busName, MethodInfo methodInfo) {
         StringBuilder builder = new StringBuilder();
-        builder.append("当前用户：【");
-
-        SessionUser user = ContextUtil.getSessionUser();
-        if (user.isAnonymous()) {
-            builder.append(user.getAccount());
-        } else {
-            builder.append(user.getUserId()).append("|").append(user.getAccount()).append("|").append(user.getTenantCode());
-        }
-        builder.append("】，");
+//        builder.append("当前用户：【");
+//
+//        SessionUser user = ContextUtil.getSessionUser();
+//        if (user.isAnonymous()) {
+//            builder.append(user.getAccount());
+//        } else {
+//            builder.append(user.getUserId()).append("|").append(user.getAccount()).append("|").append(user.getTenantCode());
+//        }
+//        builder.append("】，");
 
         builder.append("调用方法：【");
         if (methodInfo.isNative()) {

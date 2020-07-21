@@ -33,54 +33,44 @@ public class DesensitizationSerializer extends JsonSerializer<String> implements
     public void serialize(String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         switch (this.type) {
             // 中文名
-            case CHINESE_NAME: {
+            case CHINESE_NAME:
                 jsonGenerator.writeString(DesensitizationUtils.chineseName(s));
                 break;
-            }
             // 身份证号
-            case ID_CARD: {
+            case ID_CARD:
                 jsonGenerator.writeString(DesensitizationUtils.idCardNum(s));
                 break;
-            }
             // 护照号
-            case ID_PASSPORT: {
+            case ID_PASSPORT:
                 jsonGenerator.writeString(DesensitizationUtils.idPassport(s));
                 break;
-            }
             // 座机号
-            case FIXED_PHONE: {
+            case FIXED_PHONE:
                 jsonGenerator.writeString(DesensitizationUtils.fixedPhone(s));
                 break;
-            }
             // 手机号
-            case MOBILE_PHONE: {
+            case MOBILE_PHONE:
                 jsonGenerator.writeString(DesensitizationUtils.mobilePhone(s));
                 break;
-            }
             // 地址
-            case ADDRESS: {
+            case ADDRESS:
                 jsonGenerator.writeString(DesensitizationUtils.address(s, 4));
                 break;
-            }
             // 电子邮件
-            case EMAIL: {
+            case EMAIL:
                 jsonGenerator.writeString(DesensitizationUtils.email(s));
                 break;
-            }
             // 银行卡
-            case BANK_CARD: {
+            case BANK_CARD:
                 jsonGenerator.writeString(DesensitizationUtils.bankCard(s));
                 break;
-            }
             // 公司开户银行联号
-            case CNAPS_CODE: {
+            case CNAPS_CODE:
                 jsonGenerator.writeString(DesensitizationUtils.cnapsCode(s));
                 break;
-            }
-            default: {
+            default:
                 jsonGenerator.writeString(s);
                 break;
-            }
         }
     }
 

@@ -7,6 +7,8 @@
     <!--    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>-->
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <!-- 配置规则,获取当前会话 -->
+    <conversionRule conversionWord="sessionUser" converterClass="com.changhong.sei.core.log.extend.SessionUserConverter"/>
 
     <!--
         日志初始化在ApplicationContext创建之前，所以@PropertySources加载的配置是读取不到的，
@@ -22,7 +24,7 @@
 
     <!-- %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n -->
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} traceId:[%X{traceId:- }] %clr(:){faint} %m%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} traceId:[%X{traceId:- }] sessionUser:[%sessionUser] %clr(:){faint} %m%n"/>
     <!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/> -->
     <!--    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${APP_NAME}){blue} %clr(%5p) %clr(${PID:- }){magenta} %clr([%thread]){faint} %clr(%logger#%line){cyan} traceId:[%X{traceId:- }] %clr(user:[%X{userId:- }|%X{account:- }|%X{tenantCode:- }]){yellow} args:[%X{args:- }] : %clr(%m%n){magenta}"/>-->
 

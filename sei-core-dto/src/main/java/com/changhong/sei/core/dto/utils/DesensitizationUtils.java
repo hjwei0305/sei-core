@@ -106,13 +106,13 @@ public final class DesensitizationUtils {
     }
 
     /**
-     * [银行卡号] 前六位，后四位，其他用星号隐藏每位1个星号<例子:6222600**********1234>
+     * [银行卡号] 前六位，后四位，其他用星号隐藏每位1个星号<例子:6222**********1234>
      */
     public static String bankCard(final String cardNum) {
         if (StringUtils.isBlank(cardNum)) {
             return "";
         }
-        return StringUtils.left(cardNum, 6).concat(StringUtils.removeStart(
+        return StringUtils.left(cardNum, 4).concat(StringUtils.removeStart(
                 StringUtils.leftPad(StringUtils.right(cardNum, 4), StringUtils.length(cardNum), "*"),
                 "******"));
     }
