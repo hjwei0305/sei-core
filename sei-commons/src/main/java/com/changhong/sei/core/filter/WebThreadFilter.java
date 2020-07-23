@@ -78,8 +78,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         innerFilters.add(1, new ThreadLocalTranVarFilter());
         // 调用链拦截器
         innerFilters.add(2, new TraceFilter());
-
-        List<Pattern> urlFilters = new ArrayList<>();
         // 检查token
         innerFilters.add(3, new CheckTokenFilter(filterConfig.getIgnoreAuthUrl()));
         // 防止XSS攻击

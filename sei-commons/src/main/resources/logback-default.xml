@@ -23,7 +23,8 @@
     <property name="APP_PORT" value="${APP_PORT:-${DEFAULT_APP_PORT:-0}}"/>
 
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
-    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%15.15t] %-40.40logger{39}#%-4line traceId:[%X{traceId:- }] sessionUser:[%sessionUser] : %m%n"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%15.15t] %-40.40logger{39}#%-4line traceId:[%X{traceId:- }] token:[%X{x-authorization:- }] : %m%n"/>
+<!--    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${APP_NAME}@${APP_PORT} %5p ${PID:- } [%15.15t] %-40.40logger{39}#%-4line traceId:[%X{traceId:- }] token:[%token] : %m%n"/>-->
 
     <!-- additivity="true" 是否重复记录 -->
     <!-- 3rd party Loggers -->

@@ -19,10 +19,15 @@ dependencies {
     // 第三方的依赖
     compile(
             "org.springframework.boot:spring-boot-starter-data-jpa",
+            // 支持java8 日期类型
+            "org.hibernate:hibernate-java8:$hibernateVersion",
+            // po与dto对象转换工具
             "org.modelmapper:modelmapper:$modelmapperVersion",
+            // swagger
             "io.springfox:springfox-swagger2:$foxSwaggerVersion",
 //            "com.github.xiaoymin:swagger-bootstrap-ui:1.9.6",
             "com.github.xiaoymin:knife4j-spring-boot-starter:2.0.2",
+
             "joda-time:joda-time:$jodaTimeVersion"
     )
 

@@ -8,6 +8,7 @@ import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -77,23 +78,24 @@ public class CheckTokenFilter extends BaseWebFilter {
             }
         }
 
-        LOG.debug("请求token: {}", token);
+        LOG.debug("{} 请求token: {}", path, token);
         if (token.startsWith("Bearer ")) {
             // 截取token
             token = token.substring("Bearer ".length());
         }
+        MDC.put(ContextUtil.HEADER_TOKEN_KEY, token);
 
         // 检查token
         SessionUser user;
         try {
             user = ContextUtil.getSessionUser(token);
         } catch (Exception e) {
-            LOG.error("token不合法,认证失败. token: {}", token);
+            LOG.error("token不合法,认证失败. path: {}, token: {}", path, token);
             // 认证失败
             unauthorized("token不合法,认证失败!", path, response);
             return;
         }
-        LOG.info("当前用户: {}", user);
+        LOG.info("{} 当前用户: {}", path, user);
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
