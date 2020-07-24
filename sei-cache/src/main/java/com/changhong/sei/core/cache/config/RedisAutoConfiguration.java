@@ -2,7 +2,6 @@ package com.changhong.sei.core.cache.config;
 
 import com.changhong.sei.core.cache.config.properties.SeiCacheProperties;
 import com.changhong.sei.core.config.DefaultAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -20,6 +19,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -44,8 +44,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableConfigurationProperties({SeiCacheProperties.class, RedisProperties.class})
 public class RedisAutoConfiguration extends CachingConfigurerSupport {
 
-    @Autowired
-    private RedisConnectionFactory connectionFactory;
+    private final RedisConnectionFactory connectionFactory;
+
+    public RedisAutoConfiguration(LettuceConnectionFactory factory) {
+        factory.setValidateConnection(true);
+        this.connectionFactory = factory;
+    }
 
     @Override
     @Bean
