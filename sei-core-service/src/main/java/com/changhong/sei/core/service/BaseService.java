@@ -7,10 +7,12 @@ import com.changhong.sei.core.dto.auth.IDataAuthEntity;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
+import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.exception.ServiceException;
+import com.changhong.sei.util.IdGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +34,7 @@ import java.util.*;
  * @author 马超(Vision.Mac)
  * @version 1.0.1 2017/3/12 13:08
  */
-public abstract class BaseService<T extends Persistable<ID> & Serializable, ID extends Serializable>  {
+public abstract class BaseService<T extends Persistable<ID> & Serializable, ID extends Serializable> {
     /**
      * 日志类
      */
@@ -40,6 +42,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
 
     /**
      * 内部依赖的数据访问类
+     *
      * @return 数据访问类
      */
     protected abstract BaseDao<T, ID> getDao();
@@ -54,6 +57,21 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待创建数据对象
      */
     protected OperateResultWithData<T> preInsert(T entity) {
+        //如果是代码唯一的业务实体，检查代码是否存在
+        if (ICodeUnique.class.isAssignableFrom(getDao().getEntityClass())) {
+            ICodeUnique codeUnique = (ICodeUnique) entity;
+            //如果是租户的业务员实体，检查租户中代码是否存在
+            if (ITenant.class.isAssignableFrom(getDao().getEntityClass())) {
+                ITenant tenantEntity = (ITenant) entity;
+                if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), IdGenerator.uuid())) {
+                    //代码[{0}]在租户[{1}]已存在，请重新输入！
+                    return OperateResultWithData.operationFailureWithData(entity, "core_service_00038", codeUnique.getCode(), tenantEntity.getTenantCode());
+                }
+            } else if (getDao().isCodeExists(codeUnique.getCode(), IdGenerator.uuid())) {
+                //代码[{0}]已存在，请重新输入！
+                return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
+            }
+        }
         return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
     }
 
@@ -63,6 +81,21 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
      * @param entity 待更新数据对象
      */
     protected OperateResultWithData<T> preUpdate(T entity) {
+        //如果是代码唯一的业务实体，检查代码是否存在
+        if (ICodeUnique.class.isAssignableFrom(getDao().getEntityClass())) {
+            ICodeUnique codeUnique = (ICodeUnique) entity;
+            //如果是租户的业务员实体，检查租户中代码是否存在
+            if (ITenant.class.isAssignableFrom(getDao().getEntityClass())) {
+                ITenant tenantEntity = (ITenant) entity;
+                if (getDao().isCodeExists(tenantEntity.getTenantCode(), codeUnique.getCode(), (String) entity.getId())) {
+                    //代码[{0}]已存在，请重新输入！
+                    return OperateResultWithData.operationFailureWithData(entity, "core_service_00038", codeUnique.getCode(), tenantEntity.getTenantCode());
+                }
+            } else if (getDao().isCodeExists(codeUnique.getCode(), (String) entity.getId())) {
+                //代码[{0}]已存在，请重新输入！
+                return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
+            }
+        }
         return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
     }
 
@@ -121,12 +154,37 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
         if (CollectionUtils.isEmpty(entities)) {
             return;
         }
-        entities.forEach(entity-> {
-            OperateResultWithData<T> saveResult = save(entity);
-            if (saveResult.notSuccessful()) {
-                throw new ServiceException("批量保存业务实体失败！"+saveResult.getMessage());
+
+        OperateResultWithData<T> saveResult;
+        for (T entity : entities) {
+            Validation.notNull(entity, "持久化对象不能为空");
+            boolean isNew = isNew(entity);
+            if (isNew) {
+                // 创建前设置租户代码
+                if (entity instanceof ITenant) {
+                    ITenant tenantEntity = (ITenant) entity;
+                    if (StringUtils.isBlank(tenantEntity.getTenantCode())) {
+                        tenantEntity.setTenantCode(ContextUtil.getTenantCode());
+                    }
+                }
+                saveResult = preInsert(entity);
+            } else {
+                saveResult = preUpdate(entity);
             }
-        });
+            if (Objects.nonNull(saveResult) && saveResult.notSuccessful()) {
+                throw new ServiceException("批量保存业务实体失败: " + saveResult.getMessage());
+            }
+        }
+
+        // 批量保存
+        getDao().save(entities);
+
+//        entities.forEach(entity-> {
+//            OperateResultWithData<T> saveResult = save(entity);
+//            if (saveResult.notSuccessful()) {
+//                throw new ServiceException("批量保存业务实体失败！"+saveResult.getMessage());
+//            }
+//        });
     }
 
     /**
@@ -303,7 +361,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
             return Collections.emptyList();
         }
         // 判断当前业务逻辑实现类是否实现了数据权限接口
-        if (!DataAuthEntityService.class.isAssignableFrom(this.getClass())){
+        if (!DataAuthEntityService.class.isAssignableFrom(this.getClass())) {
             return Collections.emptyList();
         }
         List<String> entityIds = null;
@@ -323,7 +381,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
         }
         if (Objects.isNull(entityIds)) {
             // 缓存不存在，调用API服务获取用户有权限的数据Id清单
-            DataAuthEntityService authEntityManager = (DataAuthEntityService)this;
+            DataAuthEntityService authEntityManager = (DataAuthEntityService) this;
             String entityClassName = entityClass.getName();
             entityIds = authEntityManager.getNormalUserAuthorizedEntitiesFromBasic(entityClassName, featureCode, userId);
         }
