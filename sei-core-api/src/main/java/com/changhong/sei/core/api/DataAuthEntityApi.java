@@ -41,12 +41,12 @@ public interface DataAuthEntityApi<T extends BaseEntityDto> {
     ResultData<List<AuthEntityData>> findAllAuthEntityData();
 
     /**
-     * 获取当前用户有权限的业务实体清单
+     * 获取当前用户有权限的业务实体清单(未冻结)
      *
      * @param featureCode 功能项代码
      * @return 有权限的业务实体清单
      */
     @GetMapping(path = "getUserAuthorizedEntities")
-    @ApiOperation(value = "获取当前用户有权限的业务实体清单", notes = "获取当前用户有权限的业务实体清单")
+    @ApiOperation(value = "获取当前用户有权限的业务实体清单", notes = "获取当前用户有权限，并且未冻结的业务实体清单")
     ResultData<List<T>> getUserAuthorizedEntities(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }

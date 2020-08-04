@@ -11,10 +11,12 @@ import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.enums.UserAuthorityPolicy;
 import com.changhong.sei.util.IdGenerator;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -77,9 +79,10 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
      * 当前用户有权限的业务实体清单
      *
      * @param featureCode 功能项代码
+     * @param includeFrozen 受否包含冻结的实体
      * @return 有权限的业务实体清单
      */
-    public List<T> getUserAuthorizedEntities(String featureCode) {
+    public List<T> getUserAuthorizedEntities(String featureCode, Boolean includeFrozen) {
         Class<T> entityClass = getDao().getEntityClass();
         //判断是否实现数据权限业务实体接口
         if (!IDataAuthEntity.class.isAssignableFrom(entityClass)) {
@@ -101,7 +104,11 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                 break;
             case TenantAdmin:
                 //如果是租户管理员，返回租户的所有数据(未冻结)
-                resultList = getDao().findAllUnfrozen();
+                if (Objects.isNull(includeFrozen) || !includeFrozen) {
+                    resultList = getDao().findAllUnfrozen();
+                } else {
+                    resultList = getDao().findAll();
+                }
                 break;
             case NormalUser:
             default:
@@ -111,8 +118,13 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                     resultList = Collections.emptyList();
                 } else {
                     //先获取所有未冻结的业务实体
-                    List<T> allEntities = getDao().findAllUnfrozen();
-                    if (allEntities == null || allEntities.isEmpty()) {
+                    List<T> allEntities;
+                    if (Objects.isNull(includeFrozen) || !includeFrozen) {
+                        allEntities = getDao().findAllUnfrozen();
+                    } else {
+                        allEntities = getDao().findAll();
+                    }
+                    if (CollectionUtils.isEmpty(allEntities)) {
                         resultList = Collections.emptyList();
                     } else {
                         resultList = allEntities.stream().filter((p) -> entityIds.contains(p.getId())).collect(Collectors.toList());
@@ -123,4 +135,13 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
         return resultList;
     }
 
+    /**
+     * 当前用户有权限的业务实体清单（不含冻结）
+     *
+     * @param featureCode 功能项代码
+     * @return 有权限的业务实体清单
+     */
+    public List<T> getUserAuthorizedEntities(String featureCode) {
+        return getUserAuthorizedEntities(featureCode, Boolean.FALSE);
+    }
 }
