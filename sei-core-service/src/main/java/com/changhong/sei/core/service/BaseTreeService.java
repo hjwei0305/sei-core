@@ -582,7 +582,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * @param includeFrozen 是否包含冻结的实体
      * @return 有权限的树形业务实体清单
      */
-    protected List<T> getUserAuthorizedTreeEntities(String featureCode, Boolean includeFrozen) {
+    public List<T> getUserAuthorizedTreeEntities(String featureCode, Boolean includeFrozen) {
         Class<T> entityClass = getDao().getEntityClass();
         //判断是否实现数据权限业务实体接口
         if (!IDataAuthTreeEntity.class.isAssignableFrom(entityClass)) {
