@@ -8,6 +8,8 @@ import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
+import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,6 +23,7 @@ import org.springframework.core.env.Environment;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Locale;
 
 /**
  * 实现功能：
@@ -67,6 +70,12 @@ public class DefaultAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Validator validator() {
+        Locale.setDefault(new Locale("zh","CN"));
+//        Validator validator = Validation.byDefaultProvider().configure()
+//                .messageInterpolator(
+//                        new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ValidationMessages")))
+//                .buildValidatorFactory().getValidator();
+
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
                 .configure()
                 // 配置hibernate Validator为快速失败返回模式
