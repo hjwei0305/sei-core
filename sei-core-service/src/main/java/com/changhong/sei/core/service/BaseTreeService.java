@@ -579,6 +579,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * 获取当前用户有权限的树形业务实体清单
      *
      * @param featureCode 功能项代码
+     * @param includeFrozen 是否包含冻结的实体
      * @return 有权限的树形业务实体清单
      */
     protected List<T> getUserAuthorizedTreeEntities(String featureCode, Boolean includeFrozen) {
@@ -593,7 +594,6 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         if (sessionUser.isAnonymous()) {
             return Collections.emptyList();
         }
-
         List<T> resultList;
         List<T> allEntities;
         UserAuthorityPolicy authorityPolicy = sessionUser.getAuthorityPolicy();
@@ -604,7 +604,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 break;
             case TenantAdmin:
                 //如果是租户管理员，返回租户的所有数据(所有/未冻结)
-                if (includeFrozen) {
+                if (Objects.nonNull(includeFrozen) && includeFrozen) {
                     allEntities = getDao().findAll();
                 } else {
                     allEntities = getDao().findAllUnfrozen();
@@ -623,7 +623,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     resultList = Collections.emptyList();
                 } else {
                     //先获取所有未冻结的业务实体
-                    if (includeFrozen) {
+                    if (Objects.nonNull(includeFrozen) && includeFrozen) {
                         allEntities = getDao().findAll();
                     } else {
                         allEntities = getDao().findAllUnfrozen();
@@ -641,7 +641,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     }
 
     /**
-     * 获取当前用户有权限的树形业务实体清单
+     * 获取当前用户有权限的树形业务实体清单（不含冻结）
      *
      * @param featureCode 功能项代码
      * @return 有权限的树形业务实体清单

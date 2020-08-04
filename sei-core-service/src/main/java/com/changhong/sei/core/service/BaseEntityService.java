@@ -79,7 +79,7 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
      * 当前用户有权限的业务实体清单
      *
      * @param featureCode 功能项代码
-     * @param includeFrozen 受否包含冻结的实体
+     * @param includeFrozen 是否包含冻结的实体
      * @return 有权限的业务实体清单
      */
     public List<T> getUserAuthorizedEntities(String featureCode, Boolean includeFrozen) {
@@ -103,11 +103,13 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                 resultList = Collections.emptyList();
                 break;
             case TenantAdmin:
-                //如果是租户管理员，返回租户的所有数据(未冻结)
-                if (Objects.isNull(includeFrozen) || !includeFrozen) {
-                    resultList = getDao().findAllUnfrozen();
-                } else {
+                //如果是租户管理员，返回租户的所有数据
+                if (Objects.nonNull(includeFrozen) && includeFrozen) {
+                    // (全部)
                     resultList = getDao().findAll();
+                } else {
+                    // (未冻结)
+                    resultList = getDao().findAllUnfrozen();
                 }
                 break;
             case NormalUser:
@@ -119,10 +121,12 @@ public abstract class BaseEntityService<T extends BaseEntity> extends BaseServic
                 } else {
                     //先获取所有未冻结的业务实体
                     List<T> allEntities;
-                    if (Objects.isNull(includeFrozen) || !includeFrozen) {
-                        allEntities = getDao().findAllUnfrozen();
-                    } else {
+                    if (Objects.nonNull(includeFrozen) && includeFrozen) {
+                        // (全部)
                         allEntities = getDao().findAll();
+                    } else {
+                        // (未冻结)
+                        allEntities = getDao().findAllUnfrozen();
                     }
                     if (CollectionUtils.isEmpty(allEntities)) {
                         resultList = Collections.emptyList();

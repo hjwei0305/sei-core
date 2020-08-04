@@ -24,6 +24,6 @@ public interface DataAuthEntityIncludeFrozenApi<T extends BaseEntityDto> {
      * @return 有权限的业务实体清单
      */
     @GetMapping(path = "getUserAuthEntitiesIncludeFrozen")
-    @ApiOperation(value = "获取当前用户有权限的业务实体清单", notes = "获取当前用户有权限的业务实体清单")
+    @ApiOperation(value = "获取当前用户有权限的业务实体清单(包含已冻结)", notes = "获取当前用户有权限，并且包含冻结的业务实体清单")
     ResultData<List<T>> getUserAuthEntitiesIncludeFrozen(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }
