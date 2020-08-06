@@ -17,6 +17,7 @@ import java.util.Locale;
  */
 public class SearchOrder implements Serializable {
 
+    private static final long serialVersionUID = 1355056397836926879L;
     private String property;
     private Direction direction;
 

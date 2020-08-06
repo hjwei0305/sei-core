@@ -1,6 +1,9 @@
 package com.changhong.sei.core.dto.flow;
 
 
+import com.changhong.sei.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,6 +24,7 @@ import java.util.Set;
  */
 public class FlowInstance implements Serializable {
 
+	private static final long serialVersionUID = -5244474984429249795L;
 	/**
 	 * 乐观锁-版本
 	 */
@@ -61,11 +65,13 @@ public class FlowInstance implements Serializable {
 	/**
 	 * 开始时间
 	 */
+	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
 	private Date startDate;
 
 	/**
 	 * 结束时间
 	 */
+	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
 	private Date endDate;
 
 	/**
@@ -154,6 +160,7 @@ public class FlowInstance implements Serializable {
 	/**
 	 * 创建时间
 	 */
+	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
 	protected Date createdDate;
 
 	/**
@@ -168,6 +175,7 @@ public class FlowInstance implements Serializable {
 	/**
 	 * 最后修改时间
 	 */
+	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
 	protected Date lastEditedDate;
 
 	protected String id;

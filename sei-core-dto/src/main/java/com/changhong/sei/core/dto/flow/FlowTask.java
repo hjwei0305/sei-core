@@ -1,6 +1,9 @@
 package com.changhong.sei.core.dto.flow;
 
 
+import com.changhong.sei.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +11,7 @@ import java.util.Date;
 public class FlowTask implements Serializable {
 
 
+    private static final long serialVersionUID = 178445955668536795L;
     /**
      * 表单相对路径
      */
@@ -132,6 +136,7 @@ public class FlowTask implements Serializable {
     /**
      * 执行时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date executeDate;
 
 
@@ -149,6 +154,7 @@ public class FlowTask implements Serializable {
     /**
      * 流程任务引擎实际的任务签收时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date actClaimTime;
 
 
@@ -171,6 +177,7 @@ public class FlowTask implements Serializable {
     /**
      * 流程引擎的实际触发时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date actDueDate;
 
 
@@ -274,6 +281,7 @@ public class FlowTask implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     protected Date createdDate;
 
     /**
@@ -288,6 +296,7 @@ public class FlowTask implements Serializable {
     /**
      * 最后修改时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     protected Date lastEditedDate;
 
     protected String id;

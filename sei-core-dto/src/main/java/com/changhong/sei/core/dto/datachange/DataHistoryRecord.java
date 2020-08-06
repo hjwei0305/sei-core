@@ -1,6 +1,8 @@
 package com.changhong.sei.core.dto.datachange;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
+import com.changhong.sei.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
@@ -59,6 +61,7 @@ public class DataHistoryRecord implements Serializable {
     /**
      * 操作时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date operateTime;
 
     /**

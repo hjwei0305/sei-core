@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @version 2020-02-05 10:06
  */
 public class TreeNodeMoveParam implements Serializable {
+    private static final long serialVersionUID = -4131741097496852434L;
     /**
      * 要移动的节点Id
      */

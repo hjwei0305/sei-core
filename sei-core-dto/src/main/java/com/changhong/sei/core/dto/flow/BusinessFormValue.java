@@ -16,6 +16,7 @@ import java.util.Map;
  * *************************************************************************************************
  */
 public class BusinessFormValue implements Serializable {
+    private static final long serialVersionUID = 907197642837801491L;
     /**
      * 值
      */

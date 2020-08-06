@@ -7,6 +7,7 @@ import java.io.Serializable;
  * <p>业务实体DTO基类</p>
  */
 public class BaseEntityDto implements Serializable {
+    private static final long serialVersionUID = -4315516997392012752L;
     /**
      * Id标识
      */

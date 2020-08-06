@@ -10,6 +10,7 @@ import java.util.List;
  * @version 1.0.1 2019-03-07 10:36
  */
 public class ParentRelationParam implements Serializable {
+    private static final long serialVersionUID = -1476733834497227672L;
     /**
      * 子实体Id
      */

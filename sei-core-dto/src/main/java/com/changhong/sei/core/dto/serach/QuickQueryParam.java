@@ -8,6 +8,8 @@ package com.changhong.sei.core.dto.serach;
  * @version 1.0.1 2017-11-25 10:40
  */
 public class QuickQueryParam extends QueryParam {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 快速搜索关键字
      */

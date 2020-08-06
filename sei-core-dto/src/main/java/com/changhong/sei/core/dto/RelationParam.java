@@ -8,6 +8,7 @@ import java.util.List;
  *
  */
 public class RelationParam implements Serializable {
+    private static final long serialVersionUID = -761461046089485684L;
     /**
      * 父实体Id
      */

@@ -15,6 +15,7 @@ import java.io.Serializable;
  * *************************************************************************************************
  */
 public class FlowOperateResult implements Serializable{
+    private static final long serialVersionUID = -8182944187806060082L;
     /**
      * 成功状态
      */

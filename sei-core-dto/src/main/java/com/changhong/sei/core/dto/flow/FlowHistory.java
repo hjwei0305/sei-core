@@ -1,12 +1,16 @@
 package com.changhong.sei.core.dto.flow;
 
 
+import com.changhong.sei.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
 
 public class FlowHistory implements Serializable {
 
+    private static final long serialVersionUID = -6899912127819108593L;
     /**
      * 所属流程实例
      */
@@ -53,12 +57,14 @@ public class FlowHistory implements Serializable {
      * 流程任务引擎实际开始时间，
      * Time when the task started.
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date actStartTime;
 
     /**
      * 流程任务引擎实际结束时间，
      * Time when the task was deleted or completed.
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date actEndTime;
 
     /**
@@ -78,6 +84,7 @@ public class FlowHistory implements Serializable {
     /**
      * 流程任务引擎实际的任务签收时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     private Date actClaimTime;
 
 
@@ -214,6 +221,7 @@ public class FlowHistory implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     protected Date createdDate;
 
     /**
@@ -228,6 +236,7 @@ public class FlowHistory implements Serializable {
     /**
      * 最后修改时间
      */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     protected Date lastEditedDate;
 
     protected String id;

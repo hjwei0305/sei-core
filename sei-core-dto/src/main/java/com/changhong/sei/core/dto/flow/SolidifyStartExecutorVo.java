@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class SolidifyStartExecutorVo implements Serializable {
 
+    private static final long serialVersionUID = -2499923811834941445L;
     /**
      * 节点名称
      */
