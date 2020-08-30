@@ -37,7 +37,6 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
         try {
             result = getService().save(entity);
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("保存业务实体异常！", e);
             // 保存业务实体异常！{0}
@@ -63,7 +62,6 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
             OperateResult result = getService().delete(id);
             return ResultDataUtil.convertFromOperateResult(result);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("删除业务实体异常！", e);
             // 删除业务实体异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00004", e.getMessage()));
@@ -82,7 +80,6 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
         try {
             entity = getService().findOne(id);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取业务实体异常！", e);
             // 获取业务实体异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00005", e.getMessage()));

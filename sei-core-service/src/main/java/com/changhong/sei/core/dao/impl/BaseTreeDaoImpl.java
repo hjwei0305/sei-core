@@ -1,19 +1,14 @@
 package com.changhong.sei.core.dao.impl;
 
 import com.changhong.sei.core.dao.BaseTreeDao;
-import com.changhong.sei.core.dao.datachange.DataHistoryUtil;
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
-import com.changhong.sei.core.datachange.DataChangeProducer;
-import com.changhong.sei.core.dto.datachange.DataHistoryRecord;
-import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.entity.IFrozen;
 import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.dto.serach.SearchOrder;
-import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.core.entity.BaseEntity;
+import com.changhong.sei.core.entity.IFrozen;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.Assert;
 
@@ -45,8 +40,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
         Search search = new Search();
         search.addFilter(new SearchFilter(TreeEntity.PARENT_ID, SearchFilter.EMPTY_VALUE, SearchFilter.Operator.BK));
         setDefaultSort(search);
-        List<T> list = findByFilters(search);
-        return list;
+        return findByFilters(search);
     }
 
     /**
@@ -163,8 +157,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
         search.addFilter(new SearchFilter(TreeEntity.CODE_PATH, codePath + TreeEntity.CODE_DELIMITER, SearchFilter.Operator.LLK));
         search.addFilter(new SearchFilter(BaseEntity.ID, nodeId, SearchFilter.Operator.NE));
         setDefaultSort(search);
-        List<T> list = findByFilters(search);
-        return list;
+        return findByFilters(search);
     }
 
     @Override
@@ -197,8 +190,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
         search.addFilter(new SearchFilter(TreeEntity.NAME_PATH, namePath + TreeEntity.NAME_DELIMITER, SearchFilter.Operator.LLK));
         search.addFilter(new SearchFilter(BaseEntity.ID, nodeId, SearchFilter.Operator.NE));
         setDefaultSort(search);
-        List<T> list = findByFilters(search);
-        return list;
+        return findByFilters(search);
     }
 
     /**
@@ -212,8 +204,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
         Search search = new Search();
         search.addFilter(new SearchFilter(TreeEntity.NAME_PATH, nodeName, SearchFilter.Operator.LK));
         setDefaultSort(search);
-        List<T> list = findByFilters(search);
-        return list;
+        return findByFilters(search);
     }
 
     /**

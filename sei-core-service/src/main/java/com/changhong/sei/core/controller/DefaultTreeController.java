@@ -36,7 +36,8 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
 
     // 获取实体转换类
     default ModelMapper getModelMapper(){
-        return new ModelMapper();
+        // return new ModelMapper();
+        return ContextUtil.getBean(ModelMapper.class);
     }
 
     /**
@@ -120,7 +121,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
         try {
             result = getService().move(moveParam.getNodeId(), moveParam.getTargetParentId());
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("移动一个节点异常！", e);
             // 移动一个节点异常！{0}
@@ -144,7 +144,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
             List<T> entities = getService().getAllRootNode();
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取所有根节点异常！", e);
             // 获取所有根节点异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00021", e.getMessage()));
@@ -164,7 +163,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
         try {
             entity = getService().getTree(nodeId);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取一个节点的树异常！", e);
             // 获取一个节点的树异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00022", e.getMessage()));
@@ -188,7 +186,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
             List<T> entities = getService().getChildrenNodes(nodeId, includeSelf);
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取一个节点的所有子节点异常！", e);
             // 获取一个节点的所有子节点异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00023", e.getMessage()));
@@ -210,7 +207,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
             List<T> entities = getService().getParentNodes(nodeId, includeSelf);
             data = entities.stream().map(this::convertToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取一个节点的所有父节点异常！", e);
             // 获取一个节点的所有父节点异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00024", e.getMessage()));
@@ -231,7 +227,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
             T entity = convertToEntity(dto);
             result = getService().save(entity);
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("保存业务实体异常！", e);
             // 保存业务实体异常！{0}
@@ -255,7 +250,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
         try {
             result = getService().delete(id);
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("删除业务实体异常！", e);
             // 保存业务实体异常！{0}

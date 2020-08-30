@@ -8,6 +8,7 @@ import java.util.StringJoiner;
 
 /**
  * 所有API公开接口的返回数据类型
+ *
  * @param <T> 返回数据对象的类型
  */
 public class ResultData<T> implements Serializable {
@@ -81,6 +82,15 @@ public class ResultData<T> implements Serializable {
             return true;
         }
         return !success;
+    }
+
+    /**
+     * 处理成功
+     *
+     * @return 处理结果
+     */
+    public static ResultData<?> success() {
+        return new ResultData<>(Boolean.TRUE, DEFAULT_SUCCESSFUL_MSG, null);
     }
 
     /**

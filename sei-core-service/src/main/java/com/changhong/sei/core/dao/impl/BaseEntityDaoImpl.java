@@ -1,7 +1,6 @@
 package com.changhong.sei.core.dao.impl;
 
 import com.changhong.sei.core.dao.jpa.impl.BaseDaoImpl;
-import com.changhong.sei.core.datachange.DataChangeProducer;
 import com.changhong.sei.core.entity.BaseEntity;
 
 import javax.persistence.EntityManager;

@@ -51,10 +51,14 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 ////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
 //                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
 //            }
-            if (environment.getProperty("sei.monitor.websocket.enable", Boolean.class, true)) {
-                properties.setProperty("logging.config", "classpath:logback-file.xml");
+            if (environment.getProperty("sei.log.kafka.enable", Boolean.class, true)) {
+                properties.setProperty("logging.config", "classpath:logback-kafka.xml");
             } else {
-                properties.setProperty("logging.config", "classpath:logback-spring.xml");
+                if (environment.getProperty("sei.monitor.websocket.enable", Boolean.class, true)) {
+                    properties.setProperty("logging.config", "classpath:logback-file.xml");
+                } else {
+                    properties.setProperty("logging.config", "classpath:logback-spring.xml");
+                }
             }
 
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);

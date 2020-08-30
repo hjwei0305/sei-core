@@ -15,7 +15,7 @@
         系统环境变量、Spring Environment及application,bootstrap配置文件中的信息可以读取到
      -->
 
-    <!-- 读取当前应用Environment中的属性 -->
+    <!-- 读取当前应用Environment中的属性. 读取application.yml中的值 -->
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <springProperty scope="context" name="APP_PORT" source="server.port"/>
     <springProperty scope="context" name="DEFAULT_APP_PORT" source="spring.application.port"/>

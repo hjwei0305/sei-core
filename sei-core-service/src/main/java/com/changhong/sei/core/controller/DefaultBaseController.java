@@ -28,7 +28,8 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
 
     // 获取实体转换类
     default ModelMapper getModelMapper() {
-        return new ModelMapper();
+        //return new ModelMapper();
+        return ContextUtil.getBean(ModelMapper.class);
     }
 
     /**
@@ -67,10 +68,17 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
      * @return DTO
      */
     default D convertToDto(T entity) {
+        return convertToDto(getModelMapper(), entity);
+    }
+
+    default D convertToDto(ModelMapper modelMapper, T entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
-        return getModelMapper().map(entity, getDtoClass());
+        if (Objects.isNull(modelMapper)) {
+            modelMapper = getModelMapper();
+        }
+        return modelMapper.map(entity, getDtoClass());
     }
 
     /**
@@ -85,7 +93,8 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
         if (CollectionUtils.isEmpty(entities)){
             return new ArrayList<>();
         }
-        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
+        final ModelMapper modelMapper = getModelMapper();
+        return entities.stream().map(e -> convertToDto(modelMapper, e)).collect(Collectors.toList());
     }
 
     /**

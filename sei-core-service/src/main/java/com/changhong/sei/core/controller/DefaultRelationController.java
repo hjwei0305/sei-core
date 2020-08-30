@@ -31,7 +31,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
 
     // 获取实体转换类
     default ModelMapper getModelMapper(){
-      return new ModelMapper();
+      // return new ModelMapper();
+        return ContextUtil.getBean(ModelMapper.class);
     }
 
     /**
@@ -181,7 +182,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<CT> entities = getService().getChildrenFromParentId(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("通过父实体Id获取子实体清单异常！", e);
             // 通过父实体Id获取子实体清单异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00012", e.getMessage()));
@@ -201,7 +201,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().insertRelationsByParam(relationParam);
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("创建分配关系异常！", e);
             // 创建分配关系异常！{0}
@@ -225,7 +224,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().removeRelationsByParam(relationParam);
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("移除分配关系异常！", e);
             // 移除分配关系异常！{0}
@@ -250,7 +248,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<CT> entities = getService().getUnassignedChildren(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取未分配的子实体清单异常！", e);
             // 获取未分配的子实体清单异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00015", e.getMessage()));
@@ -271,7 +268,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<PT> entities = getService().getParentsFromChildId(childId);
             data = entities.stream().map(this::convertParentToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("通过子实体Id获取父实体清单异常！", e);
             // 通过子实体Id获取父实体清单异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00016", e.getMessage()));
@@ -291,7 +287,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().insertRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("通过父实体清单创建分配关系异常！", e);
             // 通过父实体清单创建分配关系异常！{0}
@@ -315,7 +310,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().removeRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
-            e.printStackTrace();
             // 捕获异常，并返回
             LogUtil.error("通过父实体清单移除分配关系异常！", e);
             // 通过父实体清单移除分配关系异常！{0}
@@ -340,7 +334,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<TT> entities = getService().getRelationsByParentId(parentId);
             data = entities.stream().map(this::convertRelationToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("通过父实体Id获取分配关系清单异常！", e);
             // 通过父实体Id获取分配关系清单异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00019", e.getMessage()));
