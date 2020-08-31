@@ -67,17 +67,10 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
      * @return DTO
      */
     default D convertToDto(T entity) {
-        return convertToDto(getModelMapper(), entity);
-    }
-
-    default D convertToDto(ModelMapper modelMapper, T entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
-        if (Objects.isNull(modelMapper)) {
-            modelMapper = getModelMapper();
-        }
-        return modelMapper.map(entity, getDtoClass());
+        return getModelMapper().map(entity, getDtoClass());
     }
 
     /**
@@ -92,8 +85,7 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
         if (CollectionUtils.isEmpty(entities)){
             return new ArrayList<>();
         }
-        final ModelMapper modelMapper = getModelMapper();
-        return entities.stream().map(e -> convertToDto(modelMapper, e)).collect(Collectors.toList());
+        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     /**
