@@ -36,8 +36,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
 
     // 获取实体转换类
     default ModelMapper getModelMapper(){
-        // return new ModelMapper();
-        return ContextUtil.getBean(ModelMapper.class);
+         return new ModelMapper();
     }
 
     /**

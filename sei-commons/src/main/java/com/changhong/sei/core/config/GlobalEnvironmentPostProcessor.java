@@ -6,6 +6,7 @@ import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertiesPropertySource;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,7 +52,19 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 ////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
 //                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
 //            }
-            if (environment.getProperty("sei.log.kafka.enable", Boolean.class, true)) {
+
+            /*
+             按当前部署约定:在各个环境部署时需要设置系统环境变量[spring.cloud.config.profile]或[sei.application.env]指明当前环境.
+             故,基于此判定是否是本地还是服务器环境
+             */
+            boolean isLocal = true;
+            Map<String, Object> sysEnv = environment.getSystemEnvironment();
+            if (sysEnv.containsKey("spring.cloud.config.profile")
+                    || sysEnv.containsKey("sei.application.env")) {
+                isLocal = false;
+            }
+
+            if (!isLocal && environment.getProperty("sei.log.kafka.enable", Boolean.class, true)) {
                 properties.setProperty("logging.config", "classpath:logback-kafka.xml");
             } else {
                 if (environment.getProperty("sei.monitor.websocket.enable", Boolean.class, true)) {

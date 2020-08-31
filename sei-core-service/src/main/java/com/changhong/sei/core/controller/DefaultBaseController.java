@@ -28,8 +28,7 @@ public interface DefaultBaseController<T extends BaseEntity, D extends BaseEntit
 
     // 获取实体转换类
     default ModelMapper getModelMapper() {
-        //return new ModelMapper();
-        return ContextUtil.getBean(ModelMapper.class);
+        return new ModelMapper();
     }
 
     /**
