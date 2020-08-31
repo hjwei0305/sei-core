@@ -1,6 +1,6 @@
 package com.changhong.sei.core.context;
 
-import com.changhong.sei.core.constant.Constants;
+import com.changhong.sei.core.commoms.constant.Constants;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import com.changhong.sei.enums.UserAuthorityPolicy;
 import com.changhong.sei.enums.UserType;

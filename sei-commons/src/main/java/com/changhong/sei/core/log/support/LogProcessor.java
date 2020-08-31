@@ -1,5 +1,6 @@
 package com.changhong.sei.core.log.support;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.log.Level;
 import com.changhong.sei.core.log.LogCallback;
 import com.changhong.sei.core.log.Position;
@@ -8,6 +9,7 @@ import com.changhong.sei.core.log.annotation.Log;
 import com.changhong.sei.core.log.annotation.ParamLog;
 import com.changhong.sei.core.log.annotation.ResultLog;
 import com.changhong.sei.core.log.annotation.ThrowingLog;
+import com.changhong.sei.util.IdGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,6 +17,7 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -93,7 +96,7 @@ public class LogProcessor {
                 Annotation annotation;
                 String busName;
                 Class<? extends LogCallback> callback;
-                MethodInfo methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
+                MethodInfo methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
                 ThrowingLog throwingLogAnnotation = method.getAnnotation(ThrowingLog.class);
                 if (throwingLogAnnotation != null) {
                     annotation = throwingLogAnnotation;
@@ -105,7 +108,7 @@ public class LogProcessor {
                     busName = logAnnotation.value();
                     callback = logAnnotation.callback();
                 }
-                log.error(this.getThrowingInfo(busName, methodInfo), throwable);
+                log.error(this.getThrowingInfo(busName, methodInfo, joinPoint.getArgs()), throwable);
                 // 执行回调
                 this.callback(callback, annotation, methodInfo, joinPoint, null);
             } catch (Exception e) {
@@ -118,8 +121,10 @@ public class LogProcessor {
     @AfterThrowing(value = "@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)", throwing = "throwable")
     public void throwingPrint1(JoinPoint joinPoint, Throwable throwable) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        MethodInfo methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
-        log.error(this.getThrowingInfo(StringUtils.EMPTY, methodInfo), throwable);
+        Method method = signature.getMethod();
+        String methodName = method.getName();
+        MethodInfo methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
+        log.error(this.getThrowingInfo(StringUtils.EMPTY, methodInfo, joinPoint.getArgs()), throwable);
     }
 
     /**
@@ -301,8 +306,19 @@ public class LogProcessor {
      * @param methodInfo 方法信息
      * @return 返回日志信息字符串
      */
-    private String getThrowingInfo(String busName, MethodInfo methodInfo) {
-        return this.createInfoBuilder(busName, methodInfo).append("异常信息：").toString();
+    private String getThrowingInfo(String busName, MethodInfo methodInfo, Object[] params) {
+        StringBuilder builder = this.createInfoBuilder(busName, methodInfo);
+        builder.append("\n\r参数：【");
+        List<String> paramNames = methodInfo.getParamNames();
+        int count = paramNames.size();
+        if (count > 0) {
+            Map<String, Object> paramMap = new LinkedHashMap<>(count);
+            for (int i = 0; i < count; i++) {
+                paramMap.put(paramNames.get(i), this.parseParam(params[i]));
+            }
+            return builder.append(paramMap).append('】').toString();
+        }
+        return builder.append("{}】").toString();
     }
 
     /**
@@ -313,18 +329,15 @@ public class LogProcessor {
      * @return 返回日志信息builder
      */
     private StringBuilder createInfoBuilder(String busName, MethodInfo methodInfo) {
-        StringBuilder builder = new StringBuilder();
-//        builder.append("当前用户：【");
-//
-//        SessionUser user = ContextUtil.getSessionUser();
-//        if (user.isAnonymous()) {
-//            builder.append(user.getAccount());
-//        } else {
-//            builder.append(user.getUserId()).append("|").append(user.getAccount()).append("|").append(user.getTenantCode());
-//        }
-//        builder.append("】，");
+        String traceId = ContextUtil.getTraceId();
+        if (StringUtils.isBlank(traceId)) {
+            traceId = IdGenerator.uuid2();
+        }
+        //链路信息处理
+        MDC.put(ContextUtil.TRACE_ID, traceId);
+        MDC.put(ContextUtil.HEADER_TOKEN_KEY, ContextUtil.getToken());
 
-        builder.append("调用方法：【");
+        StringBuilder builder = new StringBuilder("调用方法：【");
         if (methodInfo.isNative()) {
             builder.append(methodInfo.getClassAllName()).append('.').append(methodInfo.getMethodName());
         } else {
@@ -332,7 +345,7 @@ public class LogProcessor {
         }
         builder.append("】，");
         if (StringUtils.isNotBlank(busName)) {
-            builder.append("业务名称：【").append(busName).append("】，");
+            builder.append("\n\r业务名称：【").append(busName).append("】，");
         }
         return builder;
     }

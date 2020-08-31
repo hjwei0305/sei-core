@@ -1,4 +1,4 @@
-package com.changhong.sei.core.constant;
+package com.changhong.sei.core.commoms.constant;
 
 /**
  * 实现功能：
