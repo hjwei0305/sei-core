@@ -17,6 +17,7 @@
 
     <!-- 读取当前应用Environment中的属性. 读取application.yml中的值 -->
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+    <springProperty scope="context" name="ENV" source="spring.cloud.config.profile"/>
     <springProperty scope="context" name="APP_PORT" source="server.port"/>
     <springProperty scope="context" name="DEFAULT_APP_PORT" source="spring.application.port"/>
 

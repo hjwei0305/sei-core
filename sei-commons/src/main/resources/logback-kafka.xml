@@ -21,17 +21,17 @@
                         "timestamp": "%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}",
 
                         "seiVersion": "sei-${sei-version:-}",
-<!--                        "classMethod": "%X{classMethod}",-->
-<!--                        "args": "%X{args}",-->
                         "traceId": "%X{traceId:-}",
                         "token" : "%X{x-authorization:-}",
+
+                        "host": "${HOSTNAME:-}",
+                        "env": "${ENV:-}",
+                        "serviceName": "${APP_NAME}",
 
                         "pid": "${PID:- }",
                         "logger": "%logger",
                         "level": "%p",
                         "message": "%msg",
-                        "host": "${HOSTNAME:-}",
-                        "serviceName": "${APP_NAME}",
                         "stackTrace": "%ex"
                         }
                     </pattern>
