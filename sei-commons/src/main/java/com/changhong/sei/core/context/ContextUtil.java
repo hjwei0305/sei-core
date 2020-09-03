@@ -232,6 +232,7 @@ public final class ContextUtil implements Constants {
         Map<String, Object> claims = new HashMap<>();
         claims.put("tenant", sessionUser.getTenantCode());
         claims.put("account", sessionUser.getAccount());
+        claims.put("loginAccount", StringUtils.isBlank(sessionUser.getLoginAccount()) ? sessionUser.getAccount() : sessionUser.getLoginAccount());
         claims.put("userId", sessionUser.getUserId());
         claims.put("userName", sessionUser.getUserName());
         claims.put("userType", sessionUser.getUserType().name());
@@ -260,6 +261,8 @@ public final class ContextUtil implements Constants {
             sessionUser.setSessionId(claims.get(JwtTokenUtil.RANDOM_KEY, String.class));
             sessionUser.setTenantCode(claims.get("tenant", String.class));
             sessionUser.setAccount(claims.get("account", String.class));
+            String loginAccount = claims.get("loginAccount", String.class);
+            sessionUser.setLoginAccount(StringUtils.isBlank(loginAccount) ? sessionUser.getAccount() : loginAccount);
             sessionUser.setUserId(claims.get("userId", String.class));
             sessionUser.setUserName(claims.get("userName", String.class));
             sessionUser.setUserType(EnumUtils.getEnum(UserType.class, (String) claims.get("userType")));

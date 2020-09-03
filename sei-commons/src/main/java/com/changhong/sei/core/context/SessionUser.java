@@ -12,7 +12,7 @@ import java.util.Objects;
  * 用户会话信息
  * 以sessionId是否为空判断用户是否登录
  *
- * @author <a href="mailto:chao2.ma@changhong.com">马超(Vision.Mac)</a>
+ * @author 马超(Vision.Mac)
  * @version 1.0.1 2017/3/30 19:24
  */
 public class SessionUser implements Serializable {
@@ -37,9 +37,13 @@ public class SessionUser implements Serializable {
      */
     private String userId = ANONYMOUS;
     /**
-     * 用户账号
+     * 用户主账号
      */
     private String account = ANONYMOUS;
+    /**
+     * 当前登录账号
+     */
+    private String loginAccount = ANONYMOUS;
     /**
      * 用户名
      */
@@ -95,6 +99,14 @@ public class SessionUser implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getLoginAccount() {
+        return loginAccount;
+    }
+
+    public void setLoginAccount(String loginAccount) {
+        this.loginAccount = loginAccount;
     }
 
     public String getUserName() {
