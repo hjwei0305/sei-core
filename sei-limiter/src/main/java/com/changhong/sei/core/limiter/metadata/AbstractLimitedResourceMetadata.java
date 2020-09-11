@@ -53,16 +53,11 @@ public abstract class AbstractLimitedResourceMetadata<T extends LimitedResource>
         try {
             final Method fallbackMethod = this.targetClass.getDeclaredMethod(limitedResource.getFallback(), this.targetMethod.getParameterTypes());
             fallbackMethod.setAccessible(true);
-            this.limitedFallbackResolver = new LimitedFallbackResolver() {
-                @Override
-                public Object resolve(Method method, Class clazz, Object[] args, LimitedResource limitedResource, Object target) {
-                    try {
-                        return fallbackMethod.invoke(target, args);
-                    } catch (IllegalAccessException e) {
-                        return null;
-                    } catch (InvocationTargetException e) {
-                        return null;
-                    }
+            this.limitedFallbackResolver = (method, clazz, args, limitedResource1, target) -> {
+                try {
+                    return fallbackMethod.invoke(target, args);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    return null;
                 }
             };
         } catch (NoSuchMethodException e) {
@@ -81,15 +76,13 @@ public abstract class AbstractLimitedResourceMetadata<T extends LimitedResource>
         if (limitedResource instanceof Observable) {
             ((Observable) limitedResource).addObserver(this);
         }
-
     }
 
     private Map<String, Object> findLimiterParameters() {
         // 获取所有LimiterParameter标记的字段
         Field[] fields = this.getLimitedResource().getClass().getDeclaredFields();
         Map<String, Object> retVal = null;
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+        for (Field field : fields) {
             field.setAccessible(true);
             if (AnnotatedElementUtils.hasAnnotation(field, LimiterParameter.class)) {
                 if (retVal == null) {

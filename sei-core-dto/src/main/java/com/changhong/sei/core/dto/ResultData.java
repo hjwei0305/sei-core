@@ -89,7 +89,7 @@ public class ResultData<T> implements Serializable {
      *
      * @return 处理结果
      */
-    public static ResultData<?> success() {
+    public static <T> ResultData<T> success() {
         return new ResultData<>(Boolean.TRUE, DEFAULT_SUCCESSFUL_MSG, null);
     }
 

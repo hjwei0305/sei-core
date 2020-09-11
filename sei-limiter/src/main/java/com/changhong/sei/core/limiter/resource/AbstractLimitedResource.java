@@ -18,7 +18,7 @@ public abstract class AbstractLimitedResource extends Observable implements Limi
     protected String limiter;
 
     public AbstractLimitedResource(String key, Collection<String> argumentInjectors, String fallback, String errorHandler, String limiter) {
-        Assert.hasText(key, "key不能为空！");
+//        Assert.hasText(key, "key不能为空！");
         this.key = key;
         this.argumentInjectors = argumentInjectors;
         this.fallback = fallback;
