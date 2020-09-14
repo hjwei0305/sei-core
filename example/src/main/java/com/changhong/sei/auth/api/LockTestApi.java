@@ -1,5 +1,6 @@
 package com.changhong.sei.auth.api;
 
+import com.changhong.sei.core.dto.ResultData;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -12,5 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface LockTestApi {
 
     @RequestMapping(value = "/lock")
-    String testLock(@RequestParam("key") String key) throws Exception;
+    ResultData<String> testLock(@RequestParam("key") String key) throws Exception;
+    @RequestMapping(value = "/lock1")
+    String testLock1() throws Exception;
 }

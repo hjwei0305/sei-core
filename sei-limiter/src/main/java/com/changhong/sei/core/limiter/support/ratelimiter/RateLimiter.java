@@ -9,9 +9,7 @@ import java.util.Map;
  */
 public abstract class RateLimiter implements Limiter<SeiRateLimiter> {
 
-
     public abstract boolean acquire(Object key, double rate, long capacity);
-
 
     @Override
     public boolean limit(Object key, Map<String, Object> args) {

@@ -13,7 +13,6 @@ public abstract class PeakLimiter implements Limiter<SeiPeak> {
 
     public abstract void release(Object key, int max);
 
-
     @Override
     public boolean limit(Object key, Map<String, Object> args) {
         return acquire(key, (int) args.get("max"));

@@ -11,9 +11,9 @@ public class RedisLock extends LockLimiter {
     /**
      * 引入Redis分布式锁依赖组件
      */
-    private RedisLockRegistry redisLockRegistry;
+    private final RedisLockRegistry redisLockRegistry;
 
-    private String lockName;
+    private final String lockName;
 
     public RedisLock(RedisLockRegistry redisLockRegistry, String lockName) {
         this.redisLockRegistry = redisLockRegistry;
@@ -49,7 +49,8 @@ public class RedisLock extends LockLimiter {
     /**
      * 创建Redis分布式锁
      */
-    private Lock getLock(Object key) {
+    @Override
+    public Lock getLock(Object key) {
         return redisLockRegistry.obtain(key.toString());
     }
 }

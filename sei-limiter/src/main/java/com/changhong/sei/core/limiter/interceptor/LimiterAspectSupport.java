@@ -45,7 +45,6 @@ public abstract class LimiterAspectSupport implements BeanFactoryAware, Initiali
      * @throws Throwable
      */
     protected Object execute(final MethodInvocation invocation, Object target, Method method, Object[] args) throws Throwable {
-
         if (this.initialized) {
             Class<?> targetClass = AopProxyUtils.ultimateTargetClass(target);
             LimitedResourceSource limitedResourceSource = getLimitedResourceSource();

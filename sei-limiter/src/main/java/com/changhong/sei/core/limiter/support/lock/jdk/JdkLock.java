@@ -15,9 +15,9 @@ public class JdkLock extends LockLimiter {
 
     private final Logger logger = LoggerFactory.getLogger(JdkLock.class);
 
-    private String lockName;
+    private final String lockName;
 
-    private ConcurrentHashMap<Object, Lock> locks = null;
+    private ConcurrentHashMap<Object, Lock> locks;
 
     public JdkLock(String lockName, int initialCapacity, float loadFactor, int concurrencyLevel) {
         this.lockName = lockName;
@@ -65,5 +65,13 @@ public class JdkLock extends LockLimiter {
     @Override
     public String getLimiterName() {
         return lockName;
+    }
+
+    /**
+     * 获取锁
+     */
+    @Override
+    public Lock getLock(Object key) {
+        return locks.get(key);
     }
 }
