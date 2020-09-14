@@ -62,16 +62,23 @@ public class JdkLock extends LockLimiter {
         lock.unlock();
     }
 
+    /**
+     * 检查锁状态
+     */
+    @Override
+    public boolean checkLocked(Object key) {
+        // 获取锁
+        Lock lock = locks.get(key);
+        if (lock instanceof ReentrantLock) {
+            ReentrantLock reentrantLock = (ReentrantLock) lock;
+            return reentrantLock.isLocked();
+        }
+        return false;
+    }
+
     @Override
     public String getLimiterName() {
         return lockName;
     }
 
-    /**
-     * 获取锁
-     */
-    @Override
-    public Lock getLock(Object key) {
-        return locks.get(key);
-    }
 }

@@ -14,6 +14,13 @@ public interface LockTestApi {
 
     @RequestMapping(value = "/lock")
     ResultData<String> testLock(@RequestParam("key") String key) throws Exception;
+
     @RequestMapping(value = "/lock1")
     String testLock1() throws Exception;
+
+    @RequestMapping(value = "/lock2")
+    ResultData<String> testLock2(@RequestParam("key") String key);
+
+    @RequestMapping(value = "/check")
+    ResultData<String> checkLock(@RequestParam("key") String key);
 }

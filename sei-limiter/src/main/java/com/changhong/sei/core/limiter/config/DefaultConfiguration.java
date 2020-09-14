@@ -7,6 +7,7 @@ import com.changhong.sei.core.limiter.support.lock.LockLimiter;
 import com.changhong.sei.core.limiter.support.lock.redis.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -19,12 +20,14 @@ public class DefaultConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultConfiguration.class);
 
+    @Value("${sei.limiter.lock.expire:300000}")
+    private long expireAfter;
+
     @Bean
     @ConditionalOnClass(RedisConnectionFactory.class)
     @ConditionalOnMissingBean(RedisLockRegistry.class)
-//    @ConditionalOnProperty()
     public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory) {
-        return new RedisLockRegistry(redisConnectionFactory, "sei-lock", 180000L);
+        return new RedisLockRegistry(redisConnectionFactory, "sei:lock", expireAfter);
     }
 
     @Bean(Constants.LIMITER_LOCK)

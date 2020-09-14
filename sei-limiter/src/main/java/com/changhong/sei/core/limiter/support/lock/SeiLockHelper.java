@@ -15,7 +15,7 @@ public final class SeiLockHelper {
      * 检查key对应的资源锁是否锁定
      *
      * @param key 资源key
-     * @return 返回true-锁定,反之未锁定
+     * @return 返回true-已锁定,反之未锁定
      */
     public static boolean checkLocked(String key) {
         boolean locked;

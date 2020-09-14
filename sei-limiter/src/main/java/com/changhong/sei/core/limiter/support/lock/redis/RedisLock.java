@@ -1,7 +1,11 @@
 package com.changhong.sei.core.limiter.support.lock.redis;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.limiter.support.lock.LockLimiter;
 import com.changhong.sei.core.log.LogUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 
 import java.util.concurrent.locks.Lock;
@@ -41,6 +45,27 @@ public class RedisLock extends LockLimiter {
         LogUtil.debug("线程:{} key: [{}] 释放锁", Thread.currentThread().getName(), key);
     }
 
+    /**
+     * 检查锁状态
+     *
+     * @param key 资源key
+     * @return 返回true-已锁定,反之未锁定
+     */
+    @Override
+    public boolean checkLocked(Object key) {
+        boolean locked;
+        try {
+            StringRedisTemplate template = ContextUtil.getBean(StringRedisTemplate.class);
+            String val = template.boundValueOps("sei:lock:" + key.toString()).get();
+            locked = StringUtils.isNotBlank(val);
+        } catch (BeansException e) {
+            LogUtil.error("检查锁状态", e);
+            locked = false;
+        }
+        LogUtil.debug("当前锁状态: {}", locked);
+        return locked;
+    }
+
     @Override
     public String getLimiterName() {
         return lockName;
@@ -49,8 +74,7 @@ public class RedisLock extends LockLimiter {
     /**
      * 创建Redis分布式锁
      */
-    @Override
-    public Lock getLock(Object key) {
+    private Lock getLock(Object key) {
         return redisLockRegistry.obtain(key.toString());
     }
 }
