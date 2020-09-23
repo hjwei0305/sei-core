@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <included>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="com.changhong.sei.core.log.extend.SeiConsoleAppender">
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
             <!--<charset>utf8</charset>-->

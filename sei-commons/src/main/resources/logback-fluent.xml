@@ -6,7 +6,7 @@
     <!-- %date{HH:mm:ss.SSS} %-5level [%X{traceId}] [%thread] %logger#%line %X{req.requestURI} %msg\n\r -->
     <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="com.changhong.sei.core.log.extend.SeiConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <!--<charset>utf8</charset>-->

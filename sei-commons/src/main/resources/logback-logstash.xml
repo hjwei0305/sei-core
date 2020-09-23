@@ -11,7 +11,7 @@
     <property name="CONSOLE_LOG_PATTERN"
               value="%clr(%d{HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}#%-4line){cyan} %clr(:){faint} %m%n"/>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="com.changhong.sei.core.log.extend.SeiConsoleAppender">
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
             <!--<charset>utf8</charset>-->
@@ -26,7 +26,7 @@
 
     <!--    </springProfile>-->
 
-    <appender name="LOG_STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <appender name="LOG_STASH" class="com.changhong.sei.core.log.extend.SeiLogstashTcpSocketAppender">
         <!-- logstash服务器地址 端口-->
 <!--        <destination>${sei.log.remote.host}</destination>-->
         <destination>10.4.208.132:5044</destination>

@@ -9,7 +9,7 @@
 <!--    <springProperty scope="context" name="IP" source="spring.cloud.client.ipAddress" />-->
 
     <!-- kafka的appender配置 -->
-    <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
+    <appender name="kafkaAppender" class="com.changhong.sei.core.log.extend.SeiKafkaAppender">
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>

@@ -2,22 +2,18 @@ package com.changhong.sei.core.log.extend;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.filter.LevelFilter;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.spi.FilterReply;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.log.support.LogContext;
+import net.logstash.logback.appender.LogstashTcpSocketAppender;
 
 /**
  * 实现功能：
  *
  * @author 马超(Vision.Mac)
- * @version 1.0.00  2020-01-08 11:58
+ * @version 1.0.00  2020-09-23 16:03
  */
-public class SeiRollingFileAppender extends RollingFileAppender<ILoggingEvent> {
-
-    public SeiRollingFileAppender() {
-    }
+public class SeiLogstashTcpSocketAppender extends LogstashTcpSocketAppender {
 
     @Override
     public void start() {
@@ -58,5 +54,4 @@ public class SeiRollingFileAppender extends RollingFileAppender<ILoggingEvent> {
 
         super.start();
     }
-
 }
