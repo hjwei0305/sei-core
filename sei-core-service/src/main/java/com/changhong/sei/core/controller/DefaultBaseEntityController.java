@@ -57,7 +57,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
      * @return 操作结果
      */
     @Override
-    default ResultData delete(String id){
+    default ResultData<?> delete(String id){
         try {
             OperateResult result = getService().delete(id);
             return ResultDataUtil.convertFromOperateResult(result);

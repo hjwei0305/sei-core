@@ -14,7 +14,6 @@ import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
 import org.apache.commons.collections.CollectionUtils;
-import org.modelmapper.ModelMapper;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -33,11 +32,6 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
         extends BaseTreeApi<D> {
     // 注入业务逻辑实现
     BaseTreeService<T> getService();
-
-    // 获取实体转换类
-    default ModelMapper getModelMapper(){
-         return new ModelMapper();
-    }
 
     /**
      * 获取数据实体的类型
@@ -59,12 +53,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @param entity 业务实体
      * @return DTO
      */
-    default D convertToDto(T entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        return getModelMapper().map(entity, getDtoClass());
-    }
+    D convertToDto(T entity);
 
     /**
      * 将数据实体清单转换成DTO清单
@@ -101,12 +90,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @param dto 业务实体
      * @return 数据实体
      */
-    default T convertToEntity(D dto) {
-        if (Objects.isNull(dto)) {
-            return null;
-        }
-        return getModelMapper().map(dto, getEntityClass());
-    }
+    T convertToEntity(D dto);
 
     /**
      * 移动一个节点
@@ -115,7 +99,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作状态
      */
     @Override
-    default ResultData move(TreeNodeMoveParam moveParam) {
+    default ResultData<?> move(TreeNodeMoveParam moveParam) {
         OperateResult result;
         try {
             result = getService().move(moveParam.getNodeId(), moveParam.getTargetParentId());
@@ -244,7 +228,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作结果
      */
     @Override
-    default ResultData delete(String id) {
+    default ResultData<?> delete(String id) {
         OperateResult result;
         try {
             result = getService().delete(id);

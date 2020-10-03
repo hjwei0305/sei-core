@@ -4,9 +4,12 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.service.BaseTreeService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 /**
  * 实现功能: 树形业务实体的服务控制抽象基类
@@ -19,7 +22,28 @@ public abstract class BaseTreeController<T extends BaseEntity & TreeEntity<T>, D
     private final Class<T> clazzT;
     // DTO实体类型
     private final Class<D> clazzD;
+    /**
+     * DTO转换为Entity的转换器
+     */
+    protected static final ModelMapper entityModelMapper;
+    /**
+     * Entity转换为DTO的转换器
+     */
+    protected static final ModelMapper dtoModelMapper;
+    // 初始化静态属性
+    static {
+        // 初始化DTO转换为Entity的转换器
+        entityModelMapper = new ModelMapper();
+        // 设置为严格匹配
+        entityModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        // 执行自定义设置;
+        customerConvertToEntityMapper();
 
+        // 初始化Entity转换为DTO的转换器
+        dtoModelMapper = new ModelMapper();
+        // 执行自定义设置
+        customConvertToDtoMapper();
+    }
     // 构造函数
     @SuppressWarnings("unchecked")
     protected BaseTreeController(){
@@ -50,5 +74,45 @@ public abstract class BaseTreeController<T extends BaseEntity & TreeEntity<T>, D
     @Override
     public Class<D> getDtoClass() {
         return clazzD;
+    }
+
+    /**
+     * 自定义设置DTO转换为Entity的转换器
+     */
+    protected static void customerConvertToEntityMapper() {
+    }
+
+    /**
+     * 将DTO转换成数据实体
+     *
+     * @param dto 业务实体
+     * @return 数据实体
+     */
+    @Override
+    public final T convertToEntity(D dto) {
+        if (Objects.isNull(dto)) {
+            return null;
+        }
+        return entityModelMapper.map(dto, getEntityClass());
+    }
+
+    /**
+     * 自定义设置Entity转换为DTO的转换器
+     */
+    protected static void customConvertToDtoMapper() {
+    }
+
+    /**
+     * 将数据实体转换成DTO
+     *
+     * @param entity 业务实体
+     * @return DTO
+     */
+    @Override
+    public final D convertToDto(T entity) {
+        if (Objects.isNull(entity)) {
+            return null;
+        }
+        return dtoModelMapper.map(entity, getDtoClass());
     }
 }

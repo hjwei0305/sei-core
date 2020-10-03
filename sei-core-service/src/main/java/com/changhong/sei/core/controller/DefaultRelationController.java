@@ -9,12 +9,8 @@ import com.changhong.sei.core.entity.RelationEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseRelationService;
 import com.changhong.sei.core.service.bo.OperateResult;
-import org.modelmapper.*;
-import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MappingContext;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -28,11 +24,6 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         extends BaseRelationApi<TD, PD, CD> {
     // 注入业务逻辑实现
     BaseRelationService<TT, PT, CT> getService();
-
-    // 获取实体转换类
-    default ModelMapper getModelMapper(){
-       return new ModelMapper();
-    }
 
     /**
      * 获取关系型数据实体的类型
@@ -82,26 +73,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param entity 业务实体
      * @return DTO
      */
-    default TD convertRelationToDto(TT entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        // 自定义数据映射
-        ModelMapper custMapper = new ModelMapper();
-        // 严格匹配
-        custMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 定义父类转换器
-        Converter<PT, PD> parentConverter = context -> convertParentToDto(context.getSource());
-        // 定义子类转换器
-        Converter<CT, CD> childConverter = context -> convertChildToDto(context.getSource());
-        // 添加类型映射器
-        TypeMap<PT, PD> parentTypeMap = custMapper.createTypeMap(getParentEntityClass(), getParentDtoClass());
-        parentTypeMap.setConverter(parentConverter);
-        TypeMap<CT, CD> childTypeMap = custMapper.createTypeMap(getChildEntityClass(), getChildDtoClass());
-        childTypeMap.setConverter(childConverter);
-        // 转换
-        return custMapper.map(entity, getRelationDtoClass());
-    }
+    TD convertRelationToDto(TT entity);
 
     /**
      * 将DTO转换成关系型数据实体
@@ -109,12 +81,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param dto 业务实体
      * @return 数据实体
      */
-    default TT convertToEntity(TD dto) {
-        if (Objects.isNull(dto)) {
-            return null;
-        }
-        return getModelMapper().map(dto, getRelationEntityClass());
-    }
+    TT convertToEntity(TD dto);
 
     /**
      * 将父数据实体转换成DTO
@@ -122,12 +89,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param entity 业务实体
      * @return DTO
      */
-    default PD convertParentToDto(PT entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        return getModelMapper().map(entity, getParentDtoClass());
-    }
+    PD convertParentToDto(PT entity);
 
     /**
      * 将DTO转换成父数据实体
@@ -135,12 +97,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param dto 业务实体
      * @return 数据实体
      */
-    default PT convertParentToEntity(PD dto) {
-        if (Objects.isNull(dto)) {
-            return null;
-        }
-        return getModelMapper().map(dto, getParentEntityClass());
-    }
+    PT convertParentToEntity(PD dto);
 
     /**
      * 将子数据实体转换成DTO
@@ -148,12 +105,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param entity 业务实体
      * @return DTO
      */
-    default CD convertChildToDto(CT entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        return getModelMapper().map(entity, getChildDtoClass());
-    }
+    CD convertChildToDto(CT entity);
 
     /**
      * 将DTO转换成子数据实体
@@ -161,12 +113,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @param dto 业务实体
      * @return 数据实体
      */
-    default CT convertChildToEntity(CD dto) {
-        if (Objects.isNull(dto)) {
-            return null;
-        }
-        return getModelMapper().map(dto, getChildEntityClass());
-    }
+    CT convertChildToEntity(CD dto);
 
     /**
      * 通过父实体Id获取子实体清单
@@ -195,7 +142,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @return 操作结果
      */
     @Override
-    default ResultData insertRelations(RelationParam relationParam){
+    default ResultData<?> insertRelations(RelationParam relationParam){
         OperateResult result;
         try {
             result = getService().insertRelationsByParam(relationParam);
@@ -218,7 +165,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @return 操作结果
      */
     @Override
-    default ResultData removeRelations(RelationParam relationParam){
+    default ResultData<?> removeRelations(RelationParam relationParam){
         OperateResult result;
         try {
             result = getService().removeRelationsByParam(relationParam);
@@ -281,7 +228,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @return 操作结果
      */
     @Override
-    default ResultData insertRelationsByParents(ParentRelationParam relationParam){
+    default ResultData<?> insertRelationsByParents(ParentRelationParam relationParam){
         OperateResult result;
         try {
             result = getService().insertRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
@@ -304,7 +251,7 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
      * @return 操作结果
      */
     @Override
-    default ResultData removeRelationsByParents(ParentRelationParam relationParam){
+    default ResultData<?> removeRelationsByParents(ParentRelationParam relationParam){
         OperateResult result;
         try {
             result = getService().removeRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
