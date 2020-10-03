@@ -36,13 +36,9 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
         entityModelMapper = new ModelMapper();
         // 设置为严格匹配
         entityModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 执行自定义设置;
-        customerConvertToEntityMapper();
 
         // 初始化Entity转换为DTO的转换器
         dtoModelMapper = new ModelMapper();
-        // 执行自定义设置
-        customConvertToDtoMapper();
     }
 
     // 构造函数
@@ -52,6 +48,10 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
         Type[] genericTypes = parameterizedType.getActualTypeArguments();
         this.clazzT = (Class<T>) genericTypes[0];
         this.clazzD = (Class<D>) genericTypes[1];
+        // 执行自定义设置;
+        customerConvertToEntityMapper();
+        // 执行自定义设置
+        customConvertToDtoMapper();
     }
 
     @Override
@@ -80,7 +80,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     /**
      * 自定义设置DTO转换为Entity的转换器
      */
-    public static void customerConvertToEntityMapper() {
+    protected void customerConvertToEntityMapper() {
     }
 
     /**
@@ -100,7 +100,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     /**
      * 自定义设置Entity转换为DTO的转换器
      */
-    public static void customConvertToDtoMapper() {
+    protected void customConvertToDtoMapper() {
     }
 
     /**
