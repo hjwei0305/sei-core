@@ -63,39 +63,27 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
         relationEntityModelMapper = new ModelMapper();
         // 设置为严格匹配
         relationEntityModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 执行自定义设置;
-        customerConvertRelationToEntityMapper();
 
         // 初始化Entity转换为DTO的转换器
         relationDtoModelMapper = new ModelMapper();
         // 严格匹配
         relationDtoModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 执行自定义设置
-        customConvertRelationToDtoMapper();
 
         // 初始化父实体DTO转换为Entity的转换器
         parentEntityModelMapper = new ModelMapper();
         // 设置为严格匹配
         parentEntityModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 执行自定义设置;
-        customerConvertParentToEntityMapper();
 
         // 初始化父实体Entity转换为DTO的转换器
         parentDtoModelMapper = new ModelMapper();
-        // 执行自定义设置
-        customConvertParentToDtoMapper();
 
         // 初始化子实体DTO转换为Entity的转换器
         childEntityModelMapper = new ModelMapper();
         // 设置为严格匹配
         childEntityModelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        // 执行自定义设置;
-        customerConvertChildToEntityMapper();
 
         // 初始子父实体Entity转换为DTO的转换器
         childDtoModelMapper = new ModelMapper();
-        // 执行自定义设置
-        customConvertChildToDtoMapper();
     }
 
     // 构造函数
@@ -109,6 +97,13 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
         this.clazzTD = (Class<TD>) genericTypes[3];
         this.clazzPD = (Class<PD>) genericTypes[4];
         this.clazzCD = (Class<CD>) genericTypes[5];
+        // 执行自定义设置转换器
+        customerConvertRelationToEntityMapper();
+        customConvertRelationToDtoMapper();
+        customerConvertParentToEntityMapper();
+        customConvertParentToDtoMapper();
+        customerConvertChildToEntityMapper();
+        customConvertChildToDtoMapper();
     }
 
     @Override
@@ -177,7 +172,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置DTO转换为Entity的转换器
      */
-    protected static void customerConvertRelationToEntityMapper() {
+    protected void customerConvertRelationToEntityMapper() {
     }
 
     /**
@@ -187,7 +182,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return 数据实体
      */
     @Override
-    public final TT convertToEntity(TD dto) {
+    public TT convertToEntity(TD dto) {
         if (Objects.isNull(dto)) {
             return null;
         }
@@ -197,7 +192,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置Entity转换为DTO的转换器
      */
-    protected static void customConvertRelationToDtoMapper() {
+    protected void customConvertRelationToDtoMapper() {
     }
 
     /**
@@ -207,7 +202,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return DTO
      */
     @Override
-    public final TD convertRelationToDto(TT entity) {
+    public TD convertRelationToDto(TT entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
@@ -222,7 +217,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置父实体DTO转换为Entity的转换器
      */
-    protected static void customerConvertParentToEntityMapper() {
+    protected void customerConvertParentToEntityMapper() {
     }
 
     /**
@@ -232,7 +227,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return 数据实体
      */
     @Override
-    public final PT convertParentToEntity(PD dto) {
+    public PT convertParentToEntity(PD dto) {
         if (Objects.isNull(dto)) {
             return null;
         }
@@ -242,7 +237,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置父实体Entity转换为DTO的转换器
      */
-    protected static void customConvertParentToDtoMapper() {
+    protected void customConvertParentToDtoMapper() {
     }
 
     /**
@@ -252,7 +247,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return DTO
      */
     @Override
-    public final PD convertParentToDto(PT entity) {
+    public PD convertParentToDto(PT entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
@@ -262,7 +257,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置子实体DTO转换为Entity的转换器
      */
-    protected static void customerConvertChildToEntityMapper() {
+    protected void customerConvertChildToEntityMapper() {
     }
 
     /**
@@ -272,7 +267,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return 数据实体
      */
     @Override
-    public final CT convertChildToEntity(CD dto) {
+    public CT convertChildToEntity(CD dto) {
         if (Objects.isNull(dto)) {
             return null;
         }
@@ -282,7 +277,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
     /**
      * 自定义设置子实体Entity转换为DTO的转换器
      */
-    protected static void customConvertChildToDtoMapper() {
+    protected void customConvertChildToDtoMapper() {
     }
 
     /**
@@ -292,7 +287,7 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @return DTO
      */
     @Override
-    public final CD convertChildToDto(CT entity) {
+    public CD convertChildToDto(CT entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
