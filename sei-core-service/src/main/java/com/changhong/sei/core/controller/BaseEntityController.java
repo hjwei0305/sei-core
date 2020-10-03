@@ -80,7 +80,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     /**
      * 自定义设置DTO转换为Entity的转换器
      */
-    protected static void customerConvertToEntityMapper() {
+    public static void customerConvertToEntityMapper() {
     }
 
     /**
@@ -100,7 +100,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     /**
      * 自定义设置Entity转换为DTO的转换器
      */
-    protected static void customConvertToDtoMapper() {
+    public static void customConvertToDtoMapper() {
     }
 
     /**
