@@ -90,7 +90,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      * @return 数据实体
      */
     @Override
-    public final T convertToEntity(D dto) {
+    public T convertToEntity(D dto) {
         if (Objects.isNull(dto)) {
             return null;
         }
@@ -110,7 +110,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      * @return DTO
      */
     @Override
-    public final D convertToDto(T entity) {
+    public D convertToDto(T entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
