@@ -8,7 +8,6 @@ import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.service.bo.ResponseData;
 import com.changhong.sei.util.EnumUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,19 @@ public class ResultDataUtil {
     public static <T> ResultData<T> convertFromOperateResult(OperateResult operateResult){
         if (operateResult.successful()){
             return ResultData.success(operateResult.getMessage(), null);
+        } else {
+            return ResultData.fail(operateResult.getMessage());
+        }
+    }
+
+    /**
+     * 将操作处理结果转换为返回结果
+     * @param operateResult 操作处理结果
+     * @return 返回结果
+     */
+    public static <T> ResultData<T> convertFromOperateResult(OperateResult operateResult, T data){
+        if (operateResult.successful()){
+            return ResultData.success(operateResult.getMessage(), data);
         } else {
             return ResultData.fail(operateResult.getMessage());
         }
