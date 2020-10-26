@@ -57,6 +57,7 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         // spring boot actuator
         urlFilters.add(Pattern.compile(".*?/actuator.*", Pattern.CASE_INSENSITIVE));
         urlFilters.add(Pattern.compile(".*?/instances.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/applications.*", Pattern.CASE_INSENSITIVE));
 
         // webjars
         urlFilters.add(Pattern.compile(".*?/webjars/.*", Pattern.CASE_INSENSITIVE));
@@ -89,6 +90,15 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         String path = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        if (StringUtils.equals(path, contextPath) || StringUtils.equals(path, contextPath.concat("/"))) {
+            if (StringUtils.endsWith(contextPath, "/")) {
+                response.sendRedirect(contextPath + "doc.html");
+            } else {
+                response.sendRedirect(contextPath + "/doc.html");
+            }
+            return;
+        }
 
         // 静态资源
         if (StringUtils.endsWithAny(path.toLowerCase(), ".js", ".css", ".ico", ".jpg", ".gif", ".svg", ".png")) {
