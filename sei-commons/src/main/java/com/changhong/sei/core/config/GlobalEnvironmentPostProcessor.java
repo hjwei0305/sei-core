@@ -62,6 +62,9 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             if (sysEnv.containsKey("spring.cloud.config.profile")
                     || sysEnv.containsKey("sei.application.env")) {
                 isLocal = false;
+            } else {
+                // 本地服务部自动注册
+                properties.setProperty("spring.cloud.service-registry.auto-registration.enabled", "false");
             }
 
             if (!isLocal && environment.getProperty("sei.log.kafka.enable", Boolean.class, true)) {

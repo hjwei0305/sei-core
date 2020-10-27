@@ -32,13 +32,13 @@ public class MonitorEnvironmentPostProcessor implements EnvironmentPostProcessor
         if (executed.compareAndSet(false, true)) {
             Properties properties = new Properties();
             // 暴露所有端点  health,info,env,prometheus,metrics,httptrace,threaddump,heapdump,springmetrics
-            properties.setProperty("management.endpoints.web.exposure.include", "info, health, refresh, metrics, httptrace, prometheus");
+            properties.setProperty("management.endpoints.web.exposure.include", "info, env, health, refresh, metrics, httptrace, prometheus, threaddump,heapdump,springmetrics, logfile, loggers");
             // 为指标设置tag
             properties.setProperty("management.metrics.tags.application", environment.getProperty("spring.application.name") + "-" + environment.getProperty("spring.cloud.config.profile"));
             // 不暴露的端点
 //            properties.setProperty("management.endpoints.web.exposure.exclude", "beans");
             // 健康检查
-//            properties.setProperty("management.endpoint.health.show-details", "always");
+            //properties.setProperty("management.endpoint.health.show-details", "always");
             // Actuator 端点前缀
 //            properties.setProperty("management.endpoints.web.base-path", "/monitor");
 
