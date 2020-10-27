@@ -20,7 +20,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
     /**
      * 是否已执行标示,只需要执行一次
      */
-    private static volatile AtomicBoolean executed = new AtomicBoolean(false);
+    private static final AtomicBoolean executed = new AtomicBoolean(false);
 
     /**
      * Post-process the given {@code environment}.
@@ -41,18 +41,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             // 支持服务名相同的Feign Client API接口
             System.setProperty("spring.main.allow-bean-definition-overriding", "true");
 
-//            //日志采集器
-//            if (environment.getProperty("sei.global.log.elk.enable", Boolean.class, false)) {
-////            if (environment.containsProperty("sei.log.remote.host")) {
-////                System.setProperty("appCode", environment.getProperty("spring.cloud.config.name", "example"));
-////                System.setProperty("envCode", environment.getProperty("spring.cloud.config.profile", "example"));
-////                System.setProperty("FlentdHost", environment.getProperty("sei.global.fluentd.host", "10.4.208.131"));
-////                System.setProperty("FlentdPort", environment.getProperty("sei.global.fluentd.port", "24224"));
-//                //指定配置efk文件
-////                properties.setProperty("logging.config", "classpath:logback-fluent.xml");
-//                properties.setProperty("logging.config", "classpath:logback-logstash.xml");
-//            }
-
             /*
              按当前部署约定:在各个环境部署时需要设置系统环境变量[spring.cloud.config.profile]或[sei.application.env]指明当前环境.
              故,基于此判定是否是本地还是服务器环境
@@ -65,7 +53,21 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             } else {
                 // 本地服务部自动注册
                 properties.setProperty("spring.cloud.service-registry.auto-registration.enabled", "false");
+                // 本地禁用admin监控
+                properties.setProperty("spring.boot.admin.client.enabled", "false");
             }
+
+            // 暴露所有端点
+            properties.setProperty("management.endpoints.web.exposure.include", "info,env,health,refresh,metrics,httptrace,prometheus,threaddump,heapdump,loggers");
+            // 为指标设置tag
+            properties.setProperty("management.metrics.tags.application", environment.getProperty("spring.application.name") + "-" + environment.getProperty("spring.cloud.config.profile"));
+            // 不暴露的端点
+//            properties.setProperty("management.endpoints.web.exposure.exclude", "beans");
+            // 健康检查
+            //properties.setProperty("management.endpoint.health.show-details", "always");
+            // Actuator 端点前缀
+//            properties.setProperty("management.endpoints.web.base-path", "/monitor");
+
 
             if (!isLocal && environment.getProperty("sei.log.kafka.enable", Boolean.class, true)) {
                 properties.setProperty("logging.config", "classpath:logback-kafka.xml");

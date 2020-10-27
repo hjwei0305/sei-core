@@ -22,7 +22,12 @@
 
                         "seiVersion": "sei-${sei-version:-}",
                         "traceId": "%X{traceId:-}",
-                        "token" : "%X{x-authorization:-}",
+                        "token": "%X{x-authorization:-}",
+                        "userId": "%X{userId:-}",
+                        "account": "%X{account:-}",
+                        "userName": "%X{userName:-}",
+                        "currentServer": "%X{current_server:-}",
+                        "fromServer": "%X{from_server:-}",
 
                         "host": "${HOSTNAME:-}",
                         "env": "${ENV:-}",

@@ -36,14 +36,19 @@ public class TraceFilter extends BaseWebFilter {
         MDC.put(ContextUtil.TRACE_ID, traceId);
         ThreadLocalUtil.setTranVar(ContextUtil.TRACE_ID, traceId);
 
-        //把远程获取的服务名称设置到线程变量中
-        String fromServer = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_FROM_SERVER);
-        ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_FROM_SERVER, fromServer);
-
         //把本服务器名设置为 调用服务名
         String currentAppCode = ContextUtil.getAppCode();
+        MDC.put(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
         ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
-        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_FROM_SERVER, currentAppCode);
+        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
+
+        //把远程获取的服务名称设置到线程变量中
+        String fromServer = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_FROM_SERVER);
+        if (StringUtils.isBlank(fromServer)) {
+            fromServer = currentAppCode;
+        }
+        MDC.put(ContextUtil.TRACE_FROM_SERVER, fromServer);
+        ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_FROM_SERVER, fromServer);
 
         chain.doFilter(request, response);
     }
