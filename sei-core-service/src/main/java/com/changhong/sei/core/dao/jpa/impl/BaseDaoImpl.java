@@ -977,6 +977,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         } else if (dateTime.getHour() == 0 && dateTime.getMinute() == 0 && dateTime.getSecond() == 0) {
                             matchValue = DateUtils.localDateTime2Date(dateTime.plusDays(1));
                         }
+                        predicate = builder.lessThan(expression, (Comparable) matchValue);
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
                         predicate = builder.lessThanOrEqualTo(expression, (Comparable) matchValue);
