@@ -13,6 +13,7 @@ dependencies {
     // 第三方的依赖
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compile(
+            "org.springframework.boot:spring-boot-starter-actuator",
             "org.springframework.boot:spring-boot-starter-web",
             "org.springframework.boot:spring-boot-starter-aop"
     )

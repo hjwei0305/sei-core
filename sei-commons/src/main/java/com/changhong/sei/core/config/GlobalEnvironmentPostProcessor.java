@@ -53,8 +53,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             } else {
                 // 本地服务部自动注册
                 properties.setProperty("spring.cloud.service-registry.auto-registration.enabled", "false");
-                // 本地禁用admin监控
-                properties.setProperty("spring.boot.admin.client.enabled", "false");
             }
 
             // 暴露所有端点
