@@ -95,16 +95,15 @@ public class CheckTokenFilter extends BaseWebFilter {
             return;
         }
 
-        MDC.put("userId", user.getUserId());
-        MDC.put("account", user.getAccount());
-        MDC.put("userName", user.getUserName());
-
-        LOG.info("{} 当前用户: {}", path, user);
-
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
         ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
         // 设置token到可传播的线程全局变量中
         ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, token);
+
+        MDC.put("userId", user.getUserId());
+        MDC.put("account", user.getAccount());
+        MDC.put("userName", user.getUserName());
+        LOG.info("{} 当前用户: {}", path, user);
 
         filterChain.doFilter(request, response);
     }
