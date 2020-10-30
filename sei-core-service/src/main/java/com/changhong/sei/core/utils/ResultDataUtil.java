@@ -112,9 +112,8 @@ public class ResultDataUtil {
         try {
             map = EnumUtils.getEnumMap(enumClass);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取枚举值的键值对(name,remark)异常！", e);
-            return ResultData.fail(ContextUtil.getMessage("core_service_00025", e.getMessage()));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00025"));
         }
         return ResultData.success(map);
     }
@@ -129,9 +128,8 @@ public class ResultDataUtil {
         try {
             enumEntities = EnumUtils.getEnumDataList(enumClass);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取枚举值的实体清单异常！", e);
-            return ResultData.fail(ContextUtil.getMessage("core_service_00039", e.getMessage()));
+            return ResultData.fail(ContextUtil.getMessage("core_service_00039"));
         }
         return ResultData.success(enumEntities);
     }

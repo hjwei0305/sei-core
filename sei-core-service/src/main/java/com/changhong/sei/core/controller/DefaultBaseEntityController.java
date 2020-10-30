@@ -5,10 +5,10 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
+import com.changhong.sei.exception.WebException;
 
 /**
  * <strong>实现功能:</strong>
@@ -26,7 +26,7 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
      * @return 操作结果
      */
     @Override
-    default ResultData<D> save(D dto){
+    default ResultData<D> save(D dto) {
         ResultData checkResult = checkDto(dto);
         if (checkResult.failed()) {
             return checkResult;
@@ -37,10 +37,8 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
         try {
             result = getService().save(entity);
         } catch (Exception e) {
-            // 捕获异常，并返回
-            LogUtil.error("保存业务实体异常！", e);
-            // 保存业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00003", e.getMessage()));
+            // 保存业务实体异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00003"), e);
         }
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
@@ -57,14 +55,13 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
      * @return 操作结果
      */
     @Override
-    default ResultData<?> delete(String id){
+    default ResultData<?> delete(String id) {
         try {
             OperateResult result = getService().delete(id);
             return ResultDataUtil.convertFromOperateResult(result);
         } catch (Exception e) {
-            LogUtil.error("删除业务实体异常！", e);
-            // 删除业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00004", e.getMessage()));
+            // 删除业务实体异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00004"), e);
         }
     }
 
@@ -75,14 +72,13 @@ public interface DefaultBaseEntityController<T extends BaseEntity, D extends Bas
      * @return 业务实体
      */
     @Override
-    default ResultData<D> findOne(String id){
+    default ResultData<D> findOne(String id) {
         T entity;
         try {
             entity = getService().findOne(id);
         } catch (Exception e) {
-            LogUtil.error("获取业务实体异常！", e);
-            // 获取业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00005", e.getMessage()));
+            // 获取业务实体异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00005"), e);
         }
         // 转换数据 to DTO
         D dto = convertToDto(entity);

@@ -9,6 +9,7 @@ import com.changhong.sei.core.entity.RelationEntity;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseRelationService;
 import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.exception.WebException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -128,9 +129,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<CT> entities = getService().getChildrenFromParentId(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            LogUtil.error("通过父实体Id获取子实体清单异常！", e);
-            // 通过父实体Id获取子实体清单异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00012", e.getMessage()));
+            // 通过父实体Id获取子实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00012"), e);
         }
         return ResultData.success(data);
     }
@@ -147,10 +147,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().insertRelationsByParam(relationParam);
         } catch (Exception e) {
-            // 捕获异常，并返回
-            LogUtil.error("创建分配关系异常！", e);
-            // 创建分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00013", e.getMessage()));
+            // 创建分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00013"), e);
         }
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
@@ -170,10 +168,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().removeRelationsByParam(relationParam);
         } catch (Exception e) {
-            // 捕获异常，并返回
-            LogUtil.error("移除分配关系异常！", e);
-            // 移除分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00014", e.getMessage()));
+            // 移除分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00014"), e);
         }
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
@@ -194,9 +190,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<CT> entities = getService().getUnassignedChildren(parentId);
             data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            LogUtil.error("获取未分配的子实体清单异常！", e);
-            // 获取未分配的子实体清单异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00015", e.getMessage()));
+            // 获取未分配的子实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00015"), e);
         }
         return ResultData.success(data);
     }
@@ -214,9 +209,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<PT> entities = getService().getParentsFromChildId(childId);
             data = entities.stream().map(this::convertParentToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            LogUtil.error("通过子实体Id获取父实体清单异常！", e);
-            // 通过子实体Id获取父实体清单异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00016", e.getMessage()));
+            // 通过子实体Id获取父实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00016"), e);
         }
         return ResultData.success(data);
     }
@@ -233,10 +227,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().insertRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
-            // 捕获异常，并返回
-            LogUtil.error("通过父实体清单创建分配关系异常！", e);
-            // 通过父实体清单创建分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00017", e.getMessage()));
+            // 通过父实体清单创建分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00017"), e);
         }
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
@@ -256,10 +248,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
         try {
             result = getService().removeRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
         } catch (Exception e) {
-            // 捕获异常，并返回
-            LogUtil.error("通过父实体清单移除分配关系异常！", e);
-            // 通过父实体清单移除分配关系异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00018", e.getMessage()));
+            // 通过父实体清单移除分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00018"), e);
         }
         if (result.notSuccessful()) {
             return ResultData.fail(result.getMessage());
@@ -280,9 +270,8 @@ public interface DefaultRelationController<TT extends BaseEntity & RelationEntit
             List<TT> entities = getService().getRelationsByParentId(parentId);
             data = entities.stream().map(this::convertRelationToDto).collect(Collectors.toList());
         } catch (Exception e) {
-            LogUtil.error("通过父实体Id获取分配关系清单异常！", e);
-            // 通过父实体Id获取分配关系清单异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00019", e.getMessage()));
+            // 通过父实体Id获取分配关系清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00019"), e);
         }
         return ResultData.success(data);
     }
