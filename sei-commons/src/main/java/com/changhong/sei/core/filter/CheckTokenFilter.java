@@ -95,10 +95,9 @@ public class CheckTokenFilter extends BaseWebFilter {
             return;
         }
 
-        SessionUser sessionUser = ContextUtil.getSessionUser();
-        MDC.put("userId", sessionUser.getUserId());
-        MDC.put("account", sessionUser.getAccount());
-        MDC.put("userName", sessionUser.getUserName());
+        MDC.put("userId", user.getUserId());
+        MDC.put("account", user.getAccount());
+        MDC.put("userName", user.getUserName());
 
         LOG.info("{} 当前用户: {}", path, user);
 
