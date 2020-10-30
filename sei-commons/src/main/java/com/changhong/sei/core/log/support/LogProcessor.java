@@ -1,6 +1,5 @@
 package com.changhong.sei.core.log.support;
 
-import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.log.Level;
 import com.changhong.sei.core.log.LogCallback;
 import com.changhong.sei.core.log.Position;
@@ -9,8 +8,6 @@ import com.changhong.sei.core.log.annotation.Log;
 import com.changhong.sei.core.log.annotation.ParamLog;
 import com.changhong.sei.core.log.annotation.ResultLog;
 import com.changhong.sei.core.log.annotation.ThrowingLog;
-import com.changhong.sei.util.IdGenerator;
-import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,7 +15,6 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -119,7 +115,7 @@ public class LogProcessor {
         }
     }
 
-    @AfterThrowing(value = "@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)", throwing = "throwable")
+    @AfterThrowing(value = "@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)", throwing = "throwable")
     public void throwingPrint1(JoinPoint joinPoint, Throwable throwable) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -330,26 +326,6 @@ public class LogProcessor {
      * @return 返回日志信息builder
      */
     private StringBuilder createInfoBuilder(String busName, MethodInfo methodInfo) {
-        String traceId = ContextUtil.getTraceId();
-        if (StringUtils.isBlank(traceId)) {
-            traceId = IdGenerator.uuid2();
-        }
-        //链路信息处理
-        MDC.put(ContextUtil.TRACE_ID, traceId);
-        MDC.put(ContextUtil.HEADER_TOKEN_KEY, ContextUtil.getToken());
-        MDC.put("userId", ContextUtil.getUserId());
-        MDC.put("account", ContextUtil.getUserAccount());
-        MDC.put("userName", ContextUtil.getUserName());
-        //把本服务器名设置为 调用服务名
-        String currentAppCode = ContextUtil.getAppCode();
-        MDC.put(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
-        //把远程获取的服务名称设置到线程变量中
-        String fromServer = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_FROM_SERVER);
-        if (StringUtils.isBlank(fromServer)) {
-            fromServer = currentAppCode;
-        }
-        MDC.put(ContextUtil.TRACE_FROM_SERVER, fromServer);
-
         StringBuilder builder = new StringBuilder("调用方法：【");
         if (methodInfo.isNative()) {
             builder.append(methodInfo.getClassAllName()).append('.').append(methodInfo.getMethodName());

@@ -22,19 +22,17 @@
 
                         "seiVersion": "sei-${sei-version:-}",
                         "traceId": "%X{traceId:-}",
-                        "token": "%X{x-authorization:-}",
+                        "tracePath": "%X{tracePath:-}",
                         "userId": "%X{userId:-}",
                         "account": "%X{account:-}",
                         "userName": "%X{userName:-}",
-                        "currentServer": "%X{current_server:-}",
-                        "fromServer": "%X{from_server:-}",
 
                         "host": "${HOSTNAME:-}",
                         "env": "${ENV:-}",
                         "serviceName": "${APP_NAME}",
 
                         "pid": "${PID:- }",
-                        "logger": "%logger",
+                        "logger": "%logger#%M",
                         "level": "%p",
                         "message": "%msg",
                         "stackTrace": "%ex"

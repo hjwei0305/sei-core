@@ -3,8 +3,9 @@ package com.changhong.sei.core.context.mock;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
-import com.changhong.sei.exception.SeiException;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
+import org.slf4j.MDC;
 
 /**
  * 实现功能：
@@ -40,16 +41,20 @@ public interface MockUser {
     default SessionUser mock(SessionUser sessionUser) {
         try {
             if (!ThreadLocalUtil.isAvailable()) {
-                throw new SeiException("ThreadLocalHolder还没有初始化,请先调用ThreadLocalHolder.begin(),并在当前线程任务完成前须调用ThreadLocalHolder.end()释放资源");
+                LogUtil.error("ThreadLocalHolder还没有初始化,请先调用ThreadLocalHolder.begin(),并在当前线程任务完成前须调用ThreadLocalHolder.end()释放资源");
             }
             // 生成token
             ContextUtil.generateToken(sessionUser);
+
+            MDC.put("userId", sessionUser.getUserId());
+            MDC.put("account", sessionUser.getAccount());
+            MDC.put("userName", sessionUser.getUserName());
 
             ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), sessionUser);
             // 设置token到可传播的线程全局变量中
             ThreadLocalUtil.setTranVar(ContextUtil.HEADER_TOKEN_KEY, sessionUser.getToken());
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.error("模拟用户会话异常.", e);
         }
         return sessionUser;
     }

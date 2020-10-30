@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -49,7 +52,6 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResultData<String> handleError(MissingServletRequestParameterException e) {
-        LOG.warn("Missing Request Parameter", e);
         String message = String.format("Missing Request Parameter: %s", e.getParameterName());
         return result(message, e);
     }
@@ -59,7 +61,6 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResultData<String> handleError(MethodArgumentTypeMismatchException e) {
-        LOG.warn("Method Argument Type Mismatch", e);
         String message = String.format("Method Argument Type Mismatch: %s", e.getName());
         return result(message, e);
     }
@@ -69,11 +70,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultData<String> handleError(MethodArgumentNotValidException e) {
-        LOG.warn("Method Argument Not Valid", e);
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         assert error != null;
-        String message = String.format("%s:%s", error.getField(), error.getDefaultMessage());
+        String message = String.format("Method Argument Not Valid. %s:%s", error.getField(), error.getDefaultMessage());
         return result(message, e);
     }
 
@@ -82,10 +82,9 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(BindException.class)
     public ResultData<String> handleError(BindException e) {
-        LOG.warn("Bind Exception", e);
         FieldError error = e.getFieldError();
         assert error != null;
-        String message = String.format("%s:%s", error.getField(), error.getDefaultMessage());
+        String message = String.format("Bind Exception. %s:%s", error.getField(), error.getDefaultMessage());
         return result(message, e);
     }
 
@@ -94,11 +93,10 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResultData<String> handleError(ConstraintViolationException e) {
-        LOG.warn("Constraint Violation", e);
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         ConstraintViolation<?> violation = violations.iterator().next();
         String path = ((PathImpl) violation.getPropertyPath()).getLeafNode().getName();
-        String message = String.format("%s:%s", path, violation.getMessage());
+        String message = String.format("Constraint Violation. %s:%s", path, violation.getMessage());
         return result(message, e);
     }
 
@@ -106,7 +104,6 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(NoHandlerFoundException e) {
         // "404 Not Found"
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
     }
 
@@ -117,7 +114,6 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(HttpMessageNotReadableException e) {
         // Message Not Readable
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
     }
 
@@ -128,7 +124,6 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(HttpRequestMethodNotSupportedException e) {
         // Request Method Not Supported
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
     }
 
@@ -139,8 +134,17 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(HttpMediaTypeNotSupportedException e) {
         // Media Type Not Supported
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
+    }
+
+    /**
+     * SQLException sql异常处理
+     * 返回状态码:500
+     */
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({SQLException.class})
+    public ResultData<String> handleSQLException(SQLException e) {
+        return result("服务运行SQLException异常", e);
     }
 
     /**
@@ -150,7 +154,6 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(ServiceException e) {
         // Service Exception
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
     }
 
@@ -161,11 +164,11 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(Throwable e) {
         // Internal Server Error
         String message = e.getMessage();
-        LOG.error(message, e);
         return result(message, e);
     }
 
     private ResultData<String> result(String message, Throwable e) {
+        LOG.error(message, e);
         // 因sei3.0返回格式不统一,无法按标准6.0版本样返回统一的结构,故直接按异常抛出
         if (global.isCompatible()) {
             throw new WebException(message, e);

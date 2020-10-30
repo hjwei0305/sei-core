@@ -169,9 +169,7 @@ public class SessionUser implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append(userName).append("(").append(tenantCode).append("|").append(account).append(")");
-        return str.toString();
+        return userName.concat("(" + tenantCode + "|").concat(account).concat(")");
     }
 
     @Override

@@ -10,10 +10,9 @@ import org.springframework.core.env.Environment;
 import java.util.Locale;
 
 /**
- * <strong>实现功能:</strong>
- * <p>ecmp上下文基类</p>
+ * 实现功能: sei上下文基类
  *
- * @author <a href="mailto:chao2.ma@changhong.com">马超(Vision.Mac)</a>
+ * @author 马超(Vision.Mac)
  * @version 1.0.1 2017/3/30 17:07
  * @see ApplicationContextAware
  */

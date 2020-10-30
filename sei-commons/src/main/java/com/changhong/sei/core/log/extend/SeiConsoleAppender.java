@@ -51,4 +51,12 @@ public class SeiConsoleAppender extends ConsoleAppender<ILoggingEvent> {
 
         super.start();
     }
+
+//    @Override
+//    protected void append(ILoggingEvent eventObject) {
+//        // 跟踪埋点
+////        ContextUtil.tracePoint();
+//
+//        super.append(eventObject);
+//    }
 }

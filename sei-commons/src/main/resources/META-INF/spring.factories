@@ -1,3 +1,6 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.changhong.sei.core.config.TtlMDCAdapterInitializer
+
 org.springframework.boot.SpringApplicationRunListener=\
   com.changhong.sei.core.banner.BannerListener
 #

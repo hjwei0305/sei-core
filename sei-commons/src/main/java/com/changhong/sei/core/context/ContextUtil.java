@@ -30,6 +30,7 @@ public final class ContextUtil implements Constants {
      * 当前链路信息获取
      */
     public final static String TRACE_ID = Constants.TRACE_ID;
+    public final static String TRACE_PATH = Constants.TRACE_PATH;
     public final static String TRACE_FROM_SERVER = Constants.TRACE_FROM_SERVER;
     public final static String TRACE_CURRENT_SERVER = Constants.TRACE_CURRENT_SERVER;
 
@@ -331,13 +332,6 @@ public final class ContextUtil implements Constants {
      */
     public static String getFromServer() {
         return ThreadLocalUtil.getLocalVar(TRACE_FROM_SERVER);
-    }
-
-    /**
-     * 获取当前服务
-     */
-    public static String getCurrentServer() {
-        return ThreadLocalUtil.getLocalVar(TRACE_CURRENT_SERVER);
     }
 
 }

@@ -16,11 +16,7 @@ public interface Constants {
      * 当前链路信息获取
      */
     String TRACE_ID = "traceId";
+    String TRACE_PATH = "tracePath";
     String TRACE_FROM_SERVER = "from_server";
     String TRACE_CURRENT_SERVER = "current_server";
-
-    /**
-     * 异步任务执行器
-     */
-    String TASK_EXECUTOR = "taskExecutor";
 }

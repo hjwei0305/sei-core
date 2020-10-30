@@ -3,7 +3,7 @@ package com.changhong.sei.core.log.extend;
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.SessionUser;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 实现功能：配置规则,获取当前会话
@@ -15,12 +15,12 @@ import com.changhong.sei.core.context.SessionUser;
 public class SessionUserConverter extends ClassicConverter {
 
     @Override
-    public String convert(ILoggingEvent iLoggingEvent) {
-        SessionUser user = ContextUtil.getSessionUser();
-        if (user.isAnonymous()) {
-            return user.getAccount();
+    public String convert(ILoggingEvent event) {
+        String logValue = ContextUtil.getSessionUser().toString();
+        if (StringUtils.isBlank(logValue)) {
+            return event.getFormattedMessage();
         } else {
-            return user.toString();
+            return logValue + " " + event.getFormattedMessage();
         }
     }
 }

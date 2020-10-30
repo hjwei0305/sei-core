@@ -83,7 +83,6 @@ public class CheckTokenFilter extends BaseWebFilter {
             // 截取token
             token = token.substring("Bearer ".length());
         }
-        MDC.put(ContextUtil.HEADER_TOKEN_KEY, token);
 
         // 检查token
         SessionUser user;
@@ -95,6 +94,12 @@ public class CheckTokenFilter extends BaseWebFilter {
             unauthorized("token不合法,认证失败!", path, response);
             return;
         }
+
+        SessionUser sessionUser = ContextUtil.getSessionUser();
+        MDC.put("userId", sessionUser.getUserId());
+        MDC.put("account", sessionUser.getAccount());
+        MDC.put("userName", sessionUser.getUserName());
+
         LOG.info("{} 当前用户: {}", path, user);
 
         // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中

@@ -1,9 +1,9 @@
 package com.changhong.sei.core.context.async;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -19,28 +19,33 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 @EnableAsync
-public class ThreadPoolTaskConfig  implements AsyncConfigurer {
+public class ThreadPoolTaskConfig implements AsyncConfigurer {
 
     /**
-     * 核心线程数（默认线程数）
+     * 核心线程数（默认线程数）线程池维护线程的最小数量
      */
-    private static final int corePoolSize = 20;
+    @Value("${sei.asyc-task.corePoolSize:10}")
+    private int corePoolSize;
     /**
      * 最大线程数
      */
-    private static final int maxPoolSize = 100;
+    @Value("${sei.asyc-task.maxPoolSize:200}")
+    private int maxPoolSize;
     /**
      * 允许线程空闲时间（单位：默认为秒）
      */
-    private static final int keepAliveTime = 10;
+    @Value("${sei.asyc-task.keepAliveTime:10}")
+    private int keepAliveTime;
     /**
      * 缓冲队列大小
      */
-    private static final int queueCapacity = 200;
+    @Value("${sei.asyc-task.queueCapacity:200}")
+    private int queueCapacity;
     /**
      * 线程池名前缀
      */
-    private static final String threadNamePrefix = "SEI-Async-Service-";
+    @Value("${sei.asyc-task.threadNamePrefix:SEI-Executor-}")
+    private String threadNamePrefix;
 
     /**
      * The {@link Executor} instance to be used when processing async
@@ -48,7 +53,7 @@ public class ThreadPoolTaskConfig  implements AsyncConfigurer {
      */
     @Override
     public Executor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        CustomThreadPoolTaskExecutor executor = new CustomThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(queueCapacity);
@@ -58,7 +63,7 @@ public class ThreadPoolTaskConfig  implements AsyncConfigurer {
         //executor.setAwaitTerminationSeconds(60);
 
         // 增加 TaskDecorator 属性的配置
-        executor.setTaskDecorator(new ContextTaskDecorator());
+        //executor.setTaskDecorator(new ContextTaskDecorator());
 
         // 线程池对拒绝任务的处理策略 CallerRunsPolicy：由调用线程（提交任务的线程）处理该任务
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());

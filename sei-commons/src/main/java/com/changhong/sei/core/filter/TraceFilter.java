@@ -27,6 +27,7 @@ public class TraceFilter extends BaseWebFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+        // 跟踪埋点
         String traceId = ContextUtil.getTraceId();
         if (StringUtils.isBlank(traceId)) {
             traceId = IdGenerator.uuid2();
@@ -38,17 +39,23 @@ public class TraceFilter extends BaseWebFilter {
 
         //把本服务器名设置为 调用服务名
         String currentAppCode = ContextUtil.getAppCode();
-        MDC.put(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
-        ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
-        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_CURRENT_SERVER, currentAppCode);
 
-        //把远程获取的服务名称设置到线程变量中
+        //获取上个调用服务
         String fromServer = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_FROM_SERVER);
-        if (StringUtils.isBlank(fromServer)) {
-            fromServer = currentAppCode;
+        if (StringUtils.isNotBlank(fromServer)) {
+            // 设置本地上个调用服务
+            ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_FROM_SERVER, fromServer);
         }
-        MDC.put(ContextUtil.TRACE_FROM_SERVER, fromServer);
-        ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_FROM_SERVER, fromServer);
+        // 将当前服务设置为下个服务的调用服务
+        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_FROM_SERVER, currentAppCode);
+
+        String tracePath = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_PATH);
+        if (StringUtils.isBlank(tracePath)) {
+            tracePath = "";
+        }
+        tracePath = tracePath.concat(" > ").concat(currentAppCode);
+        MDC.put(ContextUtil.TRACE_PATH, tracePath);
+        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_PATH, tracePath);
 
         chain.doFilter(request, response);
     }
