@@ -9,6 +9,7 @@ import com.changhong.sei.core.log.annotation.ParamLog;
 import com.changhong.sei.core.log.annotation.ResultLog;
 import com.changhong.sei.core.log.annotation.ThrowingLog;
 import com.changhong.sei.core.util.JsonUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -113,7 +114,7 @@ public class LogProcessor {
             }
         }
         try {
-            String busName = throwable.getMessage();
+            String busName = ExceptionUtils.getRootCauseMessage(throwable);
             Annotation annotation = null;
             Class<? extends LogCallback> callback = null;
             ThrowingLog throwingLogAnnotation = method.getAnnotation(ThrowingLog.class);
