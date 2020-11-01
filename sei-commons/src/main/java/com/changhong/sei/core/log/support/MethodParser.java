@@ -16,7 +16,7 @@ public class MethodParser {
     /**
      * 类池
      */
-    private static ClassPool POOL;
+    private static final ClassPool POOL;
 
     static {
         POOL = new ClassPool(true);
@@ -43,15 +43,16 @@ public class MethodParser {
      * @param parameterNames 参数列表
      * @return 返回方法信息
      */
-    public static MethodInfo getMethodInfo(String className, String methodName, String[] parameterNames) {
+    public static MethodInfo getMethodInfo(String className, String methodName, String[] parameterNames, Object[] args) {
         try {
-            return getMethodInfo(getMethod(className, methodName), parameterNames);
+            return getMethodInfo(getMethod(className, methodName), parameterNames, args);
         } catch (Exception e) {
             return new MethodInfo(
                     className,
                     className.substring(className.lastIndexOf('.')),
                     methodName,
                     new ArrayList<>(0),
+                    args,
                     -2
             );
         }
@@ -64,7 +65,7 @@ public class MethodParser {
      * @param parameterNames 参数列表
      * @return 返回方法信息
      */
-    public static MethodInfo getMethodInfo(CtMethod method, String[] parameterNames) {
+    public static MethodInfo getMethodInfo(CtMethod method, String[] parameterNames, Object[] args) {
         CtClass declaringClass = method.getDeclaringClass();
         try {
             javassist.bytecode.MethodInfo methodInfo = method.getMethodInfo();
@@ -85,9 +86,9 @@ public class MethodParser {
                     paramNames = new ArrayList<>(0);
                 }
             }
-            return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), method.getName(), paramNames, lineNumber);
+            return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), method.getName(), paramNames, args, lineNumber);
         } catch (Exception e) {
-            return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), method.getName(), new ArrayList<>(0), -2);
+            return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), method.getName(), new ArrayList<>(0), args, -2);
         }
     }
 
@@ -99,11 +100,11 @@ public class MethodParser {
      * @return 返回方法信息
      */
     @SuppressWarnings("rawtypes")
-    public static MethodInfo getMethodInfo(MethodSignature signature, int lineNumber) {
+    public static MethodInfo getMethodInfo(MethodSignature signature, Object[] args, int lineNumber) {
         Class declaringClass = signature.getDeclaringType();
         String[] parameterNames = signature.getParameterNames();
         List<String> paramNames = new ArrayList<>(parameterNames.length);
         Collections.addAll(paramNames, parameterNames);
-        return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), signature.getName(), paramNames, lineNumber);
+        return new MethodInfo(declaringClass.getName(), declaringClass.getSimpleName(), signature.getName(), paramNames, args, lineNumber);
     }
 }

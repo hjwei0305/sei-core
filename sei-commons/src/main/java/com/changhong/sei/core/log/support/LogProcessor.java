@@ -8,28 +8,31 @@ import com.changhong.sei.core.log.annotation.Log;
 import com.changhong.sei.core.log.annotation.ParamLog;
 import com.changhong.sei.core.log.annotation.ResultLog;
 import com.changhong.sei.core.log.annotation.ThrowingLog;
-import org.apache.commons.lang3.StringUtils;
+import com.changhong.sei.core.util.JsonUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * 日志处理器
  */
 @Aspect
+@Order(1)
 public class LogProcessor {
     private static final Logger log = LoggerFactory.getLogger(LogProcessor.class);
+
+    private static final String MDC_CLASS_NAME = "className";
+    private static final String MDC_METHOD_NAME = "methodName";
+    private static final String MDC_ARGS = "args";
 
     /**
      * 打印参数日志
@@ -50,7 +53,7 @@ public class LogProcessor {
                     annotation.position()
             );
             // 执行回调
-            this.callback(annotation.callback(), annotation, methodInfo, joinPoint, null);
+            this.callback(annotation.callback(), annotation, methodInfo, null);
         }
     }
 
@@ -67,13 +70,14 @@ public class LogProcessor {
             ResultLog annotation = signature.getMethod().getAnnotation(ResultLog.class);
             MethodInfo methodInfo = this.afterPrint(
                     signature,
+                    joinPoint.getArgs(),
                     result,
                     annotation.value(),
                     annotation.level(),
                     annotation.position()
             );
             // 执行回调
-            this.callback(annotation.callback(), annotation, methodInfo, joinPoint, result);
+            this.callback(annotation.callback(), annotation, methodInfo, result);
         }
     }
 
@@ -83,45 +87,60 @@ public class LogProcessor {
      * @param joinPoint 切入点
      * @param throwable 异常
      */
-    @AfterThrowing(value = "@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)", throwing = "throwable")
+    @AfterThrowing(value = "@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)" +
+            "||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)" +
+            "||@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)", throwing = "throwable")
     public void throwingPrint(JoinPoint joinPoint, Throwable throwable) {
-        if (this.isEnable()) {
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            Method method = signature.getMethod();
-            String methodName = method.getName();
+        if (!this.isEnable()) {
+            return;
+        }
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String className = signature.getDeclaringTypeName();
+        Method method = signature.getMethod();
+        String methodName = method.getName();
+        Object[] args = joinPoint.getArgs();
+        MethodInfo methodInfo = MethodParser.getMethodInfo(className, methodName, signature.getParameterNames(), args);
+        MDC.put(MDC_CLASS_NAME, className);
+        MDC.put(MDC_METHOD_NAME, methodName);
+        if (Objects.nonNull(args)) {
             try {
-                Annotation annotation;
-                String busName;
-                Class<? extends LogCallback> callback;
-                MethodInfo methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-                ThrowingLog throwingLogAnnotation = method.getAnnotation(ThrowingLog.class);
-                if (throwingLogAnnotation != null) {
-                    annotation = throwingLogAnnotation;
-                    busName = throwingLogAnnotation.value();
-                    callback = throwingLogAnnotation.callback();
+                if (args.length == 1) {
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args[0]));
                 } else {
-                    Log logAnnotation = method.getAnnotation(Log.class);
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args));
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        try {
+            String busName = throwable.getMessage();
+            Annotation annotation = null;
+            Class<? extends LogCallback> callback = null;
+            ThrowingLog throwingLogAnnotation = method.getAnnotation(ThrowingLog.class);
+            if (throwingLogAnnotation != null) {
+                annotation = throwingLogAnnotation;
+                busName = throwingLogAnnotation.value();
+                callback = throwingLogAnnotation.callback();
+            } else {
+                Log logAnnotation = method.getAnnotation(Log.class);
+                if (logAnnotation != null) {
                     annotation = logAnnotation;
                     busName = logAnnotation.value();
                     callback = logAnnotation.callback();
                 }
-                log.error(this.getThrowingInfo(busName, methodInfo, joinPoint.getArgs()), throwable);
-                // 执行回调
-                this.callback(callback, annotation, methodInfo, joinPoint, null);
-            } catch (Exception e) {
-                log.error("{}.{}方法错误", signature.getDeclaringTypeName(), methodName);
-                log.error(e.getMessage(), e);
             }
-        }
-    }
 
-    @AfterThrowing(value = "@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)", throwing = "throwable")
-    public void throwingPrint1(JoinPoint joinPoint, Throwable throwable) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        String methodName = method.getName();
-        MethodInfo methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-        log.error(this.getThrowingInfo(StringUtils.EMPTY, methodInfo, joinPoint.getArgs()), throwable);
+            LoggerFactory.getLogger(className).error(busName, throwable);
+
+            // 执行回调
+            this.callback(callback, annotation, methodInfo, null);
+        } catch (Exception e) {
+            log.error("{}.{}方法错误: {}", className, methodName, e.getMessage());
+        } finally {
+            MDC.remove(MDC_CLASS_NAME);
+            MDC.remove(MDC_METHOD_NAME);
+            MDC.remove(MDC_ARGS);
+        }
     }
 
     /**
@@ -147,9 +166,9 @@ public class LogProcessor {
                     annotation.position()
             );
             result = joinPoint.proceed(args);
-            MethodInfo methodInfo = this.afterPrint(signature, result, annotation.value(), annotation.level(), annotation.position());
+            MethodInfo methodInfo = this.afterPrint(signature, args, result, annotation.value(), annotation.level(), annotation.position());
             // 执行回调
-            this.callback(annotation.callback(), annotation, methodInfo, joinPoint, result);
+            this.callback(annotation.callback(), annotation, methodInfo, result);
         } else {
             result = joinPoint.proceed(args);
         }
@@ -168,30 +187,46 @@ public class LogProcessor {
      * @return 返回方法信息
      */
     private MethodInfo beforePrint(MethodSignature signature, Object[] args, String[] filterParamNames, String busName, Level level, Position position) {
+        String className = signature.getDeclaringTypeName();
         Method method = signature.getMethod();
         String methodName = method.getName();
         MethodInfo methodInfo = null;
+        MDC.put(MDC_CLASS_NAME, className);
+        MDC.put(MDC_METHOD_NAME, methodName);
+        if (Objects.nonNull(args)) {
+            try {
+                if (args.length == 1) {
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args[0]));
+                } else {
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args));
+                }
+            } catch (Exception ignored) {
+            }
+        }
         try {
             if (log.isDebugEnabled()) {
                 if (position == Position.DEFAULT || position == Position.ENABLED) {
-                    methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-                    this.print(level, this.getBeforeInfo(busName, methodInfo, args, filterParamNames));
+                    methodInfo = MethodParser.getMethodInfo(className, methodName, signature.getParameterNames(), args);
+                    this.print(methodInfo.getClassAllName(), level, busName);
                 } else {
-                    methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
-                    this.print(level, this.getBeforeInfo(busName, methodInfo, args, filterParamNames));
+                    methodInfo = MethodParser.getMethodInfo(signature, args, MethodInfo.NATIVE_LINE_NUMBER);
+                    this.print(methodInfo.getClassAllName(), level, busName);
                 }
             } else {
                 if (position == Position.ENABLED) {
-                    methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-                    this.print(level, this.getBeforeInfo(busName, methodInfo, args, filterParamNames));
+                    methodInfo = MethodParser.getMethodInfo(className, methodName, signature.getParameterNames(), args);
+                    this.print(methodInfo.getClassAllName(), level, busName);
                 } else {
-                    methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
-                    this.print(level, this.getBeforeInfo(busName, methodInfo, args, filterParamNames));
+                    methodInfo = MethodParser.getMethodInfo(signature, args, MethodInfo.NATIVE_LINE_NUMBER);
+                    this.print(methodInfo.getClassAllName(), level, busName);
                 }
             }
         } catch (Exception e) {
-            log.error("{}.{}方法错误", signature.getDeclaringTypeName(), methodName);
-            log.error(e.getMessage(), e);
+            log.error("{}.{}方法错误: {}", className, methodName, e.getMessage());
+        } finally {
+            MDC.remove(MDC_CLASS_NAME);
+            MDC.remove(MDC_METHOD_NAME);
+            MDC.remove(MDC_ARGS);
         }
         return methodInfo;
     }
@@ -206,31 +241,53 @@ public class LogProcessor {
      * @param position  代码定位开启标志
      * @return 返回方法信息
      */
-    private MethodInfo afterPrint(MethodSignature signature, Object result, String busName, Level level, Position position) {
+    private MethodInfo afterPrint(MethodSignature signature, Object[] args, Object result, String busName, Level level, Position position) {
+        String className = signature.getDeclaringTypeName();
         Method method = signature.getMethod();
         String methodName = method.getName();
         MethodInfo methodInfo = null;
+        MDC.put(MDC_CLASS_NAME, className);
+        MDC.put(MDC_METHOD_NAME, methodName);
+        if (Objects.nonNull(args)) {
+            try {
+                if (args.length == 1) {
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args[0]));
+                } else {
+                    MDC.put(MDC_ARGS, JsonUtils.toJson(args));
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
         try {
+            StringBuilder msg = new StringBuilder();
+            msg.append(busName);
+            if (Objects.nonNull(result)) {
+                msg.append(" 处理结果: ").append(JsonUtils.toJson(result));
+            }
             if (log.isDebugEnabled()) {
                 if (position == Position.DEFAULT || position == Position.ENABLED) {
-                    methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-                    this.print(level, this.getAfterInfo(busName, methodInfo, result));
+                    methodInfo = MethodParser.getMethodInfo(className, methodName, signature.getParameterNames(), args);
+                    this.print(methodInfo.getClassAllName(), level, msg.toString());
                 } else {
-                    methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
-                    this.print(level, this.getAfterInfo(busName, methodInfo, result));
+                    methodInfo = MethodParser.getMethodInfo(signature, args, MethodInfo.NATIVE_LINE_NUMBER);
+                    this.print(methodInfo.getClassAllName(), level, msg.toString());
                 }
             } else {
                 if (position == Position.ENABLED) {
-                    methodInfo = MethodParser.getMethodInfo(signature.getDeclaringTypeName(), methodName, signature.getParameterNames());
-                    this.print(level, this.getAfterInfo(busName, methodInfo, result));
+                    methodInfo = MethodParser.getMethodInfo(className, methodName, signature.getParameterNames(), args);
+                    this.print(methodInfo.getClassAllName(), level, msg.toString());
                 } else {
-                    methodInfo = MethodParser.getMethodInfo(signature, MethodInfo.NATIVE_LINE_NUMBER);
-                    this.print(level, this.getAfterInfo(busName, methodInfo, result));
+                    methodInfo = MethodParser.getMethodInfo(signature, args, MethodInfo.NATIVE_LINE_NUMBER);
+                    this.print(methodInfo.getClassAllName(), level, msg.toString());
                 }
             }
         } catch (Exception e) {
-            log.error("{}.{}方法错误", signature.getDeclaringTypeName(), methodName);
-            log.error(e.getMessage(), e);
+            log.error("{}.{}方法错误: {}", className, methodName, e.getMessage());
+        } finally {
+            MDC.remove(MDC_CLASS_NAME);
+            MDC.remove(MDC_METHOD_NAME);
+            MDC.remove(MDC_ARGS);
         }
         return methodInfo;
     }
@@ -241,242 +298,19 @@ public class LogProcessor {
      * @param callback   回调类
      * @param annotation 触发注解
      * @param methodInfo 方法信息
-     * @param joinPoint  切入点
      * @param result     方法结果
      */
-    private void callback(Class<? extends LogCallback> callback, Annotation annotation, MethodInfo methodInfo, JoinPoint joinPoint, Object result) {
+    private void callback(Class<? extends LogCallback> callback, Annotation annotation, MethodInfo methodInfo, Object result) {
+        if (callback == null || annotation == null) {
+            return;
+        }
         try {
             if (callback != VoidLogCallback.class) {
-                LogContext.getContext().getBean(callback).callback(
-                        annotation,
-                        methodInfo,
-                        this.getParamMap(methodInfo.getParamNames(), joinPoint.getArgs()),
-                        result
-                );
+                LogContext.getContext().getBean(callback).callback(annotation, methodInfo, result);
             }
         } catch (Exception ex) {
             log.error("{}.{}方法日志回调错误：【{}】", methodInfo.getClassAllName(), methodInfo.getMethodName(), ex.getMessage());
         }
-    }
-
-    /**
-     * 获取日志信息字符串
-     *
-     * @param busName    业务名
-     * @param methodInfo 方法信息
-     * @param params     参数值
-     * @return 返回日志信息字符串
-     */
-    private String getBeforeInfo(String busName, MethodInfo methodInfo, Object[] params, String[] filterParamNames) {
-        StringBuilder builder = this.createInfoBuilder(busName, methodInfo);
-        builder.append("接收参数：【");
-        List<String> paramNames = methodInfo.getParamNames();
-        int count = paramNames.size();
-        if (count > 0) {
-            Map<String, Object> paramMap = new LinkedHashMap<>(count);
-            for (int i = 0; i < count; i++) {
-                if (!this.isParamFilter(filterParamNames, paramNames.get(i))) {
-                    paramMap.put(paramNames.get(i), this.parseParam(params[i]));
-                }
-            }
-            return builder.append(paramMap).append('】').toString();
-        }
-        return builder.append("{}】").toString();
-    }
-
-    /**
-     * 获取日志信息字符串
-     *
-     * @param busName    业务名
-     * @param methodInfo 方法信息
-     * @param result     返回结果
-     * @return 返回日志信息字符串
-     */
-    private String getAfterInfo(String busName, MethodInfo methodInfo, Object result) {
-        return this.createInfoBuilder(busName, methodInfo).append("返回结果：【").append(this.parseParam(result)).append('】').toString();
-    }
-
-    /**
-     * 获取日志信息字符串
-     *
-     * @param busName    业务名
-     * @param methodInfo 方法信息
-     * @return 返回日志信息字符串
-     */
-    private String getThrowingInfo(String busName, MethodInfo methodInfo, Object[] params) {
-        StringBuilder builder = this.createInfoBuilder(busName, methodInfo);
-        builder.append("\n\r参数：【");
-        List<String> paramNames = methodInfo.getParamNames();
-        int count = paramNames.size();
-        if (count > 0) {
-            Map<String, Object> paramMap = new LinkedHashMap<>(count);
-            for (int i = 0; i < count; i++) {
-                paramMap.put(paramNames.get(i), this.parseParam(params[i]));
-            }
-            return builder.append(paramMap).append('】').toString();
-        }
-        return builder.append("{}】").toString();
-    }
-
-    /**
-     * 创建日志信息builder
-     *
-     * @param busName    业务名
-     * @param methodInfo 方法信息
-     * @return 返回日志信息builder
-     */
-    private StringBuilder createInfoBuilder(String busName, MethodInfo methodInfo) {
-        StringBuilder builder = new StringBuilder("调用方法：【");
-        if (methodInfo.isNative()) {
-            builder.append(methodInfo.getClassAllName()).append('.').append(methodInfo.getMethodName());
-        } else {
-            builder.append(this.createMethodStack(methodInfo));
-        }
-        builder.append("】，");
-        if (StringUtils.isNotBlank(busName)) {
-            builder.append("\n\r业务名称：【").append(busName).append("】，");
-        }
-        return builder;
-    }
-
-    /**
-     * 获取参数字典
-     *
-     * @param paramNames  参数名称列表
-     * @param paramValues 参数值数组
-     * @return 返回参数字典
-     */
-    private Map<String, Object> getParamMap(List<String> paramNames, Object[] paramValues) {
-        int count = paramNames.size();
-        Map<String, Object> paramMap = new LinkedHashMap<>(count);
-        for (int i = 0; i < count; i++) {
-            paramMap.put(paramNames.get(i), paramValues[i]);
-        }
-        return paramMap;
-    }
-
-    /**
-     * 解析参数
-     *
-     * @param param 参数
-     * @return 返回参数字符串
-     */
-    private String parseParam(Object param) {
-        if (param == null) {
-            return null;
-        }
-        Class<?> paramClass = param.getClass();
-        if (Map.class.isAssignableFrom(paramClass)) {
-            return this.parseMap(param);
-        }
-        if (Iterable.class.isAssignableFrom(paramClass)) {
-            return this.parseIterable(param);
-        }
-        return paramClass.isArray() ? this.parseArray(param) : param.toString();
-    }
-
-    /**
-     * 解析字典
-     *
-     * @param param 参数值
-     * @return 返回参数字典字符串
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private String parseMap(Object param) {
-        Map paramMap = (Map) param;
-        Iterator<Map.Entry> iterator = paramMap.entrySet().iterator();
-        if (!iterator.hasNext()) {
-            return "参数：【】";
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("参数：【");
-        Map.Entry entry;
-        while (true) {
-            entry = iterator.next();
-            builder.append(entry.getKey()).append('=').append(this.parseParam(entry.getValue()));
-            if (iterator.hasNext()) {
-                builder.append(',').append(' ');
-            } else {
-                return builder.append('】').toString();
-            }
-        }
-    }
-
-    /**
-     * 解析集合
-     *
-     * @param param 参数值
-     * @return 返回参数列表字符串
-     */
-    @SuppressWarnings("rawtypes")
-    private String parseIterable(Object param) {
-        Iterator iterator = ((Iterable) param).iterator();
-        if (!iterator.hasNext()) {
-            return "参数：【】";
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("参数：【");
-        while (true) {
-            builder.append(this.parseParam(iterator.next()));
-            if (iterator.hasNext()) {
-                builder.append(',').append(' ');
-            } else {
-                return builder.append('】').toString();
-            }
-        }
-    }
-
-    /**
-     * 解析数组
-     *
-     * @param param 参数值
-     * @return 返回参数列表字符串
-     */
-    private String parseArray(Object param) {
-        int length = Array.getLength(param);
-        if (length == 0) {
-            return "参数：【】";
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("参数：【");
-        for (int i = 0; i < length; i++) {
-            builder.append(this.parseParam(Array.get(param, i)));
-            if (i + 1 < length) {
-                builder.append(',').append(' ');
-            }
-        }
-        return builder.append('】').toString();
-    }
-
-    /**
-     * 是否参数过滤
-     *
-     * @param filterParamNames 过滤参数名称列表
-     * @param paramName        带过滤参数名称
-     * @return 返回布尔值，过滤true，否则false
-     */
-    private boolean isParamFilter(String[] filterParamNames, String paramName) {
-        for (String name : filterParamNames) {
-            if (name.equals(paramName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 创建方法栈
-     *
-     * @param methodInfo 方法信息
-     * @return 返回栈信息
-     */
-    private StackTraceElement createMethodStack(MethodInfo methodInfo) {
-        return new StackTraceElement(
-                methodInfo.getClassAllName(),
-                methodInfo.getMethodName(),
-                methodInfo.getClassSimpleName() + ".java",
-                methodInfo.getLineNumber()
-        );
     }
 
     /**
@@ -485,19 +319,20 @@ public class LogProcessor {
      * @param level 日志级别
      * @param msg   输出信息
      */
-    private void print(Level level, String msg) {
+    private void print(String className, Level level, String msg) {
+        Logger logger = LoggerFactory.getLogger(className);
         switch (level) {
             case DEBUG:
-                log.debug(msg);
+                logger.debug(msg);
                 break;
             case INFO:
-                log.info(msg);
+                logger.info(msg);
                 break;
             case WARN:
-                log.warn(msg);
+                logger.warn(msg);
                 break;
             case ERROR:
-                log.error(msg);
+                logger.error(msg);
                 break;
             default:
         }

@@ -30,6 +30,10 @@ public class MethodInfo implements Serializable {
      */
     private List<String> paramNames;
     /**
+     * 参数列表
+     */
+    private Object[] args;
+    /**
      * 方法行号
      */
     private Integer lineNumber;
@@ -41,13 +45,15 @@ public class MethodInfo implements Serializable {
      * @param classSimpleName 所在类简单类名
      * @param methodName      方法名称
      * @param paramNames      参数列表
+     * @param args            参数值
      * @param lineNumber      方法行号
      */
-    MethodInfo(String classAllName, String classSimpleName, String methodName, List<String> paramNames, Integer lineNumber) {
+    MethodInfo(String classAllName, String classSimpleName, String methodName, List<String> paramNames, Object[] args, Integer lineNumber) {
         this.classAllName = classAllName;
         this.classSimpleName = classSimpleName;
         this.methodName = methodName;
         this.paramNames = paramNames;
+        this.args = args;
         this.lineNumber = lineNumber;
     }
 
@@ -81,6 +87,14 @@ public class MethodInfo implements Serializable {
 
     public void setParamNames(List<String> paramNames) {
         this.paramNames = paramNames;
+    }
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
     }
 
     public Integer getLineNumber() {

@@ -26,13 +26,20 @@
                         "userId": "%X{userId:-}",
                         "account": "%X{account:-}",
                         "userName": "%X{userName:-}",
+                        "className": "%X{className:-}",
+                        "methodName": "%X{methodName:-}",
+                        "args": "%X{args:-}",
+
+                        "requestURI": "%X{requestURI:-}",
+                        "queryString": "%X{queryString:-}",
+                        "userAgent": "%X{userAgent:-}",
 
                         "host": "${HOSTNAME:-}",
                         "env": "${ENV:-}",
                         "serviceName": "${APP_NAME}",
 
                         "pid": "${PID:- }",
-                        "logger": "%logger#%M",
+                        "logger": "%logger",
                         "level": "%p",
                         "message": "%msg",
                         "stackTrace": "%ex"

@@ -57,7 +57,20 @@ public class TraceFilter extends BaseWebFilter {
         MDC.put(ContextUtil.TRACE_PATH, tracePath);
         ThreadLocalUtil.setTranVar(ContextUtil.TRACE_PATH, tracePath);
 
-        chain.doFilter(request, response);
+        MDC.put("requestURI", request.getRequestURI());
+        MDC.put("queryString", request.getQueryString());
+        MDC.put("userAgent", request.getHeader("User-Agent"));
+
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            MDC.remove(ContextUtil.TRACE_ID);
+            MDC.remove(ContextUtil.TRACE_PATH);
+
+            MDC.remove("requestURI");
+            MDC.remove("queryString");
+            MDC.remove("userAgent");
+        }
     }
 
     /**

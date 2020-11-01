@@ -105,7 +105,13 @@ public class CheckTokenFilter extends BaseWebFilter {
         MDC.put("userName", user.getUserName());
         LOG.info("{} 当前用户: {}", path, user);
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            MDC.remove("userId");
+            MDC.remove("account");
+            MDC.remove("userName");
+        }
     }
 
     /**

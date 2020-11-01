@@ -16,12 +16,6 @@ sei:
       account: admin
       user-name: 管理员
 
-
-  global:
-    log:
-      elk:
-        enable: true
-
   log:
     remote:
       host: 10.4.208.132:5044
