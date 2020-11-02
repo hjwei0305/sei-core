@@ -19,4 +19,9 @@ public interface Constants {
     String TRACE_PATH = "tracePath";
     String TRACE_FROM_SERVER = "from_server";
     String TRACE_CURRENT_SERVER = "current_server";
+
+    String MDC_CLASS_NAME = "className";
+    String MDC_METHOD_NAME = "methodName";
+    String MDC_ARGS = "args";
+
 }

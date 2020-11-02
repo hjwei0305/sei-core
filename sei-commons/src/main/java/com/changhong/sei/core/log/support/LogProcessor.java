@@ -1,5 +1,6 @@
 package com.changhong.sei.core.log.support;
 
+import com.changhong.sei.core.commoms.constant.Constants;
 import com.changhong.sei.core.log.Level;
 import com.changhong.sei.core.log.LogCallback;
 import com.changhong.sei.core.log.Position;
@@ -28,12 +29,8 @@ import java.util.Objects;
  */
 @Aspect
 @Order(1)
-public class LogProcessor {
+public class LogProcessor implements Constants {
     private static final Logger log = LoggerFactory.getLogger(LogProcessor.class);
-
-    private static final String MDC_CLASS_NAME = "className";
-    private static final String MDC_METHOD_NAME = "methodName";
-    private static final String MDC_ARGS = "args";
 
     /**
      * 打印参数日志
@@ -90,7 +87,8 @@ public class LogProcessor {
      */
     @AfterThrowing(value = "@annotation(com.changhong.sei.core.log.annotation.ThrowingLog)||@annotation(com.changhong.sei.core.log.annotation.Log)" +
             "||@within(org.springframework.stereotype.Service)||@within(org.springframework.stereotype.Component)" +
-            "||@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)", throwing = "throwable")
+            "||@within(org.springframework.web.bind.annotation.RestController)||@within(org.springframework.stereotype.Controller)" +
+            "||execution(public * com.changhong.sei.core.service..*.*(..)))", throwing = "throwable")
     public void throwingPrint(JoinPoint joinPoint, Throwable throwable) {
         if (!this.isEnable()) {
             return;
