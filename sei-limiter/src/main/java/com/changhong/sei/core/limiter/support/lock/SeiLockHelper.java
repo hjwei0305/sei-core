@@ -4,7 +4,7 @@ import com.changhong.sei.core.context.ContextUtil;
 import org.springframework.beans.BeansException;
 
 /**
- * 实现功能： 资源锁组手
+ * 实现功能： 资源锁助手
  *
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-09-14 11:20
@@ -22,6 +22,23 @@ public final class SeiLockHelper {
         try {
             LockLimiter lockLimiter = ContextUtil.getBean(LockLimiter.class);
             locked = lockLimiter.checkLocked(key);
+        } catch (BeansException e) {
+            locked = false;
+        }
+        return locked;
+    }
+
+    /**
+     * 手动锁定资源锁
+     *
+     * @param key 资源key
+     * @return 返回true-已锁定,反之未锁定
+     */
+    public static boolean lock(String key) {
+        boolean locked;
+        try {
+            LockLimiter lockLimiter = ContextUtil.getBean(LockLimiter.class);
+            locked = lockLimiter.lock(key);
         } catch (BeansException e) {
             locked = false;
         }
