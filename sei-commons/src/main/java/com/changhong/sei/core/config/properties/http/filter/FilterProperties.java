@@ -27,7 +27,7 @@ public class FilterProperties implements CorsConfigurationSource {
     /**
      * 忽略认证的url
      */
-    private String[] ignoreAuthUrl = new String[]{};;
+    private String[] ignoreAuthUrl = new String[]{};
     /**
      *
      */
@@ -59,7 +59,7 @@ public class FilterProperties implements CorsConfigurationSource {
     }
 
     @Override
-    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+    public CorsConfiguration getCorsConfiguration(@SuppressWarnings("NullableProblems") HttpServletRequest request) {
         CorsConfiguration configuration = new CorsConfiguration();
 
         String[] allowedOrigins = cors.getAllowedOrigins();

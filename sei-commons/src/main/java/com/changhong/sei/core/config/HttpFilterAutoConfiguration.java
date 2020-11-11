@@ -2,9 +2,12 @@ package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
 import com.changhong.sei.core.error.GlobalExceptionTranslator;
+import com.changhong.sei.core.filter.DefaultSessionUserAuthenticationHandler;
+import com.changhong.sei.core.filter.SessionUserAuthenticationHandler;
 import com.changhong.sei.core.filter.WebFilter;
 import com.changhong.sei.core.filter.WebThreadFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,22 +34,31 @@ import java.util.List;
 @EnableConfigurationProperties({FilterProperties.class})
 public class HttpFilterAutoConfiguration {
 
+    @Autowired
+    private FilterProperties filterConfig;
     /**
      * 自定义过滤器定义
      */
     @Autowired(required = false)
     private List<WebFilter> filterDefs;
 
+    @Bean
+    @ConditionalOnMissingBean
+    public SessionUserAuthenticationHandler userAuthenticationHandler() {
+        return new DefaultSessionUserAuthenticationHandler(filterConfig.getIgnoreAuthUrl());
+    }
+
     /**
      * 系统内置filter，优先级高于spring security的身份认证
      */
     @Bean
-    public FilterRegistrationBean<WebThreadFilter> filterRegistrationBean(Environment environment) {
+    public FilterRegistrationBean<WebThreadFilter> filterRegistrationBean(Environment environment,
+                                                                          SessionUserAuthenticationHandler userAuthenticationHandler) {
         FilterRegistrationBean<WebThreadFilter> registration = new FilterRegistrationBean<>();
         // 拦截所有请求
         registration.addUrlPatterns("/*");
 
-        WebThreadFilter filterProxy = new WebThreadFilter(filterDefs);
+        WebThreadFilter filterProxy = new WebThreadFilter(filterConfig, userAuthenticationHandler, filterDefs);
         filterProxy.setEnvironment(environment);
         registration.setFilter(filterProxy);
 

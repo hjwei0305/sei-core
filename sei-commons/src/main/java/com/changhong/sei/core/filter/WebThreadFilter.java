@@ -4,8 +4,6 @@ import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
 import com.changhong.sei.util.thread.ThreadLocalHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -30,20 +28,20 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     /**
      * 应用上下文
      */
-    private ApplicationContext applicationContext;
+    private final FilterProperties filterConfig;
+    private final SessionUserAuthenticationHandler userAuthenticationHandler;
 
-    /**
-     * 应用上下文
-     */
-    private FilterProperties filterConfig;
-
-    private List<Pattern> urlFilters = new ArrayList<>();
+    private final List<Pattern> urlFilters = new ArrayList<>();
 
     /**
      * 带参数构造器
      */
-    public WebThreadFilter(List<WebFilter> filterDefs) {
+    public WebThreadFilter(FilterProperties filterConfig,
+                           SessionUserAuthenticationHandler userAuthenticationHandler, List<WebFilter> filterDefs) {
         super(filterDefs);
+
+        this.filterConfig = filterConfig;
+        this.userAuthenticationHandler = userAuthenticationHandler;
 
         // swagger 文档
         urlFilters.add(Pattern.compile(".*?/doc\\.html.*", Pattern.CASE_INSENSITIVE));
@@ -64,13 +62,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     }
 
     @Override
-    protected void initFilterBean() throws ServletException {
-        applicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        filterConfig = applicationContext.getBean(FilterProperties.class);
-        super.initFilterBean();
-    }
-
-    @Override
     protected void handleInnerFilters(List<Filter> innerFilters) {
         super.handleInnerFilters(innerFilters);
         // 跨域
@@ -80,12 +71,13 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
         // 调用链拦截器
         innerFilters.add(2, new TraceFilter());
         // 检查token
-        innerFilters.add(3, new CheckTokenFilter(filterConfig.getIgnoreAuthUrl()));
+        innerFilters.add(3, new SessionUserFilter(userAuthenticationHandler));
         // 防止XSS攻击
         innerFilters.add(4, new XssFilter());
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
