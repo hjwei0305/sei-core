@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedWriter;
@@ -40,12 +41,13 @@ public class SessionUserFilter extends BaseWebFilter {
 
     @Override
     @SuppressWarnings("NullableProblems")
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ResultData<SessionUser> resultData;
         try {
             resultData = userAuthenticationHandler.handler(request);
             if (resultData.successful()) {
                 SessionUser user = resultData.getData();
+                // 忽略会话的情况,没有用户信息
                 if (Objects.nonNull(user)) {
                     // token 解析通过,则认证通过;设置用户信息到当前线程全局变量中
                     ThreadLocalUtil.setLocalVar(SessionUser.class.getSimpleName(), user);
@@ -58,23 +60,22 @@ public class SessionUserFilter extends BaseWebFilter {
                 }
 
                 filterChain.doFilter(request, response);
-                return;
+
+            } else {
+                LOG.error("SessionUser认证失败: {}", resultData.getMessage());
+                //认证错误处理
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8));
+                writer.write(JsonUtils.toJson(resultData));
+                writer.close();
             }
-        } catch (Exception e) {
-            resultData = ResultData.fail(e.getMessage());
         } finally {
             MDC.remove("userId");
             MDC.remove("account");
             MDC.remove("userName");
         }
-        LOG.error("SessionUser认证失败: {}", resultData.getMessage());
-        //认证错误处理
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8));
-        writer.write(JsonUtils.toJson(resultData));
-        writer.close();
     }
 
     /**
