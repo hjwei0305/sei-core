@@ -130,6 +130,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
     /**
      * 批量保存多个树节点
+     *
      * @param entities 待批量操作数据集合
      */
     @Override
@@ -148,6 +149,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
     /**
      * 通过Id标识删除一个树节点
+     *
      * @param id 主键
      * @return 操作结果
      */
@@ -175,6 +177,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
     /**
      * 批量删除树节点
+     *
      * @param ids 待批量操作数据集合
      */
     @Override
@@ -219,32 +222,44 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         }
         OperateResult operateResult;
         //当前节点的父节点
-        T parent = findOne(entity.getParentId());
+        T parent = null;
+        if (StringUtils.isNotBlank(entity.getParentId())) {
+            parent = findOne(entity.getParentId());
+        }
         //移动目标父节点
         T targetParent = findOne(targetParentId);
-        if (Objects.nonNull(parent) && Objects.nonNull(targetParent)) {
-            //检查当前父id与目标父id是否不同
-            if (!StringUtils.equals(parent.getId(), targetParent.getId())) {
-                //目标父层级 - 当前父层级
-                int difference = targetParent.getNodeLevel() - parent.getNodeLevel();
+        if (Objects.nonNull(targetParent)) {
+            //检查当前父id与目标父id是否不同，如果相同不执行移动
+            if (Objects.nonNull(parent) && StringUtils.equals(parent.getId(), targetParent.getId())) {
+                return OperateResult.operationSuccess("core_service_00034");
+            }
+            int parentNodeLevel = 0;
+            String parentCodePath = "";
+            String parentNamePath = "";
+            if (Objects.nonNull(parent)) {
+                parentNodeLevel = parent.getNodeLevel();
+                parentCodePath = parent.getCodePath();
+                parentNamePath = parent.getNamePath();
+            }
 
-                List<T> childrenList = findByCodePathStartingWith(entity.getCodePath());
-                if (CollectionUtils.isNotEmpty(childrenList)) {
-                    String temp;
-                    for (T item : childrenList) {
-                        //是否是当前节点
-                        if (nodeId.equals(item.getId())) {
-                            item.setParentId(targetParentId);
-                        }
-                        item.setNodeLevel(item.getNodeLevel() + difference);
-
-                        temp = item.getCodePath().replace(parent.getCodePath(), targetParent.getCodePath());
-                        item.setCodePath(temp);
-                        temp = item.getNamePath().replace(parent.getNamePath(), targetParent.getNamePath());
-                        item.setNamePath(temp);
-
-                        getDao().save(item);
+            //目标父层级 - 当前父层级
+            int difference = targetParent.getNodeLevel() - parentNodeLevel;
+            List<T> childrenList = findByCodePathStartingWith(entity.getCodePath());
+            if (CollectionUtils.isNotEmpty(childrenList)) {
+                String temp;
+                for (T item : childrenList) {
+                    //是否是当前节点
+                    if (nodeId.equals(item.getId())) {
+                        item.setParentId(targetParentId);
                     }
+                    item.setNodeLevel(item.getNodeLevel() + difference);
+
+                    temp = item.getCodePath().replace(parentCodePath, targetParent.getCodePath());
+                    item.setCodePath(temp);
+                    temp = item.getNamePath().replace(parentNamePath, targetParent.getNamePath());
+                    item.setNamePath(temp);
+
+                    getDao().save(item);
                 }
             }
             operateResult = OperateResult.operationSuccess("core_service_00034");
@@ -331,7 +346,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * 获取指定代码路径下的所有子节点(不包含自己)
      *
      * @param codePath 代码路径
-     * @param nodeId 本节点Id
+     * @param nodeId   本节点Id
      * @return 子节点
      */
     public List<T> findByCodePathStartingWithAndIdNot(String codePath, String nodeId) {
@@ -352,7 +367,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * 获取指定名称路径下的所有子节点(不包含自己)
      *
      * @param namePath 名称路径
-     * @param nodeId 本节点Id
+     * @param nodeId   本节点Id
      * @return 子节点
      */
     public List<T> findByNamePathStartingWithAndIdNot(String namePath, String nodeId) {
@@ -468,7 +483,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
      * 递归获取所有子节点清单(包含自己)
      *
      * @param treeNode 树形节点（顶级节点）
-     * @param nodes 子节点清单
+     * @param nodes    子节点清单
      */
     public static <Tree extends TreeEntity<Tree>> void getAllChildren(Tree treeNode, List<Tree> nodes) {
         nodes.add(treeNode);
@@ -477,7 +492,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
             // 清除节点的子节点清单
             treeNode.setChildren(null);
             nodes.addAll(children);
-            children.forEach(c-> getAllChildren(c, nodes));
+            children.forEach(c -> getAllChildren(c, nodes));
         }
     }
 
@@ -524,7 +539,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         if (CollectionUtils.isNotEmpty(treeNode.getChildren())) {
             List<Tree> children = treeNode.getChildren();
             childIds.addAll(children.stream().map(TreeEntity::getId).collect(Collectors.toList()));
-            children.forEach(c-> getAllChildIds(c, childIds));
+            children.forEach(c -> getAllChildIds(c, childIds));
         }
     }
 
@@ -578,7 +593,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     /**
      * 获取当前用户有权限的树形业务实体清单
      *
-     * @param featureCode 功能项代码
+     * @param featureCode   功能项代码
      * @param includeFrozen 是否包含冻结的实体
      * @return 有权限的树形业务实体清单
      */
@@ -652,6 +667,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
     /**
      * 获取当前用户有权限的树形节点代码清单(包含冻结)
+     *
      * @param featureCode 功能项代码
      * @return 节点代码清单
      */
@@ -675,8 +691,9 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
     /**
      * 递归获取并设置一个树形结构的所有节点
+     *
      * @param treeNode 树形结构节点
-     * @param nodes 所有节点
+     * @param nodes    所有节点
      */
     private void fetchChildrenFromTree(T treeNode, List<T> nodes) {
         if (Objects.isNull(treeNode) || CollectionUtils.isEmpty(treeNode.getChildren())) {
@@ -684,6 +701,6 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
         }
         List<T> children = treeNode.getChildren();
         nodes.addAll(children);
-        children.forEach(node-> fetchChildrenFromTree(node, nodes));
+        children.forEach(node -> fetchChildrenFromTree(node, nodes));
     }
 }
