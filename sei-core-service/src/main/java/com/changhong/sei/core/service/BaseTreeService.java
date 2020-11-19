@@ -234,8 +234,8 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 return OperateResult.operationSuccess("core_service_00034");
             }
             int parentNodeLevel = 0;
-            String parentCodePath = entity.getCodePath();
-            String parentNamePath = entity.getNamePath();
+            String parentCodePath = "";
+            String parentNamePath = "";
             if (Objects.nonNull(parent)) {
                 parentNodeLevel = parent.getNodeLevel();
                 parentCodePath = parent.getCodePath();
@@ -254,24 +254,24 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     if (nodeId.equals(item.getId())) {
                         item.setParentId(targetParentId);
                     }
-                    if (item.getNodeLevel()==0) {
+                    if (parentNodeLevel==0) {
+                        item.setNodeLevel(targetParent.getNodeLevel() + item.getNodeLevel() + 1);
+                    }
+                    else {
+                        item.setNodeLevel(item.getNodeLevel() + difference);
+                    }
+                    if (parentNodeLevel==0) {
                         temp = targetParent.getCodePath() + item.getCodePath();
                     } else {
                         temp = targetParent.getCodePath() + StringUtils.right(item.getCodePath(), item.getCodePath().length()-startCodeIndex);
                     }
                     item.setCodePath(temp);
-                    if (item.getNodeLevel()==0) {
+                    if (parentNodeLevel==0) {
                         temp = targetParent.getNamePath()+item.getNamePath();
                     } else {
                         temp = targetParent.getNamePath()+StringUtils.right(item.getNamePath(), item.getNamePath().length()-startNameIndex);
                     }
                     item.setNamePath(temp);
-                    if (item.getNodeLevel()==0) {
-                        item.setNodeLevel(difference + 1);
-                    }
-                    else {
-                        item.setNodeLevel(item.getNodeLevel() + difference);
-                    }
 
                     getDao().save(item);
                 }
