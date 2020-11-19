@@ -252,14 +252,19 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     if (nodeId.equals(item.getId())) {
                         item.setParentId(targetParentId);
                     }
-                    item.setNodeLevel(item.getNodeLevel() + difference);
-                    if (parentNodeLevel==0) {
+                    if (item.getNodeLevel()==0) {
+                        item.setNodeLevel(difference + 1);
+                    }
+                    else {
+                        item.setNodeLevel(item.getNodeLevel() + difference);
+                    }
+                    if (item.getNodeLevel()==0) {
                         temp = targetParent.getCodePath()+parentCodePath;
                     } else {
                         temp = item.getCodePath().replace(parentCodePath, targetParent.getCodePath());
                     }
                     item.setCodePath(temp);
-                    if (parentNodeLevel==0) {
+                    if (item.getNodeLevel()==0) {
                         temp = targetParent.getNamePath()+parentNamePath;
                     } else {
                         temp = item.getNamePath().replace(parentNamePath, targetParent.getNamePath());
