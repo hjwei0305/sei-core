@@ -244,6 +244,8 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
 
             //目标父层级 - 当前父层级
             int difference = targetParent.getNodeLevel() - parentNodeLevel;
+            int startCodeIndex = StringUtils.length(parentCodePath);
+            int startNameIndex = StringUtils.length(parentNamePath);
             List<T> childrenList = findByCodePathStartingWith(entity.getCodePath());
             if (CollectionUtils.isNotEmpty(childrenList)) {
                 String temp;
@@ -259,15 +261,15 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                         item.setNodeLevel(item.getNodeLevel() + difference);
                     }
                     if (item.getNodeLevel()==0) {
-                        temp = targetParent.getCodePath()+parentCodePath;
+                        temp = targetParent.getCodePath() + item.getCodePath();
                     } else {
-                        temp = item.getCodePath().replace(parentCodePath, targetParent.getCodePath());
+                        temp = targetParent.getCodePath() + StringUtils.right(item.getCodePath(), item.getCodePath().length()-startCodeIndex);
                     }
                     item.setCodePath(temp);
                     if (item.getNodeLevel()==0) {
-                        temp = targetParent.getNamePath()+parentNamePath;
+                        temp = targetParent.getNamePath()+item.getNamePath();
                     } else {
-                        temp = item.getNamePath().replace(parentNamePath, targetParent.getNamePath());
+                        temp = targetParent.getNamePath()+StringUtils.right(item.getNamePath(), item.getNamePath().length()-startNameIndex);
                     }
                     item.setNamePath(temp);
 
