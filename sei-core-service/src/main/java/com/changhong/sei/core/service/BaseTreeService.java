@@ -234,8 +234,8 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 return OperateResult.operationSuccess("core_service_00034");
             }
             int parentNodeLevel = 0;
-            String parentCodePath = "";
-            String parentNamePath = "";
+            String parentCodePath = entity.getCodePath();
+            String parentNamePath = entity.getNamePath();
             if (Objects.nonNull(parent)) {
                 parentNodeLevel = parent.getNodeLevel();
                 parentCodePath = parent.getCodePath();
