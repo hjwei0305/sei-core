@@ -4,6 +4,7 @@ import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.exception.WebException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -21,7 +21,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -103,7 +102,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResultData<String> handleError(NoHandlerFoundException e) {
         // "404 Not Found"
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
@@ -113,7 +112,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResultData<String> handleError(HttpMessageNotReadableException e) {
         // Message Not Readable
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
@@ -123,7 +122,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData<String> handleError(HttpRequestMethodNotSupportedException e) {
         // Request Method Not Supported
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
@@ -133,7 +132,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResultData<String> handleError(HttpMediaTypeNotSupportedException e) {
         // Media Type Not Supported
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
@@ -144,7 +143,7 @@ public class GlobalExceptionTranslator {
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({SQLException.class})
     public ResultData<String> handleSQLException(SQLException e) {
-        return result("服务运行SQLException异常", e);
+        return result("服务运行SQLException异常: " + ExceptionUtils.getRootCauseMessage(e), e);
     }
 
     /**
@@ -153,7 +152,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(ServiceException.class)
     public ResultData<String> handleError(ServiceException e) {
         // Service Exception
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
@@ -163,7 +162,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(Throwable.class)
     public ResultData<String> handleError(Throwable e) {
         // Internal Server Error
-        String message = e.getMessage();
+        String message = ExceptionUtils.getRootCauseMessage(e);
         return result(message, e);
     }
 
