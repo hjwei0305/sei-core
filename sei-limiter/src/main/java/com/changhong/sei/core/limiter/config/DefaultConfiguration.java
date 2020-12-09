@@ -5,6 +5,7 @@ import com.changhong.sei.core.limiter.LimitedFallbackResolver;
 import com.changhong.sei.core.limiter.constant.Constants;
 import com.changhong.sei.core.limiter.support.lock.LockLimiter;
 import com.changhong.sei.core.limiter.support.lock.redis.RedisLock;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
 @Configuration
 public class DefaultConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfiguration.class);
 
     @Value("${sei.limiter.lock.expire:300000}")
     private long expireAfter;
@@ -38,20 +39,18 @@ public class DefaultConfiguration {
     @Bean
     @ConditionalOnMissingBean(ErrorHandler.class)
     public ErrorHandler defaultErrorHandler() {
-        ErrorHandler errorHandler = (throwable, executionContext) -> {
-            logger.info(throwable.getMessage());
+        return (throwable, executionContext) -> {
+            LOGGER.error(ExceptionUtils.getRootCauseMessage(throwable), throwable);
             throw new RuntimeException(throwable.getMessage());
         };
-        return errorHandler;
     }
 
     @Bean
     @ConditionalOnMissingBean(LimitedFallbackResolver.class)
-    public LimitedFallbackResolver defaultFallbackResolver() {
-        LimitedFallbackResolver limitedFallbackResolver = (method, clazz, args, limitedResource, target) -> {
-            throw new RuntimeException("no message available");
+    public LimitedFallbackResolver<?> defaultFallbackResolver() {
+        return (method, clazz, args, limitedResource, target) -> {
+            throw new RuntimeException("锁定资源失败，触发默认降级策略");
         };
-        return limitedFallbackResolver;
     }
 
 }

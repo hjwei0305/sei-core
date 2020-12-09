@@ -2,8 +2,9 @@ package com.changhong.sei.core.limiter.support.lock.redis;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.limiter.support.lock.LockLimiter;
-import com.changhong.sei.core.log.LogUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.integration.redis.util.RedisLockRegistry;
@@ -11,6 +12,7 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
 import java.util.concurrent.locks.Lock;
 
 public class RedisLock extends LockLimiter {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLock.class);
 
     /**
      * 引入Redis分布式锁依赖组件
@@ -31,7 +33,9 @@ public class RedisLock extends LockLimiter {
 
         //尝试获取锁
         boolean locked = lock.tryLock();
-        LogUtil.debug("线程:{} key: [{}] 获取锁 {}", Thread.currentThread().getName(), key, locked);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("线程:{} key: [{}] 获取锁 {}", Thread.currentThread().getName(), key, locked);
+        }
         return locked;
     }
 
@@ -41,8 +45,9 @@ public class RedisLock extends LockLimiter {
         Lock lock = getLock(key);
         //释放分布式锁
         lock.unlock();
-
-        LogUtil.debug("线程:{} key: [{}] 释放锁", Thread.currentThread().getName(), key);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("线程:{} key: [{}] 释放锁", Thread.currentThread().getName(), key);
+        }
     }
 
     /**
@@ -59,10 +64,12 @@ public class RedisLock extends LockLimiter {
             String val = template.boundValueOps("sei:lock:" + key.toString()).get();
             locked = StringUtils.isNotBlank(val);
         } catch (BeansException e) {
-            LogUtil.error("检查锁状态", e);
+            LOG.error("检查锁状态", e);
             locked = false;
         }
-        LogUtil.debug("当前锁状态: {}", locked);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("当前锁状态: {}", locked);
+        }
         return locked;
     }
 

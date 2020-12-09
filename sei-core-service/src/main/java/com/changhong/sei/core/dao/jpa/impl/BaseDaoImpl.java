@@ -580,13 +580,14 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             searchConfig.addFilter(new SearchFilter(ISoftDelete.DELETED, 0));
         }
         Specification<T> spec = buildSpecification(searchConfig);
-        Pageable pageable = PageRequest.of(0, 1);
+        // 排序
+        Sort sort = buildSort(searchConfig);
+        // 只查询一条
+        Pageable pageable = PageRequest.of(0, 1, sort);
         Page<T> page = findAll(spec, pageable);
-        if (Objects.nonNull(page)) {
-            List<T> list = page.getContent();
-            if (CollectionUtils.isNotEmpty(list)) {
-                return list.get(0);
-            }
+        List<T> list = page.getContent();
+        if (CollectionUtils.isNotEmpty(list)) {
+            return list.get(0);
         }
         return null;
     }
@@ -613,7 +614,9 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         //Assert.isTrue(pageInfo != null, "无分页参数。");
         if (Objects.isNull(pageInfo)) {
             pageInfo = new PageInfo();
-            LOGGER.warn("无分页参数，将使用默认[{}]。", pageInfo.toString());
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("无分页参数，将使用默认[{}]。", pageInfo.toString());
+            }
         }
 
         Sort sort = buildSort(searchConfig);
@@ -910,7 +913,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         } else {
                             if (dateFrom.getHour() == 0 && dateFrom.getMinute() == 0 && dateFrom.getSecond() == 0) {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, DateUtils.localDateTime2Date(dateFrom)),
-                                        builder.lessThan(expression,DateUtils.localDateTime2Date( dateTo.plusDays(1))));
+                                        builder.lessThan(expression, DateUtils.localDateTime2Date(dateTo.plusDays(1))));
                             } else {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, DateUtils.localDateTime2Date(dateFrom)),
                                         builder.lessThan(expression, DateUtils.localDateTime2Date(dateTo)));
