@@ -47,7 +47,8 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
     private final RedisConnectionFactory connectionFactory;
 
     public RedisAutoConfiguration(LettuceConnectionFactory factory) {
-        factory.setValidateConnection(true);
+//        factory.setValidateConnection(true);
+//        factory.setShareNativeConnection(true);
         this.connectionFactory = factory;
     }
 
