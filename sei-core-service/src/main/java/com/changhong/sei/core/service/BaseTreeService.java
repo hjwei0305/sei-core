@@ -103,9 +103,9 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 if (CollectionUtils.isNotEmpty(childrenList)) {
                     String temp;
                     for (T item : childrenList) {
-                        temp = item.getCodePath().replace(origin.getCodePath(), entity.getCodePath());
+                        temp = entity.getCodePath() + item.getCodePath().substring(origin.getCodePath().length());
                         item.setCodePath(temp);
-                        temp = item.getNamePath().replace(origin.getNamePath(), entity.getNamePath());
+                        temp = entity.getNamePath() + item.getNamePath().substring(origin.getNamePath().length());
                         item.setNamePath(temp);
 
                         getDao().save(item);
@@ -252,21 +252,22 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                     if (currentNodeId.equals(item.getId())) {
                         item.setParentId(targetParentId);
                     }
-                    item.setNodeLevel(item.getNodeLevel() + difference);
 
                     if (Objects.nonNull(currentParent)) {
-                        temp = item.getCodePath().replaceFirst(parentCodePath, targetParent.getCodePath());
+                        item.setNodeLevel(item.getNodeLevel() + difference);
+                        temp = targetParent.getCodePath() + item.getCodePath().substring(parentCodePath.length());
                         item.setCodePath(temp);
-                        temp = item.getNamePath().replaceFirst(parentNamePath, targetParent.getNamePath());
+                        temp = targetParent.getNamePath() + item.getNamePath().substring(parentNamePath.length());
                         item.setNamePath(temp);
                     } else {
+                        item.setNodeLevel(item.getNodeLevel() + difference + 1);
                         temp = targetParent.getCodePath() + item.getCodePath();
                         item.setCodePath(temp);
                         temp = targetParent.getNamePath() + item.getNamePath();
                         item.setNamePath(temp);
                     }
-                    getDao().save(item);
                 }
+                getDao().save(childrenList);
             }
             operateResult = OperateResult.operationSuccess("core_service_00034");
         } else {
