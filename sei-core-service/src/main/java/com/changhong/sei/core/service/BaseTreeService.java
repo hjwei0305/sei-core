@@ -266,8 +266,8 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                         temp = targetParent.getNamePath() + item.getNamePath();
                         item.setNamePath(temp);
                     }
+                    getDao().save(item);
                 }
-                getDao().save(childrenList);
             }
             operateResult = OperateResult.operationSuccess("core_service_00034");
         } else {
