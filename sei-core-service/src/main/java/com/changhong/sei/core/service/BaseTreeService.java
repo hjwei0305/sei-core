@@ -198,81 +198,73 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     /**
      * 移动节点
      *
-     * @param nodeId         当前节点ID
+     * @param currentNodeId  当前节点ID
      * @param targetParentId 目标父节点ID
      * @return 返回操作结果对象
      */
     @Transactional
-    public OperateResult move(String nodeId, String targetParentId) {
-        if (StringUtils.isBlank(nodeId)) {
+    public OperateResult move(String currentNodeId, String targetParentId) {
+        if (StringUtils.isBlank(currentNodeId)) {
             return OperateResult.operationFailure("core_service_00033", "当前节点ID");
         }
         if (StringUtils.isBlank(targetParentId)) {
             return OperateResult.operationFailure("core_service_00033", "目标父节点ID");
         }
         // 检查不能是本节点
-        if (StringUtils.equals(nodeId, targetParentId)) {
+        if (StringUtils.equals(currentNodeId, targetParentId)) {
             // 移动时不能将父节点设置为本节点！
             return OperateResult.operationFailure("core_service_00040");
         }
         //获取当前节点
-        T entity = findOne(nodeId);
-        if (Objects.isNull(entity)) {
+        T currentNode = findOne(currentNodeId);
+        if (Objects.isNull(currentNode)) {
             return OperateResult.operationWarning("core_service_00029");
         }
         OperateResult operateResult;
         //当前节点的父节点
-        T parent = null;
-        if (StringUtils.isNotBlank(entity.getParentId())) {
-            parent = findOne(entity.getParentId());
+        T currentParent = null;
+        if (StringUtils.isNotBlank(currentNode.getParentId())) {
+            currentParent = findOne(currentNode.getParentId());
         }
         //移动目标父节点
         T targetParent = findOne(targetParentId);
         if (Objects.nonNull(targetParent)) {
             //检查当前父id与目标父id是否不同，如果相同不执行移动
-            if (Objects.nonNull(parent) && StringUtils.equals(parent.getId(), targetParent.getId())) {
+            if (Objects.nonNull(currentParent) && StringUtils.equals(currentParent.getId(), targetParent.getId())) {
                 return OperateResult.operationSuccess("core_service_00034");
             }
             int parentNodeLevel = 0;
             String parentCodePath = "";
             String parentNamePath = "";
-            if (Objects.nonNull(parent)) {
-                parentNodeLevel = parent.getNodeLevel();
-                parentCodePath = parent.getCodePath();
-                parentNamePath = parent.getNamePath();
+            if (Objects.nonNull(currentParent)) {
+                parentNodeLevel = currentParent.getNodeLevel();
+                parentCodePath = currentParent.getCodePath();
+                parentNamePath = currentParent.getNamePath();
             }
 
             //目标父层级 - 当前父层级
             int difference = targetParent.getNodeLevel() - parentNodeLevel;
-            int startCodeIndex = StringUtils.length(parentCodePath);
-            int startNameIndex = StringUtils.length(parentNamePath);
-            List<T> childrenList = findByCodePathStartingWith(entity.getCodePath());
+            List<T> childrenList = findByCodePathStartingWith(currentNode.getCodePath());
             if (CollectionUtils.isNotEmpty(childrenList)) {
                 String temp;
                 for (T item : childrenList) {
                     //是否是当前节点
-                    if (nodeId.equals(item.getId())) {
+                    if (currentNodeId.equals(item.getId())) {
                         item.setParentId(targetParentId);
                     }
-                    if (parentNodeLevel==0) {
-                        item.setNodeLevel(targetParent.getNodeLevel() + item.getNodeLevel() + 1);
-                    }
-                    else {
-                        item.setNodeLevel(item.getNodeLevel() + difference);
-                    }
-                    if (parentNodeLevel==0) {
-                        temp = targetParent.getCodePath() + item.getCodePath();
-                    } else {
-                        temp = targetParent.getCodePath() + StringUtils.right(item.getCodePath(), item.getCodePath().length()-startCodeIndex);
-                    }
-                    item.setCodePath(temp);
-                    if (parentNodeLevel==0) {
-                        temp = targetParent.getNamePath()+item.getNamePath();
-                    } else {
-                        temp = targetParent.getNamePath()+StringUtils.right(item.getNamePath(), item.getNamePath().length()-startNameIndex);
-                    }
-                    item.setNamePath(temp);
+                    item.setNodeLevel(item.getNodeLevel() + difference);
 
+                    if (Objects.nonNull(currentParent)) {
+                        temp = item.getCodePath().replaceFirst(parentCodePath, targetParent.getCodePath());
+                        item.setCodePath(temp);
+                        temp = item.getNamePath().replaceFirst(parentNamePath, targetParent.getNamePath());
+                        item.setNamePath(temp);
+                    } else {
+                        temp = targetParent.getCodePath() + item.getCodePath();
+                        item.setCodePath(temp);
+                        temp = targetParent.getNamePath() + item.getNamePath();
+                        item.setNamePath(temp);
+                    }
                     getDao().save(item);
                 }
             }
