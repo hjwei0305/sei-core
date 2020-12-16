@@ -3,13 +3,12 @@ package com.changhong.sei.core.config;
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.config.properties.mock.MockUserProperties;
 import com.changhong.sei.core.context.ApplicationContextHolder;
+import com.changhong.sei.core.context.ApplicationReadyEventListener;
 import com.changhong.sei.core.context.mock.LocalMockUser;
 import com.changhong.sei.core.context.mock.MockUser;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.HibernateValidator;
-import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
-import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -47,6 +46,15 @@ public class DefaultAutoConfiguration {
         return new ApplicationContextHolder();
     }
 
+    /**
+     * 服务启动完成监听
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ApplicationReadyEventListener readyEventListener() {
+        return new ApplicationReadyEventListener();
+    }
+
     @Bean
     @ConditionalOnMissingBean
     public MockUser mockUser() {
@@ -70,7 +78,7 @@ public class DefaultAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Validator validator() {
-        Locale.setDefault(new Locale("zh","CN"));
+        Locale.setDefault(new Locale("zh", "CN"));
 //        Validator validator = Validation.byDefaultProvider().configure()
 //                .messageInterpolator(
 //                        new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ValidationMessages")))
