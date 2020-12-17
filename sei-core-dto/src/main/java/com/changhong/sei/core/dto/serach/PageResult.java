@@ -1,5 +1,7 @@
 package com.changhong.sei.core.dto.serach;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +86,8 @@ public class PageResult<T extends Serializable> implements Serializable {
             rows = new ArrayList<T>();
         }
         rows.clear();
-        rows.addAll(list);
+        if (CollectionUtils.isNotEmpty(list)) {
+            rows.addAll(list);
+        }
     }
 }
