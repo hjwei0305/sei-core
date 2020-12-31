@@ -29,7 +29,7 @@ public class VersionController {
      *
      * @return 当前平台版本
      */
-    @GetMapping(path = "show")
+    @GetMapping(path = "platform")
     @ApiOperation(value = "获取当前SEI平台版本", notes = "获取当前SEI平台版本")
     public ResultData<Version> platform() {
         Version version = ContextUtil.getPlatformVersion();

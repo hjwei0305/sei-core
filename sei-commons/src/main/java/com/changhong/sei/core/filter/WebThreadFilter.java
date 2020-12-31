@@ -59,6 +59,9 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
 
         // webjars
         urlFilters.add(Pattern.compile(".*?/webjars/.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/version/platform.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/version/show.*", Pattern.CASE_INSENSITIVE));
+        urlFilters.add(Pattern.compile(".*?/version/list.*", Pattern.CASE_INSENSITIVE));
     }
 
     @Override
