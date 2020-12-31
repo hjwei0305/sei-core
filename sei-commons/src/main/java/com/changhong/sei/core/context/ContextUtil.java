@@ -1,18 +1,21 @@
 package com.changhong.sei.core.context;
 
 import com.changhong.sei.core.commoms.constant.Constants;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JwtTokenUtil;
 import com.changhong.sei.enums.UserAuthorityPolicy;
 import com.changhong.sei.enums.UserType;
 import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
+import com.google.common.collect.Sets;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 实现功能: 上下文用户令牌工具类
@@ -33,6 +36,8 @@ public final class ContextUtil implements Constants {
     public final static String TRACE_PATH = Constants.TRACE_PATH;
     public final static String TRACE_FROM_SERVER = Constants.TRACE_FROM_SERVER;
     public final static String TRACE_CURRENT_SERVER = Constants.TRACE_CURRENT_SERVER;
+
+    private static Set<Version> versionSet;
 
     /**
      * 获取当前用户的Id
@@ -334,4 +339,45 @@ public final class ContextUtil implements Constants {
         return ThreadLocalUtil.getLocalVar(TRACE_FROM_SERVER);
     }
 
+    /**
+     * 获取当前sei平台版本
+     */
+    public static Version getPlatformVersion() {
+        return new PlatformVersion();
+    }
+
+    /**
+     * 获取当前应用版本
+     */
+    public static Version getCurrentVersion() {
+        String appCode = ContextUtil.getAppCode();
+        Set<Version> versionSet = getDependVersions();
+        for (Version version : versionSet) {
+            if (StringUtils.equals(appCode, version.getName())) {
+                return version;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取依赖版本
+     */
+    public static Set<Version> getDependVersions() {
+        if (versionSet == null) {
+            versionSet = Sets.newConcurrentHashSet();
+        }
+        if (versionSet.isEmpty()) {
+            Reflections reflections = new Reflections("com.changhong", new SubTypesScanner(true));
+            Set<Class<? extends Version>> allClasses = reflections.getSubTypesOf(Version.class);
+            for (Class<? extends Version> clazz : allClasses) {
+                try {
+                    versionSet.add(clazz.newInstance());
+                } catch (InstantiationException | IllegalAccessException e) {
+                    LogUtil.error("读取应用版本异常", e);
+                }
+            }
+        }
+        return versionSet;
+    }
 }

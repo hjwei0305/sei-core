@@ -20,6 +20,8 @@ dependencies {
 
     //jwt
     compile("io.jsonwebtoken:jjwt:0.9.0")
+    // 反射工具类
+    compile("org.reflections:reflections:0.9.9")
 
     compile("org.javassist:javassist:3.26.0-GA")
 
@@ -45,7 +47,8 @@ jar {
     manifest {
         attributes("Manifest-Version": "6.0")
         attributes("Created-By": "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString())
-        attributes("Implementation-Title": "SEI-$project.name")
+//        attributes("Implementation-Title": "SEI-$project.name")
+        attributes("Implementation-Title": "SEI")
         attributes("Implementation-Version": "$project.version")
         attributes("Implementation-Vendor": "rcsit.cn")
         attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))

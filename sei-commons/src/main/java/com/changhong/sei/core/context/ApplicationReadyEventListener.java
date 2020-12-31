@@ -5,6 +5,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
 
+import java.util.Set;
+
 /**
  * 上下文已经准备完毕的时候触发
  *
@@ -16,6 +18,12 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
     @Override
     public void onApplicationEvent(ApplicationReadyEvent readyEvent) {
         LogUtil.bizLog("服务已准备就绪...");
+        Set<Version> versionSet = ContextUtil.getDependVersions();
+        System.out.println("--------------------------------------------");
+        System.out.println("当前依赖版本:");
+        for (Version version : versionSet) {
+            System.out.println(version);
+        }
 
 //        //将applicationContext转换为ConfigurableApplicationContext
 //        ConfigurableApplicationContext context = applicationReadyEvent.getApplicationContext();

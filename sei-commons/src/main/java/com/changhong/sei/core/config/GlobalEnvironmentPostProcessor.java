@@ -1,6 +1,6 @@
 package com.changhong.sei.core.config;
 
-import com.changhong.sei.core.context.Version;
+import com.changhong.sei.core.context.PlatformVersion;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -20,7 +20,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
     /**
      * 是否已执行标示,只需要执行一次
      */
-    private static final AtomicBoolean executed = new AtomicBoolean(false);
+    private static final AtomicBoolean EXECUTED = new AtomicBoolean(false);
 
     /**
      * Post-process the given {@code environment}.
@@ -30,14 +30,15 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (executed.compareAndSet(false, true)) {
+        if (EXECUTED.compareAndSet(false, true)) {
             Properties properties = new Properties();
             //会检查终端是否支持ANSI，是的话就采用彩色输出。设置彩色输出会让日志更具可读性
             //properties.setProperty("spring.output.ansi.enabled", "DETECT");
             //始终采用彩色输出
 //            properties.setProperty("spring.output.ansi.enabled", "ALWAYS");
             //版本
-            System.setProperty("sei-version", Version.getCurrentVersion());
+            PlatformVersion version = new PlatformVersion();
+            System.setProperty("sei-version", version.getCurrentVersion());
             // 支持服务名相同的Feign Client API接口
             System.setProperty("spring.main.allow-bean-definition-overriding", "true");
 
