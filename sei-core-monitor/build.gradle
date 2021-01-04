@@ -19,8 +19,6 @@ dependencies {
     )
 }
 
-//compileJava.dependsOn(processResources)
-
 //打jar包
 bootJar { enabled = false }
 jar {

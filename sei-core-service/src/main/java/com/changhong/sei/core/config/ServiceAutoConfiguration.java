@@ -1,5 +1,6 @@
 package com.changhong.sei.core.config;
 
+import com.changhong.sei.core.controller.VersionEndpoint;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,6 +25,11 @@ public class ServiceAutoConfiguration {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
+    }
+
+    @Bean
+    public VersionEndpoint versionEndpoint() {
+        return new VersionEndpoint();
     }
 
     @Bean

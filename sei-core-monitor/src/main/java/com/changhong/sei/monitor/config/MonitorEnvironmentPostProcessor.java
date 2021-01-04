@@ -31,6 +31,10 @@ public class MonitorEnvironmentPostProcessor implements EnvironmentPostProcessor
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         if (executed.compareAndSet(false, true)) {
             Properties properties = new Properties();
+            properties.setProperty("info.app.code", environment.getProperty("sei.application.code"));
+            properties.setProperty("info.app.name", environment.getProperty("sei.application.name"));
+            properties.setProperty("info.app.version", environment.getProperty("sei.application.version"));
+            properties.setProperty("info.app.env", environment.getProperty("sei.application.env"));
             // 暴露所有端点  health,info,env,prometheus,metrics,httptrace,threaddump,heapdump,springmetrics
             properties.setProperty("management.endpoints.web.exposure.include", "info, env, health, refresh, metrics, httptrace, prometheus, threaddump,heapdump,springmetrics, logfile, loggers");
             // 为指标设置tag
