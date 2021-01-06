@@ -9,7 +9,7 @@ package com.changhong.sei.core.context;
 public class PlatformVersion extends Version {
 
     public PlatformVersion() {
-        super(PlatformVersion.class.getPackage().getName());
+        super(PlatformVersion.class);
     }
 
 }

@@ -326,6 +326,14 @@ public final class ContextUtil implements Constants {
     }
 
     /**
+     * 当前运行环境
+     */
+    public static String getEnv() {
+        String appEnv = getProperty("sei.application.env");
+        return appEnv;
+    }
+
+    /**
      * 获取当前跟踪ID
      */
     public static String getTraceId() {
@@ -357,7 +365,8 @@ public final class ContextUtil implements Constants {
                 return version;
             }
         }
-        return null;
+        // 一般情况下不会到这步
+        return Version.buildDefaultVersion();
     }
 
     /**

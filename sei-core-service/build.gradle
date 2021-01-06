@@ -26,7 +26,7 @@ dependencies {
             // swagger
             "io.springfox:springfox-swagger2:$foxSwaggerVersion",
 //            "com.github.xiaoymin:swagger-bootstrap-ui:1.9.6",
-            "com.github.xiaoymin:knife4j-spring-boot-starter:2.0.2",
+            "com.github.xiaoymin:knife4j-spring-boot-starter:2.0.5",
             // 日期工具类
             "joda-time:joda-time:$jodaTimeVersion"
     )
@@ -49,6 +49,7 @@ jar {
         attributes("Implementation-Title": "SEI-$project.name")
         attributes("Implementation-Version": "$project.version")
         attributes("Implementation-Vendor": "rcsit.cn")
+        attributes("Description": "SEI-CORE")
         attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
     }
 }

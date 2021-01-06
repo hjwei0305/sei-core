@@ -1,12 +1,11 @@
 package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.properties.SwaggerProperties;
-import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.context.Version;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +19,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Objects;
 
 /**
  * <strong>实现功能:</strong>
@@ -37,11 +38,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration {
 
     private ApiInfo apiInfo(SwaggerProperties swagger) {
+        Version version = ContextUtil.getCurrentVersion();
         return new ApiInfoBuilder()
-                .title(StringUtils.isBlank(swagger.getTitle()) ? ContextUtil.getProperty("sei.application.name") + " API" : swagger.getTitle())
+                .title(StringUtils.isBlank(swagger.getTitle()) ? version.getName() + " API" : swagger.getTitle())
                 .description(StringUtils.isBlank(swagger.getDescription()) ?
-                        ContextUtil.getProperty("sei.application.name") + "的API文档" + "，运行环境：" + ContextUtil.getProperty("spring.cloud.config.profile") : swagger.getDescription())
-                .version(StringUtils.isBlank(swagger.getVersion()) ? ContextUtil.getProperty("sei.application.version") : swagger.getVersion())
+                        version.getDescription() + "的API文档" + "，运行环境：" + ContextUtil.getEnv() : swagger.getDescription())
+                .version(StringUtils.isBlank(swagger.getVersion()) ? version.getCurrentVersion() : swagger.getVersion())
                 .build();
     }
 

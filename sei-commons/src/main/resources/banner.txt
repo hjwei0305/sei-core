@@ -16,5 +16,5 @@ ${AnsiColor.MAGENTA}
                  S:::::::::::::::SS      E::::::::::::::::::::E     I::::::::I
                   SSSSSSSSSSSSSSS        EEEEEEEEEEEEEEEEEEEEEE     IIIIIIIIII
 ${AnsiColor.BRIGHT_MAGENTA}
-::: Project (${sei.application.code}:${spring.cloud.config.profile}:${sei.application.version}) :::   ＼(^O^)／   ::: SEI ${sei-version}   Spring-Boot ${spring-boot.version}
+::: Application (${info.app.code}:${info.app.version}:${info.app.env}) :::   ＼(^O^)／   ::: SEI ${info.sei.version}   Spring-Boot ${spring-boot.version}
 ${AnsiColor.BLUE}
