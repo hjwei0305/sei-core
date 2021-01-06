@@ -15,7 +15,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 实现功能: 上下文用户令牌工具类
@@ -37,6 +36,10 @@ public final class ContextUtil implements Constants {
     public final static String TRACE_FROM_SERVER = Constants.TRACE_FROM_SERVER;
     public final static String TRACE_CURRENT_SERVER = Constants.TRACE_CURRENT_SERVER;
 
+    /**
+     * 版本管理
+     */
+    private static volatile Version currentVersion = null;
     private static Set<Version> versionSet;
 
     /**
@@ -358,15 +361,17 @@ public final class ContextUtil implements Constants {
      * 获取当前应用版本
      */
     public static Version getCurrentVersion() {
-        String appCode = ContextUtil.getAppCode();
-        Set<Version> versionSet = getDependVersions();
-        for (Version version : versionSet) {
-            if (StringUtils.equals(appCode, version.getName())) {
-                return version;
-            }
+//        String appCode = ContextUtil.getAppCode();
+//        Set<Version> versionSet = getDependVersions();
+//        for (Version version : versionSet) {
+//            if (StringUtils.equals(appCode, version.getName())) {
+//                return version;
+//            }
+//        }
+        if (Objects.isNull(currentVersion)) {
+            currentVersion = Version.buildDefaultVersion();
         }
-        // 一般情况下不会到这步
-        return Version.buildDefaultVersion();
+        return currentVersion;
     }
 
     /**

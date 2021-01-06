@@ -5,8 +5,10 @@ import com.changhong.sei.core.context.Version;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,6 +52,23 @@ public class VersionEndpoint {
         } else {
             return ResultData.fail(ContextUtil.getAppCode() + " 未定义版本.");
         }
+    }
+
+    /**
+     * 获取指定应用版本
+     *
+     * @return 指定应用版本
+     */
+    @GetMapping(path = "show/{appCode}")
+    @ApiOperation(value = "获取指定应用版本", notes = "获取指定应用版本")
+    public ResultData<Version> showVersion(@PathVariable("appCode") String appCode) {
+        Set<Version> versionSet = ContextUtil.getDependVersions();
+        for (Version version : versionSet) {
+            if (StringUtils.equals(appCode, version.getName())) {
+                return ResultData.success(version);
+            }
+        }
+        return ResultData.fail("未找到[" + appCode + "]的版本信息");
     }
 
     /**
