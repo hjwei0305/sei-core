@@ -88,6 +88,7 @@ public class DefaultAutoConfiguration {
                 .configure()
                 // 配置hibernate Validator为快速失败返回模式
 //                .failFast(true)
+                // 使用该方式配置,否则影响webflux环境的使用,如网关服务
                 .addProperty("hibernate.validator.fail_fast", "true")
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
