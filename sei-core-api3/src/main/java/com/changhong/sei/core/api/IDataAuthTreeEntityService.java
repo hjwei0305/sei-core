@@ -28,7 +28,7 @@ public interface IDataAuthTreeEntityService<T extends BaseEntity & IDataAuthTree
      * @param ids 业务实体Id清单
      * @return 数据权限树形实体清单
      */
-    @PostMapping(path = "getAuthTreeEntityDataByIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "getAuthTreeEntityDataByIds", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取数据权限树形实体清单", notes = "通过业务实体Id清单获取数据权限树形实体清单")
     ResultData<List<AuthTreeEntityData>> getAuthTreeEntityDataByIdsMethod(@RequestBody List<String> ids);
 

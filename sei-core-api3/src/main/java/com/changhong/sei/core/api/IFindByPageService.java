@@ -23,7 +23,7 @@ public interface IFindByPageService<T extends BaseEntity> {
      * @param search 查询参数
      * @return 分页查询结果
      */
-    @PostMapping(path = "findByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "findByPage", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "分页查询业务实体", notes = "分页查询业务实体")
     PageResult<T> findByPage(@RequestBody Search search);
 }

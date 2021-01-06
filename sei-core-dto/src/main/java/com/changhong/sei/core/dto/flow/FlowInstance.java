@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -24,413 +25,429 @@ import java.util.Set;
  */
 public class FlowInstance implements Serializable {
 
-	private static final long serialVersionUID = -5244474984429249795L;
-	/**
-	 * 乐观锁-版本
-	 */
-	private Integer version = 0;
+    private static final long serialVersionUID = -5244474984429249795L;
+    /**
+     * 乐观锁-版本
+     */
+    private Integer version = 0;
+
+    /**
+     * 所属流程定义版本
+     */
+    private FlowDefVersion flowDefVersion;
+
+    /**
+     * 流程名称
+     */
+    private String flowName;
+
+    /**
+     * 业务ID
+     */
+    private String businessId;
+
+    /**
+     * 业务单号
+     */
+    private String businessCode;
+
+    /**
+     * 业务单据名称
+     */
+    private String businessName;
 
-	/**
-	 * 所属流程定义版本
-	 */
-	private FlowDefVersion flowDefVersion;
 
-	/**
-	 * 流程名称
-	 */
-	private String flowName;
+    /**
+     * 业务摘要(工作说明)
+     */
+    private String businessModelRemark;
 
-	/**
-	 * 业务ID
-	 */
-	private String businessId;
 
-	/**
-	 * 业务单号
-	 */
-	private String businessCode;
+    /**
+     * 开始时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    private Date startDate;
 
-	/**
-	 * 业务单据名称
-	 */
-	private String businessName;
+    /**
+     * 结束时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    private Date endDate;
 
+    /**
+     * 关联的实际流程引擎实例ID
+     */
+    private String actInstanceId;
 
-	/**
-	 * 业务摘要(工作说明)
-	 */
-	private String businessModelRemark;
 
+    /**
+     * 所属流程定义版本
+     */
+    private FlowInstance parent;
 
-	/**
-	 * 开始时间
-	 */
-	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-	private Date startDate;
+    /**
+     * 实例调用路径，针对作为子流程被调用时
+     */
+    private String callActivityPath;
 
-	/**
-	 * 结束时间
-	 */
-	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-	private Date endDate;
 
-	/**
-	 * 关联的实际流程引擎实例ID
-	 */
-	private String actInstanceId;
+    /**
+     * 是否挂起
+     */
+    private Boolean suspended = false;
 
+    /**
+     * 是否结束
+     */
+    private Boolean ended = false;
 
-	/**
-	 * 所属流程定义版本
-	 */
-	private FlowInstance parent;
 
-	/**
-	 * 实例调用路径，针对作为子流程被调用时
-	 */
-	private String callActivityPath;
+    /**
+     * 是否是手动结束（发起人手动终止任务的情况）
+     */
+    private Boolean manuallyEnd = false;
 
 
-	/**
-	 * 是否挂起
-	 */
-	private Boolean suspended=false;
+    /**
+     * 拥有的流程历史
+     */
+    private Set<FlowHistory> flowHistories = new HashSet<>(0);
 
-	/**
-	 * 是否结束
-	 */
-	private Boolean ended=false;
+    /**
+     * 拥有的流程任务
+     */
+    private Set<FlowTask> flowTasks = new HashSet<>(0);
 
 
-	/**
-	 * 是否是手动结束（发起人手动终止任务的情况）
-	 */
-	private Boolean manuallyEnd=false;
+    /**
+     * web基地址
+     */
+    private String webBaseAddress;
 
 
-	/**
-	 * 拥有的流程历史
-	 */
-	private Set<FlowHistory> flowHistories = new HashSet<FlowHistory>(0);
+    /**
+     * web基地址绝对路径
+     */
+    private String webBaseAddressAbsolute;
 
-	/**
-	 * 拥有的流程任务
-	 */
-	private Set<FlowTask> flowTasks = new HashSet<FlowTask>(0);
+    /**
+     * api基地址
+     */
+    private String apiBaseAddress;
 
+    /**
+     * api基地址
+     */
+    private String apiBaseAddressAbsolute;
 
+    /**
+     * 租户代码
+     */
+    private String tenantCode;
 
 
-	/**
-	 * web基地址
-	 */
-	private String webBaseAddress;
+    /**
+     * 创建者
+     */
+    protected String creatorId;
 
+    protected String creatorAccount;
 
-	/**
-	 * web基地址绝对路径
-	 */
-	private String webBaseAddressAbsolute;
+    protected String creatorName;
 
-	/**
-	 * api基地址
-	 */
-	private String apiBaseAddress;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    protected Date createdDate;
 
-	/**
-	 * api基地址
-	 */
-	private String apiBaseAddressAbsolute;
+    /**
+     * 最后修改者
+     */
+    protected String lastEditorId;
 
-	/**
-	 * 租户代码
-	 */
-	private String tenantCode;
+    protected String lastEditorAccount;
 
+    protected String lastEditorName;
 
-	/**
-	 * 创建者
-	 */
-	protected String creatorId;
+    /**
+     * 最后修改时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    protected Date lastEditedDate;
 
-	protected String creatorAccount;
+    protected String id;
 
-	protected String creatorName;
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * 创建时间
-	 */
-	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-	protected Date createdDate;
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**
-	 * 最后修改者
-	 */
-	protected String lastEditorId;
 
-	protected String lastEditorAccount;
+    public FlowInstance() {
+    }
 
-	protected String lastEditorName;
 
-	/**
-	 * 最后修改时间
-	 */
-	@JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-	protected Date lastEditedDate;
+    public Integer getVersion() {
+        return version;
+    }
 
-	protected String id;
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public FlowDefVersion getFlowDefVersion() {
+        return flowDefVersion;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setFlowDefVersion(FlowDefVersion flowDefVersion) {
+        this.flowDefVersion = flowDefVersion;
+    }
 
+    public String getFlowName() {
+        return flowName;
+    }
 
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
+    }
 
-	public FlowInstance() {
-	}
+    public String getBusinessId() {
+        return businessId;
+    }
 
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
 
-	public Integer getVersion() {
-		return version;
-	}
+    public String getBusinessCode() {
+        return businessCode;
+    }
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+    public void setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
+    }
 
-	public FlowDefVersion getFlowDefVersion() {
-		return flowDefVersion;
-	}
+    public String getBusinessName() {
+        return businessName;
+    }
 
-	public void setFlowDefVersion(FlowDefVersion flowDefVersion) {
-		this.flowDefVersion = flowDefVersion;
-	}
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
 
-	public String getFlowName() {
-		return flowName;
-	}
+    public String getBusinessModelRemark() {
+        return businessModelRemark;
+    }
 
-	public void setFlowName(String flowName) {
-		this.flowName = flowName;
-	}
+    public void setBusinessModelRemark(String businessModelRemark) {
+        this.businessModelRemark = businessModelRemark;
+    }
 
-	public String getBusinessId() {
-		return businessId;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public void setBusinessId(String businessId) {
-		this.businessId = businessId;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public String getBusinessCode() {
-		return businessCode;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public void setBusinessCode(String businessCode) {
-		this.businessCode = businessCode;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public String getBusinessName() {
-		return businessName;
-	}
+    public String getActInstanceId() {
+        return actInstanceId;
+    }
 
-	public void setBusinessName(String businessName) {
-		this.businessName = businessName;
-	}
+    public void setActInstanceId(String actInstanceId) {
+        this.actInstanceId = actInstanceId;
+    }
 
-	public String getBusinessModelRemark() {
-		return businessModelRemark;
-	}
+    public FlowInstance getParent() {
+        return parent;
+    }
 
-	public void setBusinessModelRemark(String businessModelRemark) {
-		this.businessModelRemark = businessModelRemark;
-	}
+    public void setParent(FlowInstance parent) {
+        this.parent = parent;
+    }
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    public String getCallActivityPath() {
+        return callActivityPath;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public void setCallActivityPath(String callActivityPath) {
+        this.callActivityPath = callActivityPath;
+    }
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    public Boolean getSuspended() {
+        return suspended;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public void setSuspended(Boolean suspended) {
+        this.suspended = suspended;
+    }
 
-	public String getActInstanceId() {
-		return actInstanceId;
-	}
+    public Boolean getEnded() {
+        return ended;
+    }
 
-	public void setActInstanceId(String actInstanceId) {
-		this.actInstanceId = actInstanceId;
-	}
+    public void setEnded(Boolean ended) {
+        this.ended = ended;
+    }
 
-	public FlowInstance getParent() {
-		return parent;
-	}
+    public Boolean getManuallyEnd() {
+        return manuallyEnd;
+    }
 
-	public void setParent(FlowInstance parent) {
-		this.parent = parent;
-	}
+    public void setManuallyEnd(Boolean manuallyEnd) {
+        this.manuallyEnd = manuallyEnd;
+    }
 
-	public String getCallActivityPath() {
-		return callActivityPath;
-	}
+    public Set<FlowHistory> getFlowHistories() {
+        return flowHistories;
+    }
 
-	public void setCallActivityPath(String callActivityPath) {
-		this.callActivityPath = callActivityPath;
-	}
+    public void setFlowHistories(Set<FlowHistory> flowHistories) {
+        this.flowHistories = flowHistories;
+    }
 
-	public Boolean getSuspended() {
-		return suspended;
-	}
+    public Set<FlowTask> getFlowTasks() {
+        return flowTasks;
+    }
 
-	public void setSuspended(Boolean suspended) {
-		this.suspended = suspended;
-	}
+    public void setFlowTasks(Set<FlowTask> flowTasks) {
+        this.flowTasks = flowTasks;
+    }
 
-	public Boolean getEnded() {
-		return ended;
-	}
+    public String getWebBaseAddress() {
+        return webBaseAddress;
+    }
 
-	public void setEnded(Boolean ended) {
-		this.ended = ended;
-	}
+    public void setWebBaseAddress(String webBaseAddress) {
+        this.webBaseAddress = webBaseAddress;
+    }
 
-	public Boolean getManuallyEnd() {
-		return manuallyEnd;
-	}
+    public String getWebBaseAddressAbsolute() {
+        return webBaseAddressAbsolute;
+    }
 
-	public void setManuallyEnd(Boolean manuallyEnd) {
-		this.manuallyEnd = manuallyEnd;
-	}
+    public void setWebBaseAddressAbsolute(String webBaseAddressAbsolute) {
+        this.webBaseAddressAbsolute = webBaseAddressAbsolute;
+    }
 
-	public Set<FlowHistory> getFlowHistories() {
-		return flowHistories;
-	}
+    public String getApiBaseAddress() {
+        return apiBaseAddress;
+    }
 
-	public void setFlowHistories(Set<FlowHistory> flowHistories) {
-		this.flowHistories = flowHistories;
-	}
+    public void setApiBaseAddress(String apiBaseAddress) {
+        this.apiBaseAddress = apiBaseAddress;
+    }
 
-	public Set<FlowTask> getFlowTasks() {
-		return flowTasks;
-	}
+    public String getApiBaseAddressAbsolute() {
+        return apiBaseAddressAbsolute;
+    }
 
-	public void setFlowTasks(Set<FlowTask> flowTasks) {
-		this.flowTasks = flowTasks;
-	}
+    public void setApiBaseAddressAbsolute(String apiBaseAddressAbsolute) {
+        this.apiBaseAddressAbsolute = apiBaseAddressAbsolute;
+    }
 
-	public String getWebBaseAddress() {
-		return webBaseAddress;
-	}
+    public String getTenantCode() {
+        return tenantCode;
+    }
 
-	public void setWebBaseAddress(String webBaseAddress) {
-		this.webBaseAddress = webBaseAddress;
-	}
+    public void setTenantCode(String tenantCode) {
+        this.tenantCode = tenantCode;
+    }
 
-	public String getWebBaseAddressAbsolute() {
-		return webBaseAddressAbsolute;
-	}
+    public String getCreatorId() {
+        return creatorId;
+    }
 
-	public void setWebBaseAddressAbsolute(String webBaseAddressAbsolute) {
-		this.webBaseAddressAbsolute = webBaseAddressAbsolute;
-	}
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
 
-	public String getApiBaseAddress() {
-		return apiBaseAddress;
-	}
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
 
-	public void setApiBaseAddress(String apiBaseAddress) {
-		this.apiBaseAddress = apiBaseAddress;
-	}
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
 
-	public String getApiBaseAddressAbsolute() {
-		return apiBaseAddressAbsolute;
-	}
+    public String getCreatorName() {
+        return creatorName;
+    }
 
-	public void setApiBaseAddressAbsolute(String apiBaseAddressAbsolute) {
-		this.apiBaseAddressAbsolute = apiBaseAddressAbsolute;
-	}
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
 
-	public String getTenantCode() {
-		return tenantCode;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	public void setTenantCode(String tenantCode) {
-		this.tenantCode = tenantCode;
-	}
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
-	public String getCreatorId() {
-		return creatorId;
-	}
+    public String getLastEditorId() {
+        return lastEditorId;
+    }
 
-	public void setCreatorId(String creatorId) {
-		this.creatorId = creatorId;
-	}
+    public void setLastEditorId(String lastEditorId) {
+        this.lastEditorId = lastEditorId;
+    }
 
-	public String getCreatorAccount() {
-		return creatorAccount;
-	}
+    public String getLastEditorAccount() {
+        return lastEditorAccount;
+    }
 
-	public void setCreatorAccount(String creatorAccount) {
-		this.creatorAccount = creatorAccount;
-	}
+    public void setLastEditorAccount(String lastEditorAccount) {
+        this.lastEditorAccount = lastEditorAccount;
+    }
 
-	public String getCreatorName() {
-		return creatorName;
-	}
+    public String getLastEditorName() {
+        return lastEditorName;
+    }
 
-	public void setCreatorName(String creatorName) {
-		this.creatorName = creatorName;
-	}
+    public void setLastEditorName(String lastEditorName) {
+        this.lastEditorName = lastEditorName;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    public Date getLastEditedDate() {
+        return lastEditedDate;
+    }
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    public void setLastEditedDate(Date lastEditedDate) {
+        this.lastEditedDate = lastEditedDate;
+    }
 
-	public String getLastEditorId() {
-		return lastEditorId;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-	public void setLastEditorId(String lastEditorId) {
-		this.lastEditorId = lastEditorId;
-	}
+        FlowInstance flowType = (FlowInstance) o;
 
-	public String getLastEditorAccount() {
-		return lastEditorAccount;
-	}
+        return Objects.equals(id, flowType.id);
+    }
 
-	public void setLastEditorAccount(String lastEditorAccount) {
-		this.lastEditorAccount = lastEditorAccount;
-	}
-
-	public String getLastEditorName() {
-		return lastEditorName;
-	}
-
-	public void setLastEditorName(String lastEditorName) {
-		this.lastEditorName = lastEditorName;
-	}
-
-	public Date getLastEditedDate() {
-		return lastEditedDate;
-	}
-
-	public void setLastEditedDate(Date lastEditedDate) {
-		this.lastEditedDate = lastEditedDate;
-	}
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

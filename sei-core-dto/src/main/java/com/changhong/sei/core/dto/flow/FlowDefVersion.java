@@ -4,10 +4,7 @@ import com.changhong.sei.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * *************************************************************************************************
@@ -102,7 +99,7 @@ public class FlowDefVersion implements Serializable {
     /**
      * 拥有的流程实例
      */
-    private Set<FlowInstance> flowInstances = new HashSet<FlowInstance>(0);
+    private Set<FlowInstance> flowInstances = new HashSet<>(0);
 
     /**
      * 固化流程初始化时用的单个执行人列表
@@ -533,5 +530,24 @@ public class FlowDefVersion implements Serializable {
 
     public void setLastEditedDate(Date lastEditedDate) {
         this.lastEditedDate = lastEditedDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        FlowDefVersion flowType = (FlowDefVersion) o;
+
+        return Objects.equals(id, flowType.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

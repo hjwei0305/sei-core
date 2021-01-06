@@ -65,6 +65,7 @@ public class FlowOperateResult implements Serializable{
         this.userId = userId;
     }
 
+    @Override
     public String toString(){
         return "成功状态："+this.isSuccess()+";返回消息="+this.getMessage();
     }

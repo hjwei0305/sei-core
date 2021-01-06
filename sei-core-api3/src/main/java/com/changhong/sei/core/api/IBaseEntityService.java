@@ -22,7 +22,7 @@ public interface IBaseEntityService<T extends BaseEntity> {
      * @param entity 业务实体
      * @return 操作结果
      */
-    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
     OperateResultWithData<T> save(@RequestBody T entity);
 

@@ -33,7 +33,7 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        if (EXECUTED.compareAndSet(false, true)) {
+//        if (EXECUTED.compareAndSet(false, true)) {
             Properties properties = new Properties();
 
             // 定义/actuator/info断点信息
@@ -132,6 +132,6 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
             //environment.getPropertySources().addLast(source);
             // 配置中心配置文件优先，即当配置中心和本地配置文件存在相同key时，使用配置中心该key的配置值
             environment.getPropertySources().addFirst(source);
-        }
+//        }
     }
 }

@@ -6,7 +6,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -17,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * 实现功能：
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
  * @version 1.0.00  2020-04-01 10:01
  */
 public class LocalCacheProviderImpl implements CacheProviderService {
-    private static Map<String, Cache<String, Object>> _cacheMap = Maps.newConcurrentMap();
+    private static final Map<String, Cache<String, Object>> CACHE_CONCURRENT_MAP = Maps.newConcurrentMap();
 
     private static SeiCacheProperties cacheProperties;
 
@@ -37,7 +35,7 @@ public class LocalCacheProviderImpl implements CacheProviderService {
     static {
         Cache<String, Object> cacheContainer = buildCacheContainer(100, 600000);
 
-        _cacheMap.put(String.valueOf(600000), cacheContainer);
+        CACHE_CONCURRENT_MAP.put(String.valueOf(600000), cacheContainer);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class LocalCacheProviderImpl implements CacheProviderService {
         if (StringUtils.isNotBlank(keys)) {
             String key = keys.replaceAll("[*]", "");
             ConcurrentMap<String, Object> concurrentMap;
-            for (Map.Entry<String, Cache<String, Object>> entry : _cacheMap.entrySet()) {
+            for (Map.Entry<String, Cache<String, Object>> entry : CACHE_CONCURRENT_MAP.entrySet()) {
                 concurrentMap = entry.getValue().asMap();
                 if (Objects.nonNull(concurrentMap)) {
                     // 通常情况下调用keys是为了删除缓存,同时为了确保与分布式缓存的key一致性这里直接删除对应的key缓存
@@ -233,8 +231,8 @@ public class LocalCacheProviderImpl implements CacheProviderService {
 
         String mapKey = String.valueOf(expireTime);
 
-        if (_cacheMap.containsKey(mapKey)) {
-            cacheContainer = _cacheMap.get(mapKey);
+        if (CACHE_CONCURRENT_MAP.containsKey(mapKey)) {
+            cacheContainer = CACHE_CONCURRENT_MAP.get(mapKey);
             return cacheContainer;
         }
 
@@ -242,7 +240,7 @@ public class LocalCacheProviderImpl implements CacheProviderService {
         try {
             cacheContainer = buildCacheContainer(cacheProperties.getMaximumSize(), cacheProperties.getExpire());
 
-            _cacheMap.put(mapKey, cacheContainer);
+            CACHE_CONCURRENT_MAP.put(mapKey, cacheContainer);
         } finally {
             lock.unlock();
         }

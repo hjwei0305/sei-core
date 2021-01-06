@@ -23,7 +23,7 @@ public interface BaseEntityApi<T extends BaseEntityDto> {
      * @param dto 业务实体DTO
      * @return 操作结果
      */
-    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
     ResultData<T> save(@RequestBody @Valid T dto);
 

@@ -87,7 +87,8 @@ public class DefaultAutoConfiguration {
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
                 .configure()
                 // 配置hibernate Validator为快速失败返回模式
-                .failFast(true)
+//                .failFast(true)
+                .addProperty("hibernate.validator.fail_fast", "true")
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
     }

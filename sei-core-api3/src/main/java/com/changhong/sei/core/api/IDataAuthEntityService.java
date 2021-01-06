@@ -27,7 +27,7 @@ public interface IDataAuthEntityService<T extends BaseEntity> {
      * @param ids 业务实体Id清单
      * @return 数据权限实体清单
      */
-    @PostMapping(path = "getAuthEntityDataByIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "getAuthEntityDataByIds", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取数据权限实体清单", notes = "通过业务实体Id清单获取数据权限实体清单")
     ResultData<List<AuthEntityData>> getAuthEntityDataByIdsMethod(@RequestBody List<String> ids);
 

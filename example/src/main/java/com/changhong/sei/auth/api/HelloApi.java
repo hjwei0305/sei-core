@@ -18,7 +18,7 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-14 14:13
  */
-@RequestMapping(path = "demo", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "demo", produces = MediaType.APPLICATION_JSON_VALUE)
 public interface HelloApi {
 
     /**

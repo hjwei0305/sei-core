@@ -111,8 +111,7 @@ public class BusinessModel implements Serializable {
     /**
      * 拥有的流程类型
      */
-    private Set<FlowType> flowTypes = new HashSet<FlowType>();
-
+    private Set<FlowType> flowTypes = new HashSet<>();
 
     /**
      * 创建者

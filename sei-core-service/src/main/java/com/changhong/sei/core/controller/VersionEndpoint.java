@@ -23,7 +23,7 @@ import java.util.Set;
  */
 @RestController
 @Api(value = "VersionApi", tags = "应用版本服务")
-@RequestMapping(path = "version", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "version", produces = MediaType.APPLICATION_JSON_VALUE)
 public class VersionEndpoint {
 
     /**
