@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -136,7 +138,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
     @Override
-    public ResultData<D> save(D dto) {
+    public ResultData<D> save(@RequestBody @Valid D dto) {
         return DefaultBaseEntityController.super.save(dto);
     }
 }
