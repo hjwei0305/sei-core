@@ -20,6 +20,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Objects;
+
 /**
  * <strong>实现功能:</strong>
  * <p>自动生成API文档配置</p>
@@ -40,7 +42,7 @@ public class SwaggerConfiguration {
         return new ApiInfoBuilder()
                 .title(StringUtils.isBlank(swagger.getTitle()) ? version.getName() + " API" : swagger.getTitle())
                 .description(StringUtils.isBlank(swagger.getDescription()) ?
-                        ContextUtil.getProperty("sei.application.description", version.getName()) + "的API文档" + "，运行环境：" + ContextUtil.getEnv() : swagger.getDescription())
+                        version.getDescription() + "的API文档" + "，运行环境：" + ContextUtil.getEnv() : swagger.getDescription())
                 .version(StringUtils.isBlank(swagger.getVersion()) ? version.getCurrentVersion() : swagger.getVersion())
                 .build();
     }
