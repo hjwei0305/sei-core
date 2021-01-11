@@ -24,7 +24,6 @@ public class Version {
 
     private String version = LATEST;
     private String name = UNDEFINED;
-    private String description;
     private String fullVersion;
     private String buildTime = UNDEFINED;
 
@@ -44,10 +43,7 @@ public class Version {
                 } else {
                     // Class not from JAR
                     name = ApplicationContextHolder.getProperty("sei.application.code", UNDEFINED);
-                    description = ApplicationContextHolder.getProperty("sei.application.description", name);
-                    if (description.startsWith("@")) {
-                        description = name;
-                    }
+
                     version = ApplicationContextHolder.getProperty("sei.application.version", LATEST);
                     if (version.startsWith("@")) {
                         version = LATEST;
@@ -66,7 +62,6 @@ public class Version {
                 if (Objects.nonNull(pkg)) {
                     name = pkg.getImplementationTitle();
                     name = Objects.isNull(name) ? UNDEFINED : name;
-                    description = name;
                     version = pkg.getImplementationVersion();
                     version = Objects.isNull(version) ? UNDEFINED : version;
                     fullVersion = name + " " + version;
@@ -81,13 +76,6 @@ public class Version {
      */
     public final String getName() {
         return name;
-    }
-
-    /**
-     * 应用描述
-     */
-    public final String getDescription() {
-        return description;
     }
 
     /**
@@ -114,10 +102,6 @@ public class Version {
     protected static Version buildDefaultVersion() {
         Version verObj = new Version();
         verObj.name = ApplicationContextHolder.getProperty("sei.application.code", UNDEFINED);
-        verObj.description = ApplicationContextHolder.getProperty("sei.application.description", verObj.getName());
-        if (verObj.getDescription().startsWith("@")) {
-            verObj.description = verObj.getName();
-        }
         verObj.version = ApplicationContextHolder.getProperty("sei.application.version", LATEST);
         if (verObj.getCurrentVersion().startsWith("@")) {
             verObj.version = LATEST;
@@ -136,11 +120,6 @@ public class Version {
             Manifest manifest = new Manifest(new URL(manifestPath).openStream());
             Attributes attrs = manifest.getMainAttributes();
 
-            String appDescription = attrs.getValue("Description");
-            LOG.debug("Read Description: {}", appDescription);
-            if (StringUtils.isNotBlank(appDescription)) {
-                description = appDescription;
-            }
             String implementationTitle = attrs.getValue("Implementation-Title");
             LOG.debug("Read Implementation-Title: {}", implementationTitle);
             if (StringUtils.isNotBlank(implementationTitle)) {

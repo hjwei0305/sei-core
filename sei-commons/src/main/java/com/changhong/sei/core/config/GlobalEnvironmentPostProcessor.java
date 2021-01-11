@@ -58,8 +58,8 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
                 appDescription = environment.getProperty("sei.application.name");
                 if (StringUtils.isBlank(appDescription)) {
                     appDescription = appCode;
-                    properties.setProperty("sei.application.description", appDescription);
                 }
+                properties.setProperty("sei.application.description", appDescription);
             }
             properties.setProperty("info.app.description", appDescription);
             // 当前应用版本号

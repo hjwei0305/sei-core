@@ -51,7 +51,6 @@ jar {
         attributes("Implementation-Title": "SEI")
         attributes("Implementation-Version": "$project.version")
         attributes("Implementation-Vendor": "rcsit.cn")
-        attributes("Description": "SEI-CORE")
         attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
     }
 }
