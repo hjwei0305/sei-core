@@ -35,7 +35,7 @@ public interface BaseEntityApi<T extends BaseEntityDto> {
      */
     @DeleteMapping(path = "delete/{id}")
     @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
-    ResultData delete(@PathVariable("id") String id);
+    ResultData<?> delete(@PathVariable("id") String id);
 
     /**
      * 通过Id获取一个业务实体

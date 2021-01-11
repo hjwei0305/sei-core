@@ -8,8 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.ParameterizedType;
@@ -129,16 +128,36 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      * @param dto 业务实体DTO
      * @return 操作结果
      */
-    /**
-     * 保存业务实体
-     *
-     * @param dto 业务实体DTO
-     * @return 操作结果
-     */
     @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
     @Override
     public ResultData<D> save(@RequestBody @Valid D dto) {
         return DefaultBaseEntityController.super.save(dto);
+    }
+
+    /**
+     * 删除业务实体
+     *
+     * @param id 业务实体Id
+     * @return 操作结果
+     */
+    @DeleteMapping(path = "delete/{id}")
+    @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
+    @Override
+    public ResultData<?> delete(@PathVariable("id") String id) {
+        return DefaultBaseEntityController.super.delete(id);
+    }
+
+    /**
+     * 通过Id获取一个业务实体
+     *
+     * @param id 业务实体Id
+     * @return 业务实体
+     */
+    @GetMapping(path = "findOne")
+    @ApiOperation(value = "获取一个业务实体", notes = "通过Id获取一个业务实体")
+    @Override
+    public ResultData<D> findOne(@RequestParam("id") String id) {
+        return DefaultBaseEntityController.super.findOne(id);
     }
 }
