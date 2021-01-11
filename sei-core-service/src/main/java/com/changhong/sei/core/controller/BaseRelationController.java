@@ -1,17 +1,22 @@
 package com.changhong.sei.core.controller;
 
-import com.changhong.sei.core.dto.BaseEntityDto;
-import com.changhong.sei.core.dto.RelationEntityDto;
+import com.changhong.sei.core.api.BaseRelationApi;
+import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.dto.*;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.RelationEntity;
 import com.changhong.sei.core.service.BaseRelationService;
+import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.exception.WebException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 实现功能: 分配关系业务实体的服务控制抽象基类
@@ -20,7 +25,7 @@ import java.util.Objects;
  * @version 2020-03-19 9:04
  */
 public abstract class BaseRelationController<TT extends BaseEntity & RelationEntity<PT, CT>, PT extends AbstractEntity<String>, CT extends AbstractEntity<String>, TD extends BaseEntityDto & RelationEntityDto<PD, CD>, PD extends BaseEntityDto, CD extends BaseEntityDto>
-        implements DefaultRelationController<TT, PT, CT, TD, PD, CD>{
+        implements BaseRelationApi<TD, PD, CD> {
     // 数据实体类型
     private final Class<TT> clazzTT;
     // 父实体数据实体类型
@@ -106,7 +111,10 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
         customConvertChildToDtoMapper();
     }
 
-    @Override
+    /**
+     * 获取使用的业务逻辑实现
+     * @return 业务逻辑
+     */
     public abstract BaseRelationService<TT, PT, CT> getService();
 
     /**
@@ -114,7 +122,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<TT> getRelationEntityClass() {
         return clazzTT;
     }
@@ -124,7 +131,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<TD> getRelationDtoClass() {
         return clazzTD;
     }
@@ -134,7 +140,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<PT> getParentEntityClass() {
         return clazzPT;
     }
@@ -144,7 +149,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<PD> getParentDtoClass() {
         return clazzPD;
     }
@@ -154,7 +158,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<CT> getChildEntityClass() {
         return clazzCT;
     }
@@ -164,7 +167,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      *
      * @return 类型Class
      */
-    @Override
     public Class<CD> getChildDtoClass() {
         return clazzCD;
     }
@@ -181,7 +183,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param dto 业务实体
      * @return 数据实体
      */
-    @Override
     public TT convertToEntity(TD dto) {
         if (Objects.isNull(dto)) {
             return null;
@@ -201,7 +202,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param entity 业务实体
      * @return DTO
      */
-    @Override
     public TD convertRelationToDto(TT entity) {
         if (Objects.isNull(entity)) {
             return null;
@@ -226,7 +226,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param dto 业务实体
      * @return 数据实体
      */
-    @Override
     public PT convertParentToEntity(PD dto) {
         if (Objects.isNull(dto)) {
             return null;
@@ -246,7 +245,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param entity 业务实体
      * @return DTO
      */
-    @Override
     public PD convertParentToDto(PT entity) {
         if (Objects.isNull(entity)) {
             return null;
@@ -266,7 +264,6 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param dto 业务实体
      * @return 数据实体
      */
-    @Override
     public CT convertChildToEntity(CD dto) {
         if (Objects.isNull(dto)) {
             return null;
@@ -286,11 +283,170 @@ public abstract class BaseRelationController<TT extends BaseEntity & RelationEnt
      * @param entity 业务实体
      * @return DTO
      */
-    @Override
     public CD convertChildToDto(CT entity) {
         if (Objects.isNull(entity)) {
             return null;
         }
         return childDtoModelMapper.map(entity, getChildDtoClass());
+    }
+
+    /**
+     * 通过父实体Id获取子实体清单
+     *
+     * @param parentId 父实体Id
+     * @return 子实体清单
+     */
+    @Override
+    public ResultData<List<CD>> getChildrenFromParentId(String parentId){
+        List<CD> data;
+        try {
+            List<CT> entities = getService().getChildrenFromParentId(parentId);
+            data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            // 通过父实体Id获取子实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00012"), e);
+        }
+        return ResultData.success(data);
+    }
+
+    /**
+     * 创建分配关系
+     *
+     * @param relationParam 分配关系参数
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<?> insertRelations(RelationParam relationParam){
+        OperateResult result;
+        try {
+            result = getService().insertRelationsByParam(relationParam);
+        } catch (Exception e) {
+            // 创建分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00013"), e);
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultData.success(result.getMessage());
+    }
+
+    /**
+     * 移除分配关系
+     *
+     * @param relationParam 分配关系参数
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<?> removeRelations(RelationParam relationParam){
+        OperateResult result;
+        try {
+            result = getService().removeRelationsByParam(relationParam);
+        } catch (Exception e) {
+            // 移除分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00014"), e);
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultData.success(result.getMessage());
+    }
+
+    /**
+     * 获取未分配的子实体清单
+     *
+     * @param parentId 父实体Id
+     * @return 子实体清单
+     */
+    @Override
+    public ResultData<List<CD>> getUnassignedChildren(String parentId){
+        List<CD> data;
+        try {
+            List<CT> entities = getService().getUnassignedChildren(parentId);
+            data = entities.stream().map(this::convertChildToDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            // 获取未分配的子实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00015"), e);
+        }
+        return ResultData.success(data);
+    }
+
+    /**
+     * 通过子实体Id获取父实体清单
+     *
+     * @param childId 子实体Id
+     * @return 父实体清单
+     */
+    @Override
+    public ResultData<List<PD>> getParentsFromChildId(String childId){
+        List<PD> data;
+        try {
+            List<PT> entities = getService().getParentsFromChildId(childId);
+            data = entities.stream().map(this::convertParentToDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            // 通过子实体Id获取父实体清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00016"), e);
+        }
+        return ResultData.success(data);
+    }
+
+    /**
+     * 通过父实体清单创建分配关系
+     *
+     * @param relationParam 父实体Id清单的分配关系
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<?> insertRelationsByParents(ParentRelationParam relationParam){
+        OperateResult result;
+        try {
+            result = getService().insertRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
+        } catch (Exception e) {
+            // 通过父实体清单创建分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00017"), e);
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultData.success(result.getMessage());
+    }
+
+    /**
+     * 通过父实体清单移除分配关系
+     *
+     * @param relationParam 父实体Id清单的分配关系
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<?> removeRelationsByParents(ParentRelationParam relationParam){
+        OperateResult result;
+        try {
+            result = getService().removeRelationsByParents(relationParam.getChildId(), relationParam.getParentIds());
+        } catch (Exception e) {
+            // 通过父实体清单移除分配关系异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00018"), e);
+        }
+        if (result.notSuccessful()) {
+            return ResultData.fail(result.getMessage());
+        }
+        return ResultData.success(result.getMessage());
+    }
+
+    /**
+     * 通过父实体Id获取分配关系清单
+     *
+     * @param parentId 父实体Id
+     * @return 分配关系清单
+     */
+    @Override
+    public ResultData<List<TD>> getRelationsByParentId(String parentId){
+        List<TD> data;
+        try {
+            List<TT> entities = getService().getRelationsByParentId(parentId);
+            data = entities.stream().map(this::convertRelationToDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            // 通过父实体Id获取分配关系清单异常！
+            throw new WebException(ContextUtil.getMessage("core_service_00019"), e);
+        }
+        return ResultData.success(data);
     }
 }
