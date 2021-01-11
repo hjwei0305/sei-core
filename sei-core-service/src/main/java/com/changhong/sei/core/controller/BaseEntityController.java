@@ -1,5 +1,6 @@
 package com.changhong.sei.core.controller;
 
+import com.changhong.sei.core.api.BaseEntityApi;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
@@ -9,11 +10,11 @@ import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.exception.WebException;
-import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.lang.reflect.ParameterizedType;
@@ -27,7 +28,7 @@ import java.util.Objects;
  * @version 2020-03-18 16:46
  */
 public abstract class BaseEntityController<T extends BaseEntity, D extends BaseEntityDto>
-        implements DefaultBaseController<T, D>{
+        implements DefaultBaseController<T, D>, BaseEntityApi<D> {
     // 数据实体类型
     private final Class<T> clazzT;
     // DTO实体类型
@@ -139,6 +140,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      */
 //    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
 //    @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
+    @Override
     public ResultData<D> save(@RequestBody @Valid D dto) {
         ResultData<?> checkResult = checkDto(dto);
         if (checkResult.failed()) {
@@ -169,6 +171,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      */
 //    @DeleteMapping(path = "delete/{id}")
 //    @ApiOperation(value = "删除业务实体", notes = "删除一个业务实体")
+    @Override
     public ResultData<?> delete(@PathVariable("id") String id) {
         try {
             OperateResult result = getService().delete(id);
@@ -187,6 +190,7 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      */
 //    @GetMapping(path = "findOne")
 //    @ApiOperation(value = "获取一个业务实体", notes = "通过Id获取一个业务实体")
+    @Override
     public ResultData<D> findOne(@RequestParam("id") String id) {
         T entity;
         try {
