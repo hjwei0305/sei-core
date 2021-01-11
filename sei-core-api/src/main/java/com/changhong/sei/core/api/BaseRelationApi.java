@@ -36,7 +36,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      */
     @PostMapping(path = "insertRelations")
     @ApiOperation(value = "创建分配关系", notes = "通过分配关系参数创建分配关系")
-    ResultData insertRelations(@RequestBody RelationParam relationParam);
+    ResultData<?> insertRelations(@RequestBody RelationParam relationParam);
 
     /**
      * 移除分配关系
@@ -46,7 +46,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      */
     @DeleteMapping(path = "removeRelations")
     @ApiOperation(value = "移除分配关系", notes = "通过分配关系参数移除分配关系")
-    ResultData removeRelations(@RequestBody RelationParam relationParam);
+    ResultData<?> removeRelations(@RequestBody RelationParam relationParam);
 
     /**
      * 获取未分配的子实体清单
@@ -76,7 +76,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      */
     @PostMapping(path = "insertRelationsByParents")
     @ApiOperation(value = "通过父实体清单创建分配关系", notes = "通过父实体清单创建分配关系")
-    ResultData insertRelationsByParents(@RequestBody ParentRelationParam relationParam);
+    ResultData<?> insertRelationsByParents(@RequestBody ParentRelationParam relationParam);
 
     /**
      * 通过父实体清单移除分配关系
@@ -86,7 +86,7 @@ public interface BaseRelationApi<T extends BaseEntityDto & RelationEntityDto<P, 
      */
     @DeleteMapping(path = "removeRelationsByParents")
     @ApiOperation(value = "通过父实体清单移除分配关系", notes = "通过父实体清单移除分配关系")
-    ResultData removeRelationsByParents(@RequestBody ParentRelationParam relationParam);
+    ResultData<?> removeRelationsByParents(@RequestBody ParentRelationParam relationParam);
 
     /**
      * 通过父实体Id获取分配关系清单

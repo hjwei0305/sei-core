@@ -6,7 +6,6 @@ import com.changhong.sei.core.dto.*;
 import com.changhong.sei.core.entity.AbstractEntity;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.entity.RelationEntity;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseRelationService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.exception.WebException;
