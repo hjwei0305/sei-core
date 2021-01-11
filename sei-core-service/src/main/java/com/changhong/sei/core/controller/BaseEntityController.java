@@ -4,8 +4,11 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.service.BaseEntityService;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -124,6 +127,14 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
      * @param dto 业务实体DTO
      * @return 操作结果
      */
+    /**
+     * 保存业务实体
+     *
+     * @param dto 业务实体DTO
+     * @return 操作结果
+     */
+    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "保存业务实体", notes = "保存一个业务实体")
     @Override
     public ResultData<D> save(D dto) {
         return DefaultBaseEntityController.super.save(dto);
