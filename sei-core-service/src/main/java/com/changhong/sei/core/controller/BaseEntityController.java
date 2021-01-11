@@ -1,6 +1,7 @@
 package com.changhong.sei.core.controller;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.core.service.BaseEntityService;
 import org.modelmapper.ModelMapper;
@@ -115,5 +116,16 @@ public abstract class BaseEntityController<T extends BaseEntity, D extends BaseE
             return null;
         }
         return dtoModelMapper.map(entity, getDtoClass());
+    }
+
+    /**
+     * 保存业务实体
+     *
+     * @param dto 业务实体DTO
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<D> save(D dto) {
+        return DefaultBaseEntityController.super.save(dto);
     }
 }
