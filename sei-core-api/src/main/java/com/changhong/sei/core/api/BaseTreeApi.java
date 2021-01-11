@@ -4,11 +4,13 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.TreeNodeMoveParam;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -26,9 +28,9 @@ public interface BaseTreeApi<T extends BaseEntityDto> extends BaseEntityApi<T> {
      * @param moveParam 节点移动参数
      * @return 操作状态
      */
-    @PostMapping(path = "move")
+    @PostMapping(path = "move", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "移动节点", notes = "移动一个节点")
-    ResultData move(@RequestBody TreeNodeMoveParam moveParam);
+    ResultData<?> move(@RequestBody @Valid TreeNodeMoveParam moveParam);
 
     /**
      * 获取所有根节点

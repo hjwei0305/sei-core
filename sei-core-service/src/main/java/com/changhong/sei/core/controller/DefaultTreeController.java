@@ -8,7 +8,6 @@ import com.changhong.sei.core.dto.TreeEntity;
 import com.changhong.sei.core.dto.TreeNodeMoveParam;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseTreeService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
@@ -100,7 +99,7 @@ public interface DefaultTreeController<T extends BaseEntity & TreeEntity<T>, D e
      * @return 操作状态
      */
     @Override
-    default ResultData<?> move(TreeNodeMoveParam moveParam) {
+    default ResultData<?> move(@Valid TreeNodeMoveParam moveParam) {
         OperateResult result;
         try {
             result = getService().move(moveParam.getNodeId(), moveParam.getTargetParentId());
