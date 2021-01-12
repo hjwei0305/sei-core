@@ -806,10 +806,10 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     else if (matchValue instanceof Date) {
                         DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime.toLocalDate()),
+                                    builder.lessThan(expression, dateTime.plusDays(1).toLocalDate()));
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime),
-                                    builder.lessThan(expression, dateTime.plusDays(1)));
+                            matchValue = dateTime.toLocalDateTime();
                         } else {
                             if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime.toDate()),
@@ -832,8 +832,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             matchValue = dateTime.toLocalDate();
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            predicate = builder.or(builder.lessThan(expression, dateTime),
-                                    builder.greaterThan(expression, dateTime.plusDays(1)));
+                            predicate = builder.or(builder.lessThan(expression, dateTime.toLocalDateTime()),
+                                    builder.greaterThan(expression, dateTime.plusDays(1).toLocalDateTime()));
                         } else {
                             if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
                                 predicate = builder.or(builder.lessThan(expression, dateTime.toDate()),
@@ -907,17 +907,17 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
 
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toLocalDate()),
-                                    builder.lessThan(expression, dateTo.toLocalDate()));
+                                    builder.lessThan(expression, dateTo.plusDays(1).toLocalDate()));
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom),
-                                    builder.lessThan(expression, dateTo.plusDays(1)));
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toLocalDateTime()),
+                                    builder.greaterThanOrEqualTo(expression, dateTo.toLocalDateTime()));
                         } else {
                             if (dateFrom.getHourOfDay() == 0 && dateFrom.getMinuteOfDay() == 0 && dateFrom.getSecondOfDay() == 0) {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toDate()),
                                         builder.lessThan(expression, dateTo.plusDays(1).toDate()));
                             } else {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toDate()),
-                                        builder.lessThan(expression, dateTo.toDate()));
+                                        builder.greaterThanOrEqualTo(expression, dateTo.toDate()));
                             }
                         }
                     } else {
@@ -932,7 +932,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             matchValue = dateTime.toLocalDate();
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime;
+                            matchValue = dateTime.toLocalDateTime();
                         }
                     }
                     predicate = builder.greaterThan(expression, (Comparable) matchValue);
@@ -945,7 +945,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             matchValue = dateTime.toLocalDate();
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime;
+                            matchValue = dateTime.toLocalDateTime();
                         }
                     }
                     predicate = builder.greaterThanOrEqualTo(expression, (Comparable) matchValue);
@@ -960,7 +960,7 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             matchValue = dateTime.toLocalDate();
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime;
+                            matchValue = dateTime.toLocalDateTime();
                         }
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
@@ -970,18 +970,19 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 //<=
                 case LE:
                     Assert.notNull(matchValue, "Match value must be not null");
-                    // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
+                    // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2012-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValue instanceof Date) {
                         DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
                             matchValue = dateTime.toLocalDate();
+                            predicate = builder.lessThan(expression, (Comparable) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime;
+                            matchValue = dateTime.toLocalDateTime();
                         } else if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
                             matchValue = dateTime.plusDays(1).toDate();
+                            predicate = builder.lessThan(expression, (Comparable) matchValue);
                         }
-                        predicate = builder.lessThan(expression, (Comparable) matchValue);
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
                         predicate = builder.lessThanOrEqualTo(expression, (Comparable) matchValue);

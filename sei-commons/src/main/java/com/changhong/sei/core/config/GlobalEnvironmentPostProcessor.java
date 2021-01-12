@@ -127,6 +127,10 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
                 }
             }
 
+            // 对请求和响应进行gzip压缩，提高通信效率
+            properties.setProperty("feign.compression.request.enabled", "true");
+            properties.setProperty("feign.compression.response.enabled", "true");
+
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);
             // 本地配置文件优先，即当配置中心和本地配置文件存在相同key时，使用本地该key的配置值
             //environment.getPropertySources().addLast(source);
