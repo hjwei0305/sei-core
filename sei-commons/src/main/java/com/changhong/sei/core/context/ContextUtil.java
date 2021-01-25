@@ -1,5 +1,7 @@
 package com.changhong.sei.core.context;
 
+import com.changhong.sei.core.BaseVersion;
+import com.changhong.sei.core.Version;
 import com.changhong.sei.core.commoms.constant.Constants;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JwtTokenUtil;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -40,6 +43,7 @@ public final class ContextUtil implements Constants {
      * 版本管理
      */
     private static volatile Version currentVersion = null;
+    private static volatile Version platformVersion = null;
     private static Set<Version> versionSet;
 
     /**
@@ -354,23 +358,70 @@ public final class ContextUtil implements Constants {
      * 获取当前sei平台版本
      */
     public static Version getPlatformVersion() {
-        return new PlatformVersion();
+        if (Objects.isNull(platformVersion)) {
+            platformVersion = new PlatformVersion();
+        }
+        return platformVersion;
     }
 
     /**
      * 获取当前应用版本
      */
     public static Version getCurrentVersion() {
-//        String appCode = ContextUtil.getAppCode();
-//        Set<Version> versionSet = getDependVersions();
-//        for (Version version : versionSet) {
-//            if (StringUtils.equals(appCode, version.getName())) {
-//                return version;
-//            }
-//        }
         if (Objects.isNull(currentVersion)) {
-            currentVersion = Version.buildDefaultVersion();
+            currentVersion = new Version() {
+                String name;
+                String version;
+                String description;
+                String buildTime = FORMATTER.format(LocalDateTime.now());
+
+                @Override
+                public String getName() {
+                    if (StringUtils.isBlank(name)) {
+                        name = ApplicationContextHolder.getProperty("sei.application.code", UNDEFINED);
+                    }
+                    return name;
+                }
+
+                @Override
+                public String getDescription() {
+                    if (StringUtils.isBlank(description)) {
+                        description = ApplicationContextHolder.getProperty("sei.application.description", getName());
+                        if (description.startsWith("@")) {
+                            description = getName();
+                        }
+                    }
+                    return description;
+                }
+
+                @Override
+                public String getCurrentVersion() {
+                    if (StringUtils.isBlank(version)) {
+                        version = ApplicationContextHolder.getProperty("sei.application.version", LATEST);
+                        if (version.startsWith("@")) {
+                            version = LATEST;
+                        }
+                    }
+                    return version;
+                }
+
+                @Override
+                public String getCompleteVersionString() {
+                    return getName() + " " + getCurrentVersion();
+                }
+
+                @Override
+                public String getBuildTime() {
+                    return buildTime;
+                }
+
+                @Override
+                public String toString() {
+                    return getCompleteVersionString();
+                }
+            };
         }
+
         return currentVersion;
     }
 
@@ -382,13 +433,18 @@ public final class ContextUtil implements Constants {
             versionSet = Sets.newConcurrentHashSet();
         }
         if (versionSet.isEmpty()) {
+            Version version;
             Reflections reflections = new Reflections("com.changhong", new SubTypesScanner(true));
-            Set<Class<? extends Version>> allClasses = reflections.getSubTypesOf(Version.class);
-            for (Class<? extends Version> clazz : allClasses) {
+            Set<Class<? extends BaseVersion>> allClasses = reflections.getSubTypesOf(BaseVersion.class);
+            for (Class<? extends BaseVersion> clazz : allClasses) {
                 try {
-                    versionSet.add(clazz.newInstance());
+                    version = clazz.newInstance();
                 } catch (InstantiationException | IllegalAccessException e) {
+                    version = null;
                     LogUtil.error("读取应用版本异常", e);
+                }
+                if (Objects.nonNull(version) && !Objects.equals(Version.UNDEFINED, version.getName())) {
+                    versionSet.add(version);
                 }
             }
         }

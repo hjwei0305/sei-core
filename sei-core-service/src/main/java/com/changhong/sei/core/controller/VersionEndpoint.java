@@ -1,7 +1,7 @@
 package com.changhong.sei.core.controller;
 
+import com.changhong.sei.core.Version;
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.Version;
 import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

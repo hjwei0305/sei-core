@@ -1,7 +1,7 @@
 package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.Version;
+import com.changhong.sei.core.Version;
 import com.changhong.sei.exception.SeiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;

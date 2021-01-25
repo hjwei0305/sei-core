@@ -2,7 +2,7 @@ package com.changhong.sei.core.config;
 
 import com.changhong.sei.core.config.properties.SwaggerProperties;
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.context.Version;
+import com.changhong.sei.core.Version;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;

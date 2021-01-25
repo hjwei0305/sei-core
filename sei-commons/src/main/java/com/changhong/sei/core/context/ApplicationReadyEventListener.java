@@ -1,5 +1,6 @@
 package com.changhong.sei.core.context;
 
+import com.changhong.sei.core.Version;
 import com.changhong.sei.core.log.LogUtil;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
