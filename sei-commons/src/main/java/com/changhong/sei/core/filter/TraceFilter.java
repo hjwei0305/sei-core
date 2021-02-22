@@ -1,5 +1,6 @@
 package com.changhong.sei.core.filter;
 
+import com.changhong.sei.core.commoms.constant.Constants;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.util.IdGenerator;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
@@ -37,23 +38,18 @@ public class TraceFilter extends BaseWebFilter {
         MDC.put(ContextUtil.TRACE_ID, traceId);
         ThreadLocalUtil.setTranVar(ContextUtil.TRACE_ID, traceId);
 
-        //把本服务器名设置为 调用服务名
-        String currentAppCode = ContextUtil.getAppCode();
-
         //获取上个调用服务
-        String fromServer = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_FROM_SERVER);
-        if (StringUtils.isNotBlank(fromServer)) {
-            // 设置本地上个调用服务
-            ThreadLocalUtil.setLocalVar(ContextUtil.TRACE_FROM_SERVER, fromServer);
+        String caller = request.getHeader(Constants.HEADER_CALLER);
+        if (StringUtils.isBlank(caller)) {
+            //把本服务器名设置为 调用服务名
+            caller = ContextUtil.getAppCode();
         }
-        // 将当前服务设置为下个服务的调用服务
-        ThreadLocalUtil.setTranVar(ContextUtil.TRACE_FROM_SERVER, currentAppCode);
 
         String tracePath = ThreadLocalUtil.getTranVar(ContextUtil.TRACE_PATH);
         if (StringUtils.isBlank(tracePath)) {
             tracePath = "";
         }
-        tracePath = tracePath.concat(" > ").concat(currentAppCode);
+        tracePath = tracePath.concat(" > ").concat(caller);
         MDC.put(ContextUtil.TRACE_PATH, tracePath);
         ThreadLocalUtil.setTranVar(ContextUtil.TRACE_PATH, tracePath);
 

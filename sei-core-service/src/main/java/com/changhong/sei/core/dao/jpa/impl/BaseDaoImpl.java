@@ -51,8 +51,8 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
     protected final Class<T> domainClass;
     protected final EntityManager entityManager;
 
-    private static String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)";
-    private static Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+    private static final String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)";
+    private static final Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 
     protected boolean isValid(String str) {
         if (sqlPattern.matcher(str).find()) {

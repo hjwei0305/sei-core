@@ -51,6 +51,8 @@
     <logger name="druid" level="WARN"/>
     <logger name="com.alibaba" level="WARN"/>
     <logger name="com.zaxxer.hikari" level="WARN"/>
+    <!--  reflections  -->
+    <logger name="org.reflections" level="WARN"/>
 
     <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
     <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>

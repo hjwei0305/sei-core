@@ -1,5 +1,6 @@
 package com.changhong.sei.core.context;
 
+import com.changhong.sei.core.commoms.constant.Constants;
 import com.changhong.sei.util.thread.ThreadLocalHolder;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,8 @@ public final class HeaderHelper {
         if (StringUtils.isNotBlank(token)) {
             headers.put("Authorization", token);
         }
+        // 传递调用方
+        headers.put(Constants.HEADER_CALLER, ContextUtil.getAppCode());
 
         return headers;
     }

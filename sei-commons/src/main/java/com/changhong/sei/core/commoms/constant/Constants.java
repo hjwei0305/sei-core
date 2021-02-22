@@ -11,14 +11,16 @@ public interface Constants {
      * 请求头token key
      */
     String HEADER_TOKEN_KEY = "x-authorization";
+    /**
+     * 请求头调用者 key
+     */
+    String HEADER_CALLER = "caller";
 
     /**
      * 当前链路信息获取
      */
     String TRACE_ID = "traceId";
     String TRACE_PATH = "tracePath";
-    String TRACE_FROM_SERVER = "from_server";
-    String TRACE_CURRENT_SERVER = "current_server";
 
     String MDC_CLASS_NAME = "className";
     String MDC_METHOD_NAME = "methodName";
