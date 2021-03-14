@@ -30,6 +30,8 @@ public class LocalMockUser implements MockUser {
             BeanUtils.copyProperties(sessionUser, mockUser);
         } catch (Exception ignored) {
         }
+        sessionUser.setTenantCode(tenant);
+        sessionUser.setAccount(account);
         return mock(sessionUser);
     }
 
