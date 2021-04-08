@@ -28,7 +28,7 @@ public class HelloService {
         LogUtil.info("info测试");
         LogUtil.warn("warn测试");
         int i = 0, j = 0;
-        long m = i/j;
+//        long m = i/j;
 
 
         return ResultData.success(response);

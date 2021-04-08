@@ -5,6 +5,7 @@ import org.springframework.core.Ordered;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
@@ -62,6 +63,10 @@ public class TransactionUtil {
         td.setReadOnly(true);
         TransactionStatus status = getTransactionManager().getTransaction(td);
         return status;
+    }
+
+    public static TransactionStatus currentTransactionStatus() {
+        return TransactionAspectSupport.currentTransactionStatus();
     }
 
     /**

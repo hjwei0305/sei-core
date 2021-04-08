@@ -53,9 +53,9 @@
       "defaultValue": "SEI"
     },
     {
-      "name": "sei.application.name",
+      "name": "sei.application.description",
       "type": "java.lang.String",
-      "description": "应用名称",
+      "description": "描述说明",
       "sourceType": "com.changhong.sei.core.config.properties.global.GlobalProperties",
       "defaultValue": "SEI"
     },

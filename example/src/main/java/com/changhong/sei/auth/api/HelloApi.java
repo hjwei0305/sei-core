@@ -24,9 +24,19 @@ public interface HelloApi {
     /**
      * 登录
      */
-    @PostMapping(path = "hello")
-    @ApiOperation("hello")
-    ResultData<UserResponse> hello(HelloRequest request);
+    @PostMapping(path = "login")
+    @ApiOperation("登录")
+    ResultData<UserResponse> login(HelloRequest request);
+
+    /**
+     * 你好
+     *
+     * @param name 姓名
+     * @return 返回句子
+     */
+    @GetMapping(path = "sayHello")
+    @ApiOperation("你好")
+    ResultData<String> sayHello(@RequestParam("name") String name);
 
     /**
      * 获取匿名token

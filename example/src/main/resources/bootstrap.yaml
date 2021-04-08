@@ -5,8 +5,8 @@ spring:
     config:
       profile: DEV
       name: ${spring.application.name}
-    zookeeper:
-      enabled: false
+#    zookeeper:
+#      enabled: false
 
 sei:
   # 本地调试的当前用户配置
@@ -15,7 +15,3 @@ sei:
       tenant-code: 10044
       account: admin
       user-name: 管理员
-
-  log:
-    remote:
-      host: 10.4.208.132:5044

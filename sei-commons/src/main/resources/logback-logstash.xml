@@ -47,8 +47,8 @@
                             "tenantCode": "%X{tenantCode}",
                             "accessToken": "%X{accessToken}",
 
-                            "classMethod": "%X{classMethod}",
-                            "args": "%X{args}",
+                            "classMethod": "%X{className:-}#%X{methodName:-}",
+                            "args": "%X{args:-}",
 
                             "timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}",
                             "trace_id": "%X{traceId}",

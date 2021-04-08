@@ -23,7 +23,7 @@ public class HelloAspect {
     /**
      * 拦截@see com.changhong.sei.auth.controller.HelloController#hello 方法的返回,记录登录历史
      */
-    @AfterReturning(value = "execution(* com.changhong.sei.auth.controller.HelloController.hello(..))", argNames = "joinPoint, result", returning = "result")
+    @AfterReturning(value = "execution(* com.changhong.sei.auth.controller.HelloController.login(..))", argNames = "joinPoint, result", returning = "result")
     public void afterReturning(JoinPoint joinPoint, ResultData<UserResponse> result) {
         Object[] args = joinPoint.getArgs();
         if (Objects.nonNull(args) && args.length == 1) {
