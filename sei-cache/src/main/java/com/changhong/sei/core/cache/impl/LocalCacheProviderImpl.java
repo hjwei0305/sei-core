@@ -23,6 +23,7 @@ import java.util.function.Function;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-04-01 10:01
  */
+@SuppressWarnings("unchecked")
 public class LocalCacheProviderImpl implements CacheProviderService {
     private static final Map<String, Cache<String, Object>> CACHE_CONCURRENT_MAP = Maps.newConcurrentMap();
 
@@ -221,7 +222,7 @@ public class LocalCacheProviderImpl implements CacheProviderService {
         return exists;
     }
 
-    private static Lock lock = new ReentrantLock();
+    private static final Lock lock = new ReentrantLock();
 
     private Cache<String, Object> getCacheContainer(Long expireTime) {
         Cache<String, Object> cacheContainer = null;
