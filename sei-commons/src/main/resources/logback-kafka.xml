@@ -6,7 +6,7 @@
 
     <!-- 读取当前应用Environment中的属性. 读取application.yml中的值 -->
     <springProperty scope="context" name="bootstrapServers" source="spring.kafka.bootstrap-servers" defaultValue="localhost:9092"/>
-    <springProperty scope="context" name="logTopic" source="spring.kafka.logger-topic" defaultValue="SeiLoggerPlatform"/>
+    <springProperty scope="context" name="logTopic" source="sei.topic.logger" defaultValue="SeiLoggerPlatform"/>
 <!--    <springProperty scope="context" name="IP" source="spring.cloud.client.ipAddress" />-->
 
     <!-- kafka的appender配置 -->
