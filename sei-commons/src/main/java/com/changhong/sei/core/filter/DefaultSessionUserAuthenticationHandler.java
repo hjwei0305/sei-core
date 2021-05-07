@@ -7,6 +7,7 @@ import com.changhong.sei.util.thread.ThreadLocalUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -35,10 +36,11 @@ public class DefaultSessionUserAuthenticationHandler implements SessionUserAuthe
             }
         }
 
+//        AntPathMatcher antPathMatcher = new AntPathMatcher();
+
         ignoreAuthURLSet.add(Pattern.compile(".*?/csrf.*", Pattern.CASE_INSENSITIVE));
-        // 实时日志监控 忽略会话检查
-        ignoreAuthURLSet.add(Pattern.compile(".*?/websocket/log.*", Pattern.CASE_INSENSITIVE));
-        ignoreAuthURLSet.add(Pattern.compile(".*?/websocket/logging.*", Pattern.CASE_INSENSITIVE));
+        // 忽略websocket会话检查
+        ignoreAuthURLSet.add(Pattern.compile(".*?/websocket/.*", Pattern.CASE_INSENSITIVE));
     }
 
     @Override
