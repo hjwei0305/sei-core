@@ -67,7 +67,9 @@ public class DefaultSessionUserAuthenticationHandler implements SessionUserAuthe
             }
         }
 
-        LOG.debug("{} 请求token: {}", path, token);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("{} 请求token: {}", path, token);
+        }
         if (token.startsWith("Bearer ")) {
             // 截取token
             token = token.substring("Bearer ".length());
@@ -76,7 +78,9 @@ public class DefaultSessionUserAuthenticationHandler implements SessionUserAuthe
         // 检查token
         try {
             SessionUser user = ContextUtil.getSessionUser(token);
-            LOG.info("{} 当前用户: {}", path, user);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("{} 当前用户: {}", path, user);
+            }
             return ResultData.success(user);
         } catch (Exception e) {
             LOG.error("token不合法,认证失败. path: {}, token: {}", path, token);

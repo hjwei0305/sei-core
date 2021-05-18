@@ -77,8 +77,9 @@ public class CacheBuilder {
                 // 设置分布式缓存版本号
                 resetCacheVersion();
             }
-
-            LOG.info("初始化缓存提供者成功，共有" + listCacheProvider.size() + "个");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("初始化缓存提供者成功，共有{}个", listCacheProvider.size());
+            }
         } catch (Exception e) {
             listCacheProvider = Lists.newLinkedList();
 

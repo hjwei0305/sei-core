@@ -33,7 +33,9 @@ public class ThreadLocalTranVarFilter extends BaseWebFilter {
             while (headers.hasMoreElements()) {
                 String key = headers.nextElement();
                 if (StringUtils.isNotBlank(key) && key.startsWith(ThreadLocalUtil.TRAN_PREFIX)) {
-                    LOG.info("从请求头设置可传播的线程变量: {}", key);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("从请求头设置可传播的线程变量: {}", key);
+                    }
                     ThreadLocalUtil.setTranVar(key.substring(length), request.getHeader(key));
                 }
             }

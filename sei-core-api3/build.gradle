@@ -12,9 +12,11 @@ dependencies {
     compile project(':sei-commons')
     compile(
             "org.springframework.boot:spring-boot-starter-web",
-            "org.springframework.cloud:spring-cloud-starter-openfeign",
-            "io.springfox:springfox-swagger2:$foxSwaggerVersion"
+            "org.springframework.cloud:spring-cloud-starter-openfeign"
     )
+    // swagger
+    compile("io.swagger:swagger-annotations:1.5.22")
+//    compile("io.springfox:springfox-swagger2:$foxSwaggerVersion")
 }
 
 //打jar包

@@ -24,7 +24,7 @@ public abstract class BaseEntity extends AbstractEntity<String> {
      * 主键
      */
     @Id
-    @Column(length = 36)
+    @Column(length = 36, updatable = false)
     protected String id;
 
     @Override
