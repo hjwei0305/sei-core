@@ -1,5 +1,6 @@
 package com.changhong.sei.core.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ public class TreeNodeMoveParam implements Serializable {
     /**
      * 要移动的节点Id
      */
+    @NotBlank
     private String nodeId;
 
     /**

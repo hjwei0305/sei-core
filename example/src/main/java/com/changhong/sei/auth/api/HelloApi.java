@@ -18,6 +18,7 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-01-14 14:13
  */
+@Valid
 @RequestMapping(path = "demo", produces = MediaType.APPLICATION_JSON_VALUE)
 public interface HelloApi {
 
@@ -26,7 +27,7 @@ public interface HelloApi {
      */
     @PostMapping(path = "login")
     @ApiOperation("登录")
-    ResultData<UserResponse> login(HelloRequest request);
+    ResultData<UserResponse> login(@Valid @RequestBody HelloRequest request);
 
     /**
      * 你好
@@ -36,7 +37,7 @@ public interface HelloApi {
      */
     @GetMapping(path = "sayHello")
     @ApiOperation("你好")
-    ResultData<String> sayHello(@RequestParam("name") String name);
+    ResultData<String> sayHello(@RequestParam("name") @NotBlank String name);
 
     /**
      * 获取匿名token
