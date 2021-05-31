@@ -2,4 +2,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.changhong.sei.core.config.JpaAutoConfiguration,\
     com.changhong.sei.core.config.ServiceAutoConfiguration,\
-    com.changhong.sei.core.config.SwaggerConfiguration
+    com.changhong.sei.core.config.SwaggerConfiguration,\
+    com.changhong.sei.core.config.HttpFilterAutoConfiguration,\
+    com.changhong.sei.core.error.GlobalExceptionTranslator

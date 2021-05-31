@@ -9,6 +9,8 @@ dependencies {
     compile(
             "com.changhong.sei:sei-util:$util_version"
     )
+    compile("org.apache.httpcomponents:httpclient")
+    compile("org.apache.httpcomponents:httpmime")
 
     // 第三方的依赖
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"

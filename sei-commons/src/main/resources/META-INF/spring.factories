@@ -9,7 +9,5 @@ org.springframework.boot.env.EnvironmentPostProcessor=\
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.changhong.sei.core.config.DefaultAutoConfiguration,\
-  com.changhong.sei.core.config.HttpFilterAutoConfiguration,\
   com.changhong.sei.core.context.async.ThreadPoolTaskConfig,\
-  com.changhong.sei.core.log.config.LogAutoConfiguration,\
-  com.changhong.sei.core.error.GlobalExceptionTranslator
+  com.changhong.sei.core.log.config.LogAutoConfiguration

@@ -75,25 +75,6 @@ public class DefaultAutoConfiguration {
         return jwtTokenUtil;
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public Validator validator() {
-        Locale.setDefault(new Locale("zh", "CN"));
-//        Validator validator = Validation.byDefaultProvider().configure()
-//                .messageInterpolator(
-//                        new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("ValidationMessages")))
-//                .buildValidatorFactory().getValidator();
-
-        ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
-                .configure()
-                // 配置hibernate Validator为快速失败返回模式
-//                .failFast(true)
-                // 使用该方式配置,否则影响webflux环境的使用,如网关服务
-                .addProperty("hibernate.validator.fail_fast", "true")
-                .buildValidatorFactory();
-        return validatorFactory.getValidator();
-    }
-
 //    @Bean
 //    @Primary
 //    public ObjectMapper jacksonObjectMapper() {

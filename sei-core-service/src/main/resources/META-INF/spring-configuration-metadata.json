@@ -5,9 +5,19 @@
       "name": "sei.swagger",
       "type": "com.changhong.sei.core.config.properties.SwaggerProperties",
       "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties"
+    },
+
+    {
+      "name": "sei.http.filter",
+      "type": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties"
+    },
+    {
+      "name": "sei.http.filter.cors",
+      "type": "com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
+      "sourceMethod": "getCors()"
     }
-
-
   ],
   "properties": [
     {
@@ -34,6 +44,48 @@
       "type": "java.lang.String",
       "description": "版本",
       "sourceType": "com.changhong.sei.core.config.properties.SwaggerProperties"
+    },
+
+
+    {
+      "name": "sei.http.filter.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启sei平台定义的http filter",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "sei.http.filter.ignore-auth-url",
+      "type": "java.lang.String[]",
+      "description": "忽略认证的url",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.FilterProperties"
+    },
+    {
+      "name": "sei.http.filter.cors.allowedOrigins",
+      "type": "java.lang.String[]",
+      "description": "允许访问域名列表",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties",
+      "defaultValue": [
+        "*"
+      ]
+    },
+    {
+      "name": "sei.http.filter.cors.allowedMethods",
+      "type": "java.lang.String[]",
+      "description": "允许方法列表",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties",
+      "defaultValue": [
+        "*"
+      ]
+    },
+    {
+      "name": "sei.http.filter.cors.allowedHeaders",
+      "type": "java.lang.String[]",
+      "description": "允许头访问列表",
+      "sourceType": "com.changhong.sei.core.config.properties.http.filter.cors.CorsProperties",
+      "defaultValue": [
+        "*"
+      ]
     }
   ]
 }
