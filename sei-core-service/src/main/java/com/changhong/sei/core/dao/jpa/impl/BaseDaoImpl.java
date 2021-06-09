@@ -27,6 +27,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -483,12 +484,6 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
      */
     @Override
     public T findFirstByProperty(final String property, final Object value) {
-        Sort sort = Sort.unsorted();
-        if (IRank.class.isAssignableFrom(domainClass)) {
-            sort = Sort.by(Sort.Direction.ASC, IRank.RANK);
-        }
-        Pageable pageable = PageRequest.of(0, 1, sort);
-
         SearchFilter searchFilter = new SearchFilter(property, value, SearchFilter.Operator.EQ, null);
 
         Specification<T> spec = (root, query, builder) -> {
@@ -502,9 +497,15 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
             }
             return predicate;
         };
-        Page<T> page = findAll(spec, pageable);
         T result = null;
-        List<T> list = page.getContent();
+        Sort sort = Sort.unsorted();
+        if (IRank.class.isAssignableFrom(domainClass)) {
+            sort = Sort.by(Sort.Direction.ASC, IRank.RANK);
+        }
+        TypedQuery<T> query = super.getQuery(spec, sort);
+        query.setFirstResult(0);
+        query.setMaxResults(1);
+        List<T> list = query.getResultList();
         if (CollectionUtils.isNotEmpty(list)) {
             result = list.get(0);
         }
