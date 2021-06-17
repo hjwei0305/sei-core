@@ -45,4 +45,21 @@ public final class SeiLockHelper {
         return locked;
     }
 
+    /**
+     * 手动解除资源锁
+     *
+     * @param key 资源key
+     * @return 返回true-已解除,反之未解除
+     */
+    public static boolean unlock(String key) {
+        boolean locked = true;
+        try {
+            LockLimiter lockLimiter = ContextUtil.getBean(LockLimiter.class);
+            lockLimiter.unlock(key);
+        } catch (BeansException e) {
+            locked = false;
+        }
+        return locked;
+    }
+
 }

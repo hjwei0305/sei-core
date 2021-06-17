@@ -34,7 +34,7 @@ public class LocalCacheProviderImpl implements CacheProviderService {
     }
 
     static {
-        Cache<String, Object> cacheContainer = buildCacheContainer(100, 600000);
+        Cache<String, Object> cacheContainer = buildCacheContainer(512, 600000);
 
         CACHE_CONCURRENT_MAP.put(String.valueOf(600000), cacheContainer);
     }
