@@ -804,13 +804,14 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     else if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime.toLocalDate()),
-                                    builder.lessThan(expression, dateTime.plusDays(1).toLocalDate()));
+                            LocalDate dateTime = DateUtils.date2LocalDate((Date) matchValue);
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime),
+                                    builder.lessThan(expression, dateTime.plusDays(1)));
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime.toLocalDateTime();
+                            matchValue = DateUtils.date2LocalDateTime((Date) matchValue);
                         } else {
+                            DateTime dateTime = new DateTime(matchValue);
                             if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateTime.toDate()),
                                         builder.lessThan(expression, dateTime.plusDays(1).toDate()));
@@ -828,13 +829,14 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     else if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            matchValue = DateUtils.date2LocalDate((Date) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            predicate = builder.or(builder.lessThan(expression, dateTime.toLocalDateTime()),
-                                    builder.greaterThan(expression, dateTime.plusDays(1).toLocalDateTime()));
+                            LocalDateTime dateTime = DateUtils.date2LocalDateTime((Date) matchValue);
+                            predicate = builder.or(builder.lessThan(expression, dateTime),
+                                    builder.greaterThan(expression, dateTime.plusDays(1)));
                         } else {
+                            DateTime dateTime = new DateTime(matchValue);
                             if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
                                 predicate = builder.or(builder.lessThan(expression, dateTime.toDate()),
                                         builder.greaterThan(expression, dateTime.plusDays(1).toDate()));
@@ -902,16 +904,19 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2012-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValues[0] instanceof Date) {
-                        DateTime dateFrom = new DateTime(matchValues[0]);
-                        DateTime dateTo = new DateTime(matchValues[1]);
-
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toLocalDate()),
-                                    builder.lessThan(expression, dateTo.plusDays(1).toLocalDate()));
+                            LocalDate dateFrom = DateUtils.date2LocalDate((Date) matchValues[0]);
+                            LocalDate dateTo = DateUtils.date2LocalDate((Date) matchValues[1]);
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom),
+                                    builder.lessThan(expression, dateTo.plusDays(1)));
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toLocalDateTime()),
-                                    builder.greaterThanOrEqualTo(expression, dateTo.toLocalDateTime()));
+                            LocalDateTime dateFrom = DateUtils.date2LocalDateTime((Date) matchValues[0]);
+                            LocalDateTime dateTo = DateUtils.date2LocalDateTime((Date) matchValues[1]);
+                            predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom),
+                                    builder.greaterThanOrEqualTo(expression, dateTo));
                         } else {
+                            DateTime dateFrom = new DateTime(matchValues[0]);
+                            DateTime dateTo = new DateTime(matchValues[1]);
                             if (dateFrom.getHourOfDay() == 0 && dateFrom.getMinuteOfDay() == 0 && dateFrom.getSecondOfDay() == 0) {
                                 predicate = builder.and(builder.greaterThanOrEqualTo(expression, dateFrom.toDate()),
                                         builder.lessThan(expression, dateTo.plusDays(1).toDate()));
@@ -928,11 +933,10 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 case GT:
                     Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            matchValue = DateUtils.date2LocalDate((Date) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime.toLocalDateTime();
+                            matchValue = DateUtils.date2LocalDateTime((Date) matchValue);
                         }
                     }
                     predicate = builder.greaterThan(expression, (Comparable) matchValue);
@@ -941,11 +945,10 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 case GE:
                     Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            matchValue = DateUtils.date2LocalDate((Date) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime.toLocalDateTime();
+                            matchValue = DateUtils.date2LocalDateTime((Date) matchValue);
                         }
                     }
                     predicate = builder.greaterThanOrEqualTo(expression, (Comparable) matchValue);
@@ -956,11 +959,10 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2010-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            matchValue = DateUtils.date2LocalDate((Date) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime.toLocalDateTime();
+                            matchValue = DateUtils.date2LocalDateTime((Date) matchValue);
                         }
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
@@ -973,15 +975,17 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                     // 对日期特殊处理：一般用于区间日期的结束时间查询,如查询2012-01-01之前,一般需要显示2012-01-01当天及以前的数据,
                     // 而数据库一般存有时分秒,因此需要特殊处理把当前日期+1天,转换为<2012-01-02进行查询
                     if (matchValue instanceof Date) {
-                        DateTime dateTime = new DateTime(matchValue);
                         if (expression.getJavaType().isAssignableFrom(LocalDate.class)) {
-                            matchValue = dateTime.toLocalDate();
+                            matchValue = DateUtils.date2LocalDate((Date) matchValue);
                             predicate = builder.lessThan(expression, (Comparable) matchValue);
                         } else if (expression.getJavaType().isAssignableFrom(LocalDateTime.class)) {
-                            matchValue = dateTime.toLocalDateTime();
-                        } else if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
-                            matchValue = dateTime.plusDays(1).toDate();
-                            predicate = builder.lessThan(expression, (Comparable) matchValue);
+                            matchValue = DateUtils.date2LocalDateTime((Date) matchValue);
+                        } else {
+                            DateTime dateTime = new DateTime(matchValue);
+                            if (dateTime.getHourOfDay() == 0 && dateTime.getMinuteOfDay() == 0 && dateTime.getSecondOfDay() == 0) {
+                                matchValue = dateTime.plusDays(1).toDate();
+                                predicate = builder.lessThan(expression, (Comparable) matchValue);
+                            }
                         }
                     }
                     if (predicate == null && matchValue instanceof Comparable) {
