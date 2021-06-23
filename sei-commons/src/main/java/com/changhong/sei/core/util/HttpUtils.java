@@ -597,6 +597,13 @@ public final class HttpUtils {
     }
 
     /**
+     * 获取客户端信息
+     */
+    public static String getUserAgent(HttpServletRequest request) {
+        return request.getHeader("user-agent");
+    }
+
+    /**
      * 获取客户端请求ip
      */
     public static String getClientIP(HttpServletRequest request, String... otherHeaderNames) {

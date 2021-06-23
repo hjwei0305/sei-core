@@ -8,6 +8,6 @@ include 'sei-core-api'
 include 'example'
 include 'sei-core-entity3'
 include 'sei-core-api3'
-include 'sei-core-monitor'
+//include 'sei-core-monitor'
 include 'sei-limiter'
 

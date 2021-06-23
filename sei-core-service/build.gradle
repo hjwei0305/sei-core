@@ -13,7 +13,6 @@ dependencies {
     compile project(':sei-commons')
     compile project(':sei-cache')
     compile project(':sei-core-entity3')
-//    compile project(':sei-core-monitor')
     compile project(':sei-limiter')
 
     // 第三方的依赖
