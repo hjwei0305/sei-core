@@ -21,8 +21,8 @@ public class SessionUser implements Serializable {
     /**
      * 匿名用户名称
      */
-    private final static String ANONYMOUS = "anonymous";
-    private final static String UNKNOWN = "Unknown";
+    public final static String ANONYMOUS = "anonymous";
+    public final static String UNKNOWN = "Unknown";
 
     /**
      * 会话id
