@@ -583,10 +583,11 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
         Specification<T> spec = buildSpecification(searchConfig);
         // 排序
         Sort sort = buildSort(searchConfig);
-        // 只查询一条
-        Pageable pageable = PageRequest.of(0, 1, sort);
-        Page<T> page = findAll(spec, pageable);
-        List<T> list = page.getContent();
+
+        TypedQuery<T> query = super.getQuery(spec, sort);
+        query.setFirstResult(0);
+        query.setMaxResults(1);
+        List<T> list = query.getResultList();
         if (CollectionUtils.isNotEmpty(list)) {
             return list.get(0);
         }
