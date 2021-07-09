@@ -263,6 +263,17 @@ public class FlowTask implements Serializable {
      */
     private Boolean allowSubtractSign;//允许减签
 
+    /**
+     * 新任务自动执行
+     */
+    private Boolean newTaskAuto;
+
+    /**
+     * 已办审批状态
+     */
+    private  String   approveStatus;
+
+
 
     /**
      * 租户代码
@@ -752,6 +763,22 @@ public class FlowTask implements Serializable {
 
     public void setLastEditedDate(Date lastEditedDate) {
         this.lastEditedDate = lastEditedDate;
+    }
+
+    public Boolean getNewTaskAuto() {
+        return newTaskAuto;
+    }
+
+    public void setNewTaskAuto(Boolean newTaskAuto) {
+        this.newTaskAuto = newTaskAuto;
+    }
+
+    public String getApproveStatus() {
+        return approveStatus;
+    }
+
+    public void setApproveStatus(String approveStatus) {
+        this.approveStatus = approveStatus;
     }
 
     @Override
