@@ -530,46 +530,8 @@ public final class HttpUtils {
         return servletRequestAttributes.getResponse();
     }
 
-//    /**
-//     * 写cookie，base64编码
-//     * cookie name 为 默认的_s
-//     *
-//     * @see ContextUtil#REQUEST_SID_KEY
-//     */
-//    public static void writeDefaultCookieValue(String value, HttpServletRequest request, HttpServletResponse response) {
-//        byte[] encodedCookieBytes = Base64.getEncoder().encode(value.getBytes());
-//        String baseVal = new String(encodedCookieBytes);
-//
-//        Cookie sessionCookie = new Cookie(ContextUtil.REQUEST_SID_KEY, baseVal);
-//        sessionCookie.setSecure(request.isSecure());
-//        sessionCookie.setPath("/");
-//        sessionCookie.setHttpOnly(true);
-//        //设置Cookie最大生存时间,以秒为单位,负数的话为浏览器进程,关闭浏览器Cookie消失
-//        sessionCookie.setMaxAge(-1);
-//        response.addCookie(sessionCookie);
-//    }
-//
-//    /**
-//     * 写cookie，base64编码
-//     * cookie name 为 默认的_s
-//     *
-//     * @see ContextUtil#REQUEST_SID_KEY
-//     */
-//    public static String readDefaultCookieValue(HttpServletRequest request) {
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null && cookies.length > 0) {
-//            for (Cookie cookie : cookies) {
-//                if (ContextUtil.REQUEST_SID_KEY.equals(cookie.getName())) {
-//                    byte[] encodedCookieBytes = Base64.getDecoder().decode(cookie.getValue());
-//                    return new String(encodedCookieBytes);
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
     /**
-     * 写cookie，base64编码
+     * 写cookie
      */
     public static void writeCookieValue(String name, String value, HttpServletRequest request, HttpServletResponse response) {
         Cookie sessionCookie = new Cookie(name, value);
@@ -582,7 +544,7 @@ public final class HttpUtils {
     }
 
     /**
-     * 写cookie，base64编码
+     * 写cookie
      */
     public static String readCookieValue(String name, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -594,6 +556,21 @@ public final class HttpUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 删除指定名称的cookie
+     */
+    public static void deleteCookie(String name, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length > 0) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    // 当设置为0的时候：创建完cookie，使用后马上就删除
+                    cookie.setMaxAge(0);
+                }
+            }
+        }
     }
 
     /**
