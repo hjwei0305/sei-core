@@ -157,4 +157,20 @@ public abstract class BaseController<T extends BaseEntity, D extends BaseEntityD
         }
         return entityModelMapper.map(dto, getEntityClass());
     }
+
+    /**
+     * 将业务实体清单转换成数据实体清单
+     * @param dtos 业务实体清单
+     * @return 数据实体清单
+     */
+    public List<T> convertToEntities(List<D> dtos) {
+        if (Objects.isNull(dtos)) {
+            return null;
+        }
+        if (CollectionUtils.isEmpty(dtos)) {
+            return new ArrayList<>();
+        }
+        return dtos.stream().map(this::convertToEntity).collect(Collectors.toList());
+    }
+
 }
