@@ -2,6 +2,7 @@ package com.changhong.sei.core.cache.config;
 
 import com.changhong.sei.core.cache.config.properties.SeiCacheProperties;
 import com.changhong.sei.core.config.DefaultAutoConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -27,6 +29,8 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.StringUtils;
+
+import java.time.Duration;
 
 /**
  * Redis配置类.
@@ -44,8 +48,12 @@ import org.springframework.util.StringUtils;
 @AutoConfigureAfter(DefaultAutoConfiguration.class)
 @EnableConfigurationProperties({SeiCacheProperties.class, RedisProperties.class})
 public class RedisAutoConfiguration extends CachingConfigurerSupport {
-
     private final RedisConnectionFactory connectionFactory;
+
+    // @Value("${spring.application.name:unknown}")
+    // private String appName;
+    @Value("${spring.redis.timeToLive:1d}")
+    private Duration timeToLive;
 
     public RedisAutoConfiguration(LettuceConnectionFactory factory) {
 //        factory.setValidateConnection(true);
@@ -56,8 +64,16 @@ public class RedisAutoConfiguration extends CachingConfigurerSupport {
     @Override
     @Bean
     public CacheManager cacheManager() {
-        RedisCacheManager cacheManager = RedisCacheManager.create(connectionFactory);
-        return cacheManager;
+        // 配置序列化（解决乱码的问题）
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(timeToLive)
+                // .prefixCacheNameWith(appName + ":")
+                // 是否允许控制存储
+                .disableCachingNullValues();
+
+        return RedisCacheManager.builder(connectionFactory)
+                .cacheDefaults(config)
+                .build();
     }
 
     // 以下两种redisTemplate自由根据场景选择

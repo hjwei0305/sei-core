@@ -67,6 +67,13 @@ import java.util.*;
  */
 @SuppressWarnings("unchecked")
 public final class JsonUtils {
+
+    private static final ObjectMapper DEFAULT_OBJECT_MAPPER;
+
+    static {
+        DEFAULT_OBJECT_MAPPER = generateMapper(JsonInclude.Include.ALWAYS);
+    }
+
     /**
      * 通过Inclusion创建ObjectMapper对象
      * <p/>
@@ -130,7 +137,7 @@ public final class JsonUtils {
     }
 
     /**
-         * 将json通过类型转换成对象
+     * 将json通过类型转换成对象
      * <pre>
      *     {@link JsonUtils JsonUtil}.fromJson("{\"username\":\"username\", \"password\":\"password\"}", User.class);
      * </pre>
@@ -268,7 +275,7 @@ public final class JsonUtils {
             return (String) src;
         } else {
             try {
-                ObjectMapper om = generateMapper((null == inclusion) ? JsonInclude.Include.ALWAYS : inclusion);
+                ObjectMapper om = (null == inclusion) ? DEFAULT_OBJECT_MAPPER : generateMapper(inclusion);
                 if (null != properties && properties.length > 0) {
                     FilterProvider fp = new SimpleFilterProvider().addFilter("customFilter", SimpleBeanPropertyFilter.serializeAllExcept(properties));
                     om.setFilterProvider(fp);
@@ -380,6 +387,7 @@ public final class JsonUtils {
     }
 
     ////////////////////////
+
     /**
      * 当序列化类型为array，list、set时，当值为空时，序列化成[]
      * 为数值类型时，当值为空时，序列化成0
