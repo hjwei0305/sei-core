@@ -29,6 +29,13 @@ dependencies {
             // 日期工具类
             "joda-time:joda-time:$jodaTimeVersion"
     )
+    // DB
+    compile(
+            // mysql
+            "mysql:mysql-connector-java",
+            // postgresql
+            "org.postgresql:postgresql"
+    )
 
     // logback <if>标签
     // compile("org.codehaus.janino:janino:3.1.0")

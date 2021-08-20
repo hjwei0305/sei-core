@@ -98,7 +98,7 @@ public final class JsonUtils {
         objectMapper.setSerializationInclusion(include);
 
         //设置为中国上海时区
-        //objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         //取消时间的转化格式,默认是时间戳,可以取消,同时需要设置要表现的时间格式
 //        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
