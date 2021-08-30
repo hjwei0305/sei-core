@@ -22,8 +22,6 @@ public @interface Desensitization {
 
     /**
      * 脱敏类型
-     *
-     * @author yx
      */
     enum DesensitizationType {
         /**

@@ -10,7 +10,6 @@ import com.changhong.sei.enums.UserType;
 import com.changhong.sei.util.EnumUtils;
 import com.changhong.sei.util.IdGenerator;
 import com.changhong.sei.util.thread.ThreadLocalUtil;
-import com.google.common.collect.Sets;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
@@ -421,7 +420,7 @@ public final class ContextUtil implements Constants {
      */
     public static Set<Version> getDependVersions() {
         if (versionSet == null) {
-            versionSet = Sets.newConcurrentHashSet();
+            versionSet = new HashSet<>();
         }
         if (versionSet.isEmpty()) {
             Version version;

@@ -24,8 +24,9 @@ public class QueryFieldMappingUtil {
     public static Map<String, String> getMappings(Class<?> clazz) {
         Map<String, String> mappings = new LinkedHashMap<>();
         Field[] fields = clazz.getDeclaredFields();
+        QueryFieldMapping annotation;
         for (Field field : fields) {
-            QueryFieldMapping annotation = field.getAnnotation(QueryFieldMapping.class);
+            annotation = field.getAnnotation(QueryFieldMapping.class);
             if (Objects.nonNull(annotation)) {
                 mappings.put(field.getName(), annotation.value());
             }

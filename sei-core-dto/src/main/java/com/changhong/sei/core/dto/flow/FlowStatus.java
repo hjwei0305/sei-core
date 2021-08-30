@@ -16,22 +16,22 @@ import java.io.Serializable;
  * <p/>
  * *************************************************************************************************
  */
-public enum FlowStatus implements Serializable{
+public enum FlowStatus implements Serializable {
 
     /**
      * 未进入流程
      */
-    @Remark("初始化状态")
+    @Remark(value = "FlowStatus_INIT", comments = "初始化状态")
     INIT("init"),
     /**
      * 流程处理中
      */
-    @Remark("流程中")
+    @Remark(value = "FlowStatus_INPROCESS", comments = "流程中")
     INPROCESS("inProcess"),
     /**
      * 流程处理完成
      */
-    @Remark("流程处理完成")
+    @Remark(value = "FlowStatus_COMPLETED", comments = "流程处理完成")
     COMPLETED("completed");
 
     private String value;

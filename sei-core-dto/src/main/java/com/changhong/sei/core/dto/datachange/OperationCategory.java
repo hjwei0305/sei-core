@@ -12,18 +12,18 @@ public enum OperationCategory {
     /**
      * 创建
      */
-    @Remark(value = "创建")
+    @Remark(value = "OperationCategory_CREATE", comments = "创建")
     CREATE,
 
     /**
      * 更新
      */
-    @Remark(value = "更新")
+    @Remark(value = "OperationCategory_UPDATE", comments = "更新")
     UPDATE,
 
     /**
      * 删除
      */
-    @Remark(value = "删除")
+    @Remark(value = "OperationCategory_DELETE", comments = "删除")
     DELETE
 }

@@ -24,17 +24,19 @@ public enum FlowDefinationStatus implements Serializable{
     /**
      * 未发布
      */
-    @Remark("未发布")
+    @Remark(value = "FlowDefinationStatus_INIT", comments = "未发布")
     INIT,
     /**
      * 激活
+     * 已经发布并可用
      */
-    @Remark("激活")//已经发布并可用
+    @Remark(value = "FlowDefinationStatus_Activate", comments = "激活")
     Activate,
 
     /**
      * 冻结
+     * 已经发布，并手动冻结
      */
-    @Remark("冻结")//已经发布，并手动冻结
+    @Remark(value = "FlowDefinationStatus_Freeze", comments = "冻结")
     Freeze;
 }

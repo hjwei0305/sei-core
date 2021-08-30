@@ -1,6 +1,7 @@
 package com.changhong.sei.core.error;
 
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.exception.WebException;
@@ -143,7 +144,8 @@ public class GlobalExceptionTranslator {
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({SQLException.class})
     public ResultData<String> handleSQLException(SQLException e) {
-        return result("服务运行SQLException异常: " + ExceptionUtils.getRootCauseMessage(e), e);
+        // 服务运行SQLException异常
+        return result(ContextUtil.getMessage("core_service_00041", ExceptionUtils.getRootCauseMessage(e)), e);
     }
 
     /**
