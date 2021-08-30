@@ -131,6 +131,18 @@ public final class ContextUtil implements Constants {
 
     /**
      * @param key  多语言key
+     * @return 返回语意
+     */
+    public static String getMessage(String key) {
+        if (null != key && key.trim().length() > 0) {
+            return ApplicationContextHolder.getMessage(key, null, getLocale());
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * @param key  多语言key
      * @param args 填充参数 如：key=参数A{0},参数B{1}  此时的args={"A", "B"}
      * @return 返回语意
      */
