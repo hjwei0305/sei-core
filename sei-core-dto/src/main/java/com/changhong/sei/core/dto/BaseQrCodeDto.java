@@ -13,13 +13,13 @@ import java.io.Serializable;
 public class BaseQrCodeDto implements Serializable {
     private static final long serialVersionUID = -9054497872525138915L;
 
-    private String tenant;
+    private String tenantCode;
 
-    public String getTenant() {
-        return tenant;
+    public String getTenantCode() {
+        return tenantCode;
     }
 
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setTenantCode(String tenantCode) {
+        this.tenantCode = tenantCode;
     }
 }
