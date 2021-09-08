@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -218,6 +219,22 @@ public final class JsonUtils {
             }
         } catch (Exception e) {
             throw new RuntimeException("不能序列化对象为Json", e);
+        }
+    }
+
+    /**
+     * 字符串转换为JsonNode对象
+     *
+     * @param json json字符串
+     */
+    public static JsonNode parse(String json) {
+        if (StringUtils.isBlank(json)) {
+            return null;
+        }
+        try {
+            return DEFAULT_OBJECT_MAPPER.readTree(json);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
