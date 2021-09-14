@@ -3,8 +3,8 @@ package com.changhong.sei.core.error;
 import com.changhong.sei.core.config.properties.global.GlobalProperties;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
-import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.exception.WebException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.slf4j.Logger;
@@ -29,7 +29,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -52,7 +51,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResultData<String> handleError(MissingServletRequestParameterException e) {
-        String message = String.format("Missing Request Parameter: %s", e.getParameterName());
+        String message = ContextUtil.getMessage("core_global_err_001", e.getParameterName());
         return result(message, e);
     }
 
@@ -61,7 +60,7 @@ public class GlobalExceptionTranslator {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResultData<String> handleError(MethodArgumentTypeMismatchException e) {
-        String message = String.format("Method Argument Type Mismatch: %s", e.getName());
+        String message = ContextUtil.getMessage("core_global_err_002", e.getName());
         return result(message, e);
     }
 
@@ -73,7 +72,7 @@ public class GlobalExceptionTranslator {
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         assert error != null;
-        String message = String.format("Method Argument Not Valid. %s:%s", error.getField(), error.getDefaultMessage());
+        String message = ContextUtil.getMessage("core_global_err_003", error.getField(), error.getDefaultMessage());
         return result(message, e);
     }
 
@@ -84,7 +83,7 @@ public class GlobalExceptionTranslator {
     public ResultData<String> handleError(BindException e) {
         FieldError error = e.getFieldError();
         assert error != null;
-        String message = String.format("Bind Exception. %s:%s", error.getField(), error.getDefaultMessage());
+        String message = ContextUtil.getMessage("core_global_err_004", error.getField(), error.getDefaultMessage());
         return result(message, e);
     }
 
@@ -96,7 +95,7 @@ public class GlobalExceptionTranslator {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         ConstraintViolation<?> violation = violations.iterator().next();
         String path = ((PathImpl) violation.getPropertyPath()).getLeafNode().getName();
-        String message = String.format("Constraint Violation. %s:%s", path, violation.getMessage());
+        String message = ContextUtil.getMessage("core_global_err_005", path, violation.getMessage());
         return result(message, e);
     }
 
@@ -123,7 +122,7 @@ public class GlobalExceptionTranslator {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData<String> handleError(HttpRequestMethodNotSupportedException e) {
         // Request Method Not Supported
-        String message = ExceptionUtils.getRootCauseMessage(e);
+        String message = ContextUtil.getMessage("core_global_err_006", e.getMethod(), StringUtils.join(e.getSupportedMethods()));
         return result(message, e);
     }
 
@@ -138,34 +137,18 @@ public class GlobalExceptionTranslator {
     }
 
     /**
-     * SQLException sql异常处理
-     * 返回状态码:500
-     */
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({SQLException.class})
-    public ResultData<String> handleSQLException(SQLException e) {
-        // 服务运行SQLException异常
-        return result(ContextUtil.getMessage("core_service_00041", ExceptionUtils.getRootCauseMessage(e)), e);
-    }
-
-    /**
-     * 业务异常
-     */
-    @ExceptionHandler(ServiceException.class)
-    public ResultData<String> handleError(ServiceException e) {
-        // Service Exception
-        String message = ExceptionUtils.getRootCauseMessage(e);
-        return result(message, e);
-    }
-
-    /**
      * 不属于以上异常的其他异常
      */
     @ExceptionHandler(Throwable.class)
     public ResultData<String> handleError(Throwable e) {
-        // Internal Server Error
-        String message = ExceptionUtils.getRootCauseMessage(e);
-        return result(message, e);
+        // 获取根异常
+        Throwable throwable = ExceptionUtils.getRootCause(e);
+        if (throwable instanceof java.sql.SQLException) {
+            // SQLException sql异常处理
+            return result(ContextUtil.getMessage("core_global_err_007", throwable.getMessage()), e);
+        } else {
+            return result(throwable.getMessage(), e);
+        }
     }
 
     private ResultData<String> result(String message, Throwable e) {
