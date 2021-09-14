@@ -58,7 +58,7 @@ public class HttpFilterAutoConfiguration {
         // 拦截所有请求
         registration.addUrlPatterns("/*");
 
-        WebThreadFilter filterProxy = new WebThreadFilter(filterConfig, userAuthenticationHandler, filterDefs);
+        WebThreadFilter filterProxy = new WebThreadFilter(userAuthenticationHandler, filterDefs);
         filterProxy.setEnvironment(environment);
         registration.setFilter(filterProxy);
 

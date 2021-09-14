@@ -137,6 +137,11 @@ public class GlobalEnvironmentPostProcessor implements EnvironmentPostProcessor 
 //            properties.setProperty("feign.compression.request.enabled", "true");
 //            properties.setProperty("feign.compression.response.enabled", "true");
 
+            // 出现错误时, 直接抛出异常.以下两个配置须配合使用
+           properties.setProperty("spring.mvc.throw-exception-if-no-handler-found", "true");
+           // 关闭工程中的资源文件建立映射
+           properties.setProperty("spring.resources.add-mappings", "false");
+
             PropertiesPropertySource source = new PropertiesPropertySource("SEI-Gloabl-Config", properties);
             // 本地配置文件优先，即当配置中心和本地配置文件存在相同key时，使用本地该key的配置值
             //environment.getPropertySources().addLast(source);

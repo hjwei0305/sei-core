@@ -1,6 +1,5 @@
 package com.changhong.sei.core.filter;
 
-import com.changhong.sei.core.config.properties.http.filter.FilterProperties;
 import com.changhong.sei.util.thread.ThreadLocalHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
@@ -28,7 +27,6 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     /**
      * 应用上下文
      */
-    private final FilterProperties filterConfig;
     private final SessionUserAuthenticationHandler userAuthenticationHandler;
 
     private final List<Pattern> urlFilters = new ArrayList<>();
@@ -36,11 +34,9 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     /**
      * 带参数构造器
      */
-    public WebThreadFilter(FilterProperties filterConfig,
-                           SessionUserAuthenticationHandler userAuthenticationHandler, List<WebFilter> filterDefs) {
+    public WebThreadFilter(SessionUserAuthenticationHandler userAuthenticationHandler, List<WebFilter> filterDefs) {
         super(filterDefs);
 
-        this.filterConfig = filterConfig;
         this.userAuthenticationHandler = userAuthenticationHandler;
 
         // swagger 文档
@@ -69,16 +65,14 @@ public class WebThreadFilter extends BaseCompositeFilterProxy {
     @Override
     protected void handleInnerFilters(List<Filter> innerFilters) {
         super.handleInnerFilters(innerFilters);
-        // 跨域
-        innerFilters.add(0, new CorsSecurityFilter(filterConfig));
         // 传播线程变量拦截器
-        innerFilters.add(1, new ThreadLocalTranVarFilter());
+        innerFilters.add(0, new ThreadLocalTranVarFilter());
         // 调用链拦截器
-        innerFilters.add(2, new TraceFilter());
+        innerFilters.add(1, new TraceFilter());
         // 检查token
-        innerFilters.add(3, new SessionUserFilter(userAuthenticationHandler));
+        innerFilters.add(2, new SessionUserFilter(userAuthenticationHandler));
         // 防止XSS攻击
-        innerFilters.add(4, new XssFilter());
+        innerFilters.add(3, new XssFilter());
     }
 
     @Override

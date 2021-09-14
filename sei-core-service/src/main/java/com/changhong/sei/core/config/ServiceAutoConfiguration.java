@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -16,11 +19,36 @@ import java.util.Locale;
 
 /**
  * SEI平台启动的基础配置
+ *
  * @author 马超(Vision.Mac)
  * @version 1.0.1 2018/5/28 23:48
  */
 @Configuration
-public class ServiceAutoConfiguration {
+public class ServiceAutoConfiguration implements WebMvcConfigurer {
+
+    /**
+     * 添加静态资源的路径映射
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html", "doc.html")
+                .addResourceLocations("classpath:/META-INF/resources/", "/static", "/public");
+
+        registry.addResourceHandler("/webjars/**", "favicon.ico")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    /**
+     * 添加对跨域的支持
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
+                .allowCredentials(true)
+                .maxAge(3600 * 24);
+    }
 
     @Bean
     @ConditionalOnMissingBean
