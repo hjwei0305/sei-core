@@ -72,7 +72,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
                 return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
             }
         }
-        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
+        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00026");
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class BaseService<T extends Persistable<ID> & Serializable, ID e
                 return OperateResultWithData.operationFailureWithData(entity, "core_service_00037", codeUnique.getCode());
             }
         }
-        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00028");
+        return OperateResultWithData.operationSuccessWithData(entity, "core_service_00027");
     }
 
     /**
