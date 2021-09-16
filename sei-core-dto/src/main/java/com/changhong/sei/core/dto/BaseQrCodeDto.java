@@ -12,6 +12,10 @@ import java.io.Serializable;
  */
 public class BaseQrCodeDto implements Serializable {
     private static final long serialVersionUID = -9054497872525138915L;
+    /**
+     * 租户代码属性
+     */
+    public static final String TENANT_CODE = "tenantCode";
 
     private String tenantCode;
 
