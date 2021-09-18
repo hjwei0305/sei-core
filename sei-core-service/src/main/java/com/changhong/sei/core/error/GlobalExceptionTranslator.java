@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -146,6 +147,9 @@ public class GlobalExceptionTranslator {
         if (throwable instanceof java.sql.SQLException) {
             // SQLException sql异常处理
             return result(ContextUtil.getMessage("core_global_err_007", throwable.getMessage()), e);
+        } else if (throwable instanceof OptimisticLockingFailureException) {
+            // 并发操作引发乐观锁异常
+            return result(ContextUtil.getMessage("core_global_err_008", throwable.getMessage()), e);
         } else {
             return result(throwable.getMessage(), e);
         }
