@@ -996,9 +996,15 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 case IN:
                     Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue.getClass().isArray()) {
-                        predicate = expression.in((Object[]) matchValue);
+                        Object[] objArr = (Object[]) matchValue;
+                        if (objArr.length > 0) {
+                            predicate = expression.in(objArr);
+                        }
                     } else if (matchValue instanceof Collection) {
-                        predicate = expression.in((Collection) matchValue);
+                        Collection<?> collection = (Collection) matchValue;
+                        if (!collection.isEmpty()) {
+                            predicate = expression.in(collection);
+                        }
                     } else {
                         predicate = builder.equal(expression, matchValue);
                     }
@@ -1018,13 +1024,23 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                 case NOTIN:
                     Assert.notNull(matchValue, "Match value must be not null");
                     if (matchValue.getClass().isArray()) {
-                        predicate = expression.in((Object[]) matchValue);
+                        Object[] objArr = (Object[]) matchValue;
+                        if (objArr.length > 0) {
+                            predicate = expression.in(objArr);
+                        }
                     } else if (matchValue instanceof Collection) {
-                        predicate = expression.in((Collection) matchValue);
+                        Collection<?> collection = (Collection) matchValue;
+                        if (!collection.isEmpty()) {
+                            predicate = expression.in(collection);
+                        }
                     } else {
                         predicate = builder.equal(expression, matchValue);
                     }
-                    predicate = builder.not(predicate);
+                    if (Objects.nonNull(predicate)) {
+                        predicate = builder.not(predicate);
+                    } else {
+                        return null;
+                    }
                     break;
                 default:
                     break;
