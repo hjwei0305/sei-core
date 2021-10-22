@@ -41,7 +41,9 @@
     <logger name="org.mongodb" level="WARN"/>
     <logger name="io.lettuce" level="WARN"/>
     <!-- swagger log configure -->
-    <logger name="io.swagger" level="WARN"/>
+    <logger name="Validator" level="WARN"/>
+    <logger name="io.swagger" level="ERROR"/>
+    <logger name="springfox.documentation.swagger" level="ERROR"/>
     <!-- kafka log configure -->
     <logger name="org.apache.kafka" level="WARN"/>
     <!-- thymeleaf log configure -->
