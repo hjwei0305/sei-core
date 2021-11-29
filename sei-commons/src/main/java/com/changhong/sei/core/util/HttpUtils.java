@@ -244,7 +244,7 @@ public final class HttpUtils {
             post.setConfig(customReqConf.build());
             result = responseText(client.execute(post));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             post.releaseConnection();
             if (url.startsWith("https") && client instanceof CloseableHttpClient) {
@@ -300,7 +300,7 @@ public final class HttpUtils {
             post.setConfig(customReqConf.build());
             result = responseText(client.execute(post));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             post.releaseConnection();
             if (url.startsWith("https") && client instanceof CloseableHttpClient) {
@@ -346,7 +346,7 @@ public final class HttpUtils {
             get.setConfig(customReqConf.build());
             result = responseText(client.execute(get));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             get.releaseConnection();
             if (url.startsWith("https") && client instanceof CloseableHttpClient) {
@@ -385,8 +385,7 @@ public final class HttpUtils {
             post.setEntity(entityBuilder.build());
             result = responseText(client.execute(post));
         } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             post.releaseConnection();
             if (serverUrl.startsWith("https") && client instanceof CloseableHttpClient) {
