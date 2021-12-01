@@ -63,7 +63,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
                 entity.setNamePath(TreeEntity.NAME_DELIMITER + entity.getName());
             } else {
                 //获取父节点
-                TreeEntity parentNode = findOne(parentId);
+                TreeEntity<T> parentNode = findOne(parentId);
                 if (Objects.nonNull(parentNode)) {
                     //设置层级
                     entity.setNodeLevel(Objects.nonNull(parentNode.getNodeLevel()) ? parentNode.getNodeLevel() + 1 : 0);
@@ -136,7 +136,7 @@ public abstract class BaseTreeService<T extends BaseEntity & TreeEntity<T>> exte
     @Override
     @Transactional
     public void save(Collection<T> entities) {
-        OperateResultWithData operateResult;
+        OperateResultWithData<T> operateResult;
         if (CollectionUtils.isNotEmpty(entities)) {
             for (T entity : entities) {
                 operateResult = save(entity);

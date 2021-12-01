@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author 马超(Vision.Mac)
  * @version 1.0.1 2017/5/9 1:38
  */
-public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoImpl<T, String> implements BaseTreeDao<T> {
+public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity<T>> extends BaseDaoImpl<T, String> implements BaseTreeDao<T> {
     public BaseTreeDaoImpl(Class<T> domainClass, EntityManager entityManager) {
         super(domainClass, entityManager);
     }
@@ -53,7 +53,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public List<T> getChildrenNodes(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
-        List<T> nodeList = new ArrayList<T>();
+        List<T> nodeList = new ArrayList<>();
         //获取当前节点
         T entity = findOne(nodeId);
         if (Objects.nonNull(entity)) {
@@ -72,7 +72,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public List<T> getChildrenNodesNoneOwn(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
-        List<T> nodeList = new ArrayList<T>();
+        List<T> nodeList = new ArrayList<>();
         //获取当前节点
         T entity = findOne(nodeId);
         if (Objects.nonNull(entity)) {
@@ -93,7 +93,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
 
         List<T> nodeList = findByNamePathLike(nodeName);
         if (CollectionUtils.isEmpty(nodeList)) {
-            nodeList = new ArrayList<T>();
+            nodeList = new ArrayList<>();
         }
         return nodeList;
     }
@@ -147,9 +147,9 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     /**
      * 获取指定节点下的所有子节点(不包含自己)
      *
-     * @param codePath
-     * @param nodeId
-     * @return
+     * @param codePath 代码路径
+     * @param nodeId   节点id
+     * @return 返回所有子节点(不包含自己)
      */
     @Override
     public List<T> findByCodePathStartingWithAndIdNot(String codePath, String nodeId) {
@@ -180,9 +180,11 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     }
 
     /**
-     * @param namePath
-     * @param nodeId
-     * @return
+     * 按名称路径获取除指定节点id外的匹配节点
+     *
+     * @param namePath 名称路径
+     * @param nodeId   节点id
+     * @return 返回节点清单
      */
     @Override
     public List<T> findByNamePathStartingWithAndIdNot(String namePath, String nodeId) {
@@ -214,7 +216,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public T recursiveBuild(T parentNode, List<T> nodes) {
         List<T> children = parentNode.getChildren();
         if (Objects.isNull(children)) {
-            children = new ArrayList<T>();
+            children = new ArrayList<>();
         }
 
         for (T treeNode : nodes) {
@@ -231,8 +233,10 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     /////////////////////////////以下为冻结特性的方法/////////////////////////
 
     /**
-     * @param id
-     * @return
+     * 按节点id获取未冻结的
+     *
+     * @param id 节点id
+     * @return 返回节点
      */
     @Override
     public T findOne4Unfrozen(String id) {
@@ -275,7 +279,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public List<T> getChildrenNodes4Unfrozen(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
-        List<T> nodeList = new ArrayList<T>();
+        List<T> nodeList = new ArrayList<>();
         //获取当前节点
         T entity = this.findOne4Unfrozen(nodeId);
         if (Objects.nonNull(entity)) {
@@ -294,7 +298,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public List<T> getChildrenNodesNoneOwn4Unfrozen(String nodeId) {
         Assert.notNull(nodeId, "nodeId不能为空");
 
-        List<T> nodeList = new ArrayList<T>();
+        List<T> nodeList = new ArrayList<>();
         //获取当前节点
         T entity = this.findOne4Unfrozen(nodeId);
         if (Objects.nonNull(entity)) {
@@ -315,7 +319,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
 
         List<T> nodeList = findByNamePathLike4Unfrozen(nodeName);
         if (CollectionUtils.isEmpty(nodeList)) {
-            nodeList = new ArrayList<T>();
+            nodeList = new ArrayList<>();
         }
         return nodeList;
     }
@@ -375,9 +379,9 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     /**
      * 获取指定节点下的所有子节点(不包含自己)
      *
-     * @param codePath
-     * @param nodeId
-     * @return
+     * @param codePath 代码路径
+     * @param nodeId   节点id
+     * @return 返回所有子节点(不包含自己)
      */
     @Override
     public List<T> findByCodePathStartWithAndIdNot4Unfrozen(String codePath, String nodeId) {
@@ -420,11 +424,6 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
         return list;
     }
 
-    /**
-     * @param namePath
-     * @param nodeId
-     * @return
-     */
     @Override
     public List<T> findByNamePathStartWithAndIdNot4Unfrozen(String namePath, String nodeId) {
         List<T> list;
@@ -469,7 +468,7 @@ public class BaseTreeDaoImpl<T extends BaseEntity & TreeEntity> extends BaseDaoI
     public T recursiveBuild4Unfrozen(T parentNode, List<T> nodes) {
         List<T> children = parentNode.getChildren();
         if (Objects.isNull(children)) {
-            children = new ArrayList<T>();
+            children = new ArrayList<>();
         }
 
         for (T treeNode : nodes) {
