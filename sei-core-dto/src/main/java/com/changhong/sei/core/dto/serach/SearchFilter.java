@@ -3,6 +3,7 @@ package com.changhong.sei.core.dto.serach;
 import com.changhong.sei.util.ConverterUtils;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -181,9 +182,13 @@ public class SearchFilter implements Serializable {
 
     public Object getValue() {
         Object val = value;
-        String type = getFieldType();
-        if (Objects.nonNull(val) && val.toString().length() > 0) {
-            val = ConverterUtils.convert(type, val);
+        if (Objects.nonNull(val)) {
+            if (!(val instanceof Collection) && !(val.getClass().isArray())) {
+                String type = getFieldType();
+                if (val.toString().length() > 0) {
+                    val = ConverterUtils.convert(type, val);
+                }
+            }
         }
         return val;
     }
