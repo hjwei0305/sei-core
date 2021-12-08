@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import org.springframework.web.context.request.RequestContextListener;
 
 import java.util.List;
 
@@ -65,6 +66,16 @@ public class HttpFilterAutoConfiguration {
         // 设置优先级高于spring security
         registration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
         return registration;
+    }
+
+    /**
+     * RequestContextListener监听器
+     * (ServletRequestAttributes) RequestContextHolder.getRequestAttributes() 防止为null
+     */
+    @Bean
+    @ConditionalOnMissingBean(RequestContextListener.class)
+    public RequestContextListener requestContextListenerBean() {
+        return new RequestContextListener();
     }
 
 }
