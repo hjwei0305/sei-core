@@ -40,12 +40,27 @@ public interface MockUser {
      */
     default SessionUser mock(SessionUser sessionUser) {
         try {
-            if (!ThreadLocalUtil.isAvailable()) {
-                LogUtil.error("ThreadLocalHolder还没有初始化,请先调用ThreadLocalHolder.begin(),并在当前线程任务完成前须调用ThreadLocalHolder.end()释放资源");
-            }
             // 生成token
             ContextUtil.generateToken(sessionUser);
 
+            sessionUser = this.mockCurrentUser(sessionUser);
+        } catch (Exception e) {
+            LogUtil.error("模拟用户会话异常.", e);
+        }
+        return sessionUser;
+    }
+
+    /**
+     * 模拟用户
+     *
+     * @param sessionUser 模拟用户
+     * @return 返回模拟用户
+     */
+    default SessionUser mockCurrentUser(SessionUser sessionUser) {
+        try {
+            if (!ThreadLocalUtil.isAvailable()) {
+                LogUtil.error("ThreadLocalHolder还没有初始化,请先调用ThreadLocalHolder.begin(),并在当前线程任务完成前须调用ThreadLocalHolder.end()释放资源");
+            }
             MDC.put("userId", sessionUser.getUserId());
             MDC.put("account", sessionUser.getAccount());
             MDC.put("userName", sessionUser.getUserName());
