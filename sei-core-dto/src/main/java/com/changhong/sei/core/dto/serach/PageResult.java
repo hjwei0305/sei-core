@@ -3,6 +3,7 @@ package com.changhong.sei.core.dto.serach;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,10 @@ public class PageResult<T extends Serializable> implements Serializable {
      */
     private int total;
     /**
+     * 总金额
+     */
+    private BigDecimal totalAmount = BigDecimal.ZERO;
+    /**
      * 当前页数据
      */
     private ArrayList<T> rows;
@@ -39,11 +44,16 @@ public class PageResult<T extends Serializable> implements Serializable {
     public PageResult() {
     }
 
+    /**
+     * 通过分页结果构造
+     * @param pageResult 源分页结果
+     */
     public PageResult(PageResult pageResult) {
         if (Objects.nonNull(pageResult)) {
             this.page = pageResult.getPage();
             this.records = pageResult.getRecords();
             this.total = pageResult.getTotal();
+            this.totalAmount = pageResult.getTotalAmount();
         }
     }
 
@@ -69,6 +79,14 @@ public class PageResult<T extends Serializable> implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public ArrayList<T> getRows() {
