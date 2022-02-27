@@ -36,7 +36,7 @@ public abstract class BaseInitializeService {
             String extBeanIdError = "初始化任务执行器[" + performerBeanId + "]" + "没有实现！";
             LogUtil.error(extBeanIdError,e);
             // 初始化任务执行器【{0}】没有实现！
-            return OperateResult.operationFailure("00049", performerBeanId);
+            return OperateResult.operationFailure("core_service_00042", performerBeanId);
         }
         return performer.performTask();
     }

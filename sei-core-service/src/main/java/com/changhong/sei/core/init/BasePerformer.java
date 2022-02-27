@@ -77,6 +77,6 @@ public abstract class BasePerformer<T extends BaseEntity> implements TaskPerform
             save(entity);
         }
         // {0}初始化完毕！
-        return OperateResult.operationSuccess("00047", getEntityName());
+        return OperateResult.operationSuccess("core_service_00041", getEntityName());
     }
 }
