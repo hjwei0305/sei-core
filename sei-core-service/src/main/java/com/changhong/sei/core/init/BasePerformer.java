@@ -35,6 +35,13 @@ public abstract class BasePerformer<T extends BaseEntity> implements TaskPerform
     protected abstract void setInitEntities();
 
     /**
+     * 追加租户隔离的初始化业务实体
+     * initEntities.add(...);
+     */
+    protected void addTenantInitEntities() {
+    }
+
+    /**
      * 检查初始化业务实体已经存在
      *
      * @param entity 初始化业务实体
@@ -65,6 +72,8 @@ public abstract class BasePerformer<T extends BaseEntity> implements TaskPerform
     @Override
     @Transactional(rollbackFor = Exception.class)
     public OperateResult performTask() {
+        // 追加租户隔离的初始化业务实体
+        addTenantInitEntities();
         for (T entity : initEntities) {
             // 设置关联属性
             setRelationalField(entity);
