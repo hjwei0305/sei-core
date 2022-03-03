@@ -15,11 +15,6 @@ import java.util.List;
  */
 public abstract class BasePerformer<T extends BaseEntity> implements TaskPerformer {
     /**
-     * 定义初始化业务实体
-     */
-    protected List<T> initEntities;
-
-    /**
      * 设置初始化业务实体名称
      *
      * @return 业务实体名称
@@ -30,8 +25,9 @@ public abstract class BasePerformer<T extends BaseEntity> implements TaskPerform
      * 在子类中设置初始换业务实体清单（存在当前租户，可以构造租户数据）
      * initEntities = new LinkedList<>();
      * initEntities.add(...);
+     * return initEntities;
      */
-    protected abstract void setInitEntities();
+    protected abstract List<T> constructInitEntities();
 
     /**
      * 检查初始化业务实体已经存在
@@ -65,7 +61,7 @@ public abstract class BasePerformer<T extends BaseEntity> implements TaskPerform
     @Transactional(rollbackFor = Exception.class)
     public OperateResult performTask() {
         // 设置初始化业务实体
-        setInitEntities();
+        List<T> initEntities = constructInitEntities();
         for (T entity : initEntities) {
             // 设置关联属性
             setRelationalField(entity);
