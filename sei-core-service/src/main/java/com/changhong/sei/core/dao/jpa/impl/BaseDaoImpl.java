@@ -1009,6 +1009,18 @@ public class BaseDaoImpl<T extends Persistable & Serializable, ID extends Serial
                         predicate = builder.equal(expression, matchValue);
                     }
                     break;
+                //Property Equal: =
+                case PE:
+                    Assert.notNull(matchValue, "Match value must be not null");
+                    Expression expressionPE = buildExpression(root, builder, (String) matchValue, null);
+                    predicate = builder.equal(expression, expressionPE);
+                    break;
+                //Property Not Equal: !=
+                case PNE:
+                    Assert.notNull(matchValue, "Match value must be not null");
+                    Expression expressionPNE = buildExpression(root, builder, (String) matchValue, null);
+                    predicate = builder.notEqual(expression, expressionPNE);
+                    break;
                 //Property Less Equal: <
                 case PLT:
                     Assert.notNull(matchValue, "Match value must be not null");

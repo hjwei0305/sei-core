@@ -121,6 +121,16 @@ public class SearchFilter implements Serializable {
         NN,
 
         /**
+         * 属性比较 属性1 = 属性2
+         */
+        PE,
+
+        /**
+         * 属性比较 属性1 != 属性2
+         */
+        PNE,
+
+        /**
          * 属性比较 属性1 < 属性2
          */
         PLT,
