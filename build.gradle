@@ -41,5 +41,8 @@ subprojects  {
 //        all*.exclude group: 'javax.ws.rs', module: 'jsr311-api'
         all*.exclude group: 'org.apache.logging.log4j'
     }
+
+    // 自定义springboot 依赖的logback版本
+    ext['logback.version'] = "$logbackVersion"
 }
 
