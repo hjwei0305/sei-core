@@ -87,6 +87,17 @@ public class ResultDataUtil {
     }
 
     /**
+     * 通过多语言消息KEY返回处理成功(Void)
+     *
+     * @param messageKey 多语言消息KEY
+     * @param args       消息参数
+     * @return 处理成功
+     */
+    public static ResultData<Void> successVoid(String messageKey, Object... args) {
+        return ResultData.success(ContextUtil.getMessage(messageKey, args), null);
+    }
+
+    /**
      * 通过多语言消息KEY返回处理成功(带数据)
      *
      * @param messageKey 多语言消息KEY
